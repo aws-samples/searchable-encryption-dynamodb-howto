@@ -1,0 +1,46 @@
+{"DemoPlain": [
+{"PutRequest":{"Item":{
+"PK":{"S":"ticket_001"},
+"SK":{"S":"2022-10-07T14:32:25~"},
+"SK1":{"S":"2022-10-07T14:32:25~"},
+"SK3":{"S":"2022-10-07T14:32:25~"},
+"PK1":{"S":"zorro@gmail.com"},
+"PK2":{"S":"able@gmail.com"},
+"PK3":{"S":"3"},
+"Subject":{"S":"Bad Bug"},
+"Message":{"S":"This bug looks pretty bad"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"ticket_001"},
+"SK":{"S":"2022-10-07T15:32:25~"},
+"SK1":{"S":"2022-10-07T15:32:25~"},
+"SK3":{"S":"2022-10-07T15:32:25~"},
+"PK1":{"S":"able@gmail.com"},
+"PK2":{"S":"charlie@gmail.com"},
+"PK3":{"S":"3"},
+"Subject":{"S":"Bad Bug"},
+"Message":{"S":"Charlie should handle this"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"ticket_002"},
+"SK":{"S":"2022-10-06T14:32:25~"},
+"SK1":{"S":"2022-10-06T14:32:25~"},
+"SK3":{"S":"2022-10-06T14:32:25~"},
+"PK1":{"S":"zorro@gmail.com"},
+"PK2":{"S":"charlie@gmail.com"},
+"PK3":{"S":"3"},
+"Subject":{"S":"Easy Bug"},
+"Message":{"S":"This seems simple enough"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"ticket_002"},
+"SK":{"S":"2022-10-08T14:32:25~"},
+"SK1":{"S":"2022-10-08T14:32:25~"},
+"SK3":{"S":"2022-10-08T14:32:25~"},
+"PK1":{"S":"charlie@gmail.com"},
+"PK2":{"S":"able@gmail.com"},
+"PK3":{"S":"3"},
+"Subject":{"S":"Easy Bug"},
+"Message":{"S":"that's in able's code"}
+}}}
+]}

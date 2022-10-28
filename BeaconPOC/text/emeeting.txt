@@ -1,0 +1,15 @@
+# PK  - employee number
+# SK  - meeting start time + floor.room
+# PK1 - employee email
+# SK1 - meeting	start time + floor.room
+# PK2 - manager email
+# Duration
+# Attendees
+# Subject
+PK	SK+SK1	PK1	PK2	Duration	Attendees	Subject
+emp_001	2022-07-04T13:00~12.403	able@gmail.com	zorro@gmail.com	30	SomeList	Scan Beacons
+emp_002	2022-07-04T13:00~12.403	barney@gmail.com	zorro@gmail.com	30	SomeList	Scan Beacons
+emp_003	2022-07-04T13:00~12.403	charlie@gmail.com	zorro@gmail.com	30	SomeList	Scan Beacons
+emp_004	2022-07-04T13:00~12.403	david@gmail.com	zorro@gmail.com	30	SomeList	Scan Beacons
+emp_002	2022-07-04T14:00~12.407	barney@gmail.com	zorro@gmail.com	30	SomeList	Gazelle
+emp_003	2022-07-04T14:00~12.407	charlie@gmail.com	zorro@gmail.com	30	SomeList	Gazelle

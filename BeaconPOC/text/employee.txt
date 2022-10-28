@@ -1,0 +1,14 @@
+# PK  - employee number
+# SK  - employee tag : E1234
+# PK1 - employee email
+# SK1  - employee tag : E1234
+# PK2 - manager email
+# PK3 - City
+# SK3 - Building.floor.aisle.desk
+# Name
+# Title
+PK	SK+SK1	PK1	PK2	PK3	SK3	Name	Title
+emp_001	E~1234	able@gmail.com	zorro@gmail.com	SEA	~44.12.2.3	Able Jones	SDE9
+emp_002	E~2345	barney@gmail.com	zorro@gmail.com	SEA	~44.12.2.4	Barney Jones	SDE8
+emp_003	E~3456	charlie@gmail.com	zorro@gmail.com	SEA	~44.4.2.5	Charlie Jones	SDE7
+emp_004	E~4567	david@gmail.com	zorro@gmail.com	NYC	~22.1.2.3	David Jones	SDE6

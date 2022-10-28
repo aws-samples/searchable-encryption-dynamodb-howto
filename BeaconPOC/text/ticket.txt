@@ -1,0 +1,14 @@
+# PK  - ticket number
+# SK  - ticket mod time
+# PK1 - author email
+# SK1 - ticket mod time
+# PK2 - assignee email
+# PK3 - Severity
+# SK3 - ticket mod time
+# Subject
+# Message
+PK	SK+SK1+SK3	PK1	PK2	PK3	Subject	Message
+ticket_001	2022-10-07T14:32:25~	zorro@gmail.com	able@gmail.com	3	Bad Bug	This bug looks pretty bad
+ticket_001	2022-10-07T15:32:25~	able@gmail.com	charlie@gmail.com	3	Bad Bug	Charlie should handle this
+ticket_002	2022-10-06T14:32:25~	zorro@gmail.com	charlie@gmail.com	3	Easy Bug	This seems simple enough
+ticket_002	2022-10-08T14:32:25~	charlie@gmail.com	able@gmail.com	3	Easy Bug	that's in able's code

@@ -1,0 +1,10 @@
+# PK  - buuilding ID
+# SK  - meeting start time + floor.room
+# PK1 - organizer email
+# SK1 - meeting	start time + floor.room
+# Duration
+# Attendees
+# Subject
+PK	SK+SK1	PK1	Duration	Attendees	Subject
+SEA33	2022-07-04T13:00~12.403	able@gmail.com	30	SomeList	Scan Beacons
+SEA33	2022-07-04T14:00~12.407	barney@gmail.com	30	SomeList	Gazelle

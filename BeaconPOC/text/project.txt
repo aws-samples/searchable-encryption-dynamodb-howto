@@ -1,0 +1,11 @@
+# PK  - project name
+# SK  - project name
+# PK1 - status
+# SK1 - project start date
+# Description
+# Target
+PK	SK	PK1	SK1	Description	Target
+project_001	~project_001	Pending	2022-11-01~	Turbo Crypto	2024-01-01
+project_002	~project_002	Active	2022-07-04~	Scan Beacons	2023-02-27
+project_003	~project_003	Active	2022-08-05~	Gazelle	2023-02-27
+project_004	~project_004	Done	2020-03-03~	S3EC	2021-09-05

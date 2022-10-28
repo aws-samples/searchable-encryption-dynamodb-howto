@@ -1,0 +1,20 @@
+{"DemoPlain": [
+{"PutRequest":{"Item":{
+"PK":{"S":"SEA33"},
+"SK":{"S":"2022-07-04T13:00~12.403"},
+"SK1":{"S":"2022-07-04T13:00~12.403"},
+"PK1":{"S":"able@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Scan Beacons"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"SEA33"},
+"SK":{"S":"2022-07-04T14:00~12.407"},
+"SK1":{"S":"2022-07-04T14:00~12.407"},
+"PK1":{"S":"barney@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Gazelle"}
+}}}
+]}

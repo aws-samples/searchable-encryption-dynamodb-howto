@@ -1,0 +1,11 @@
+# PK  - project name
+# SK  - date for start of period + employee email
+# PK1 - employee email
+# SK1 - date for start of period
+# Hours
+# Role
+PK	SK+SK1	PK1	Hours	Role
+project_002	2022-09-12~able@gmail.com	able@gmail.com	40	SDE3
+project_002	2022-09-12~barney@gmail.com	barney@gmail.com	20	PM
+project_003	2022-09-12~charlie@gmail.com	charlie@gmail.com	40	SDE3
+project_003	2022-09-12~barney@gmail.com	barney@gmail.com	20	PM

@@ -1,11 +1,6 @@
-## My Project
+## Seachable Encryption for DynamoDB and how to use it
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+Examples, demos and POC's for Seachable Encryption
 
 ## Security
 

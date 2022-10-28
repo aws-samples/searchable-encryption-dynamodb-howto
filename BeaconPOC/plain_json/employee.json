@@ -1,0 +1,46 @@
+{"DemoPlain": [
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_001"},
+"SK":{"S":"E~1234"},
+"SK1":{"S":"E~1234"},
+"PK1":{"S":"able@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"PK3":{"S":"SEA"},
+"SK3":{"S":"~44.12.2.3"},
+"Name":{"S":"Able Jones"},
+"Title":{"S":"SDE9"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_002"},
+"SK":{"S":"E~2345"},
+"SK1":{"S":"E~2345"},
+"PK1":{"S":"barney@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"PK3":{"S":"SEA"},
+"SK3":{"S":"~44.12.2.4"},
+"Name":{"S":"Barney Jones"},
+"Title":{"S":"SDE8"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_003"},
+"SK":{"S":"E~3456"},
+"SK1":{"S":"E~3456"},
+"PK1":{"S":"charlie@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"PK3":{"S":"SEA"},
+"SK3":{"S":"~44.4.2.5"},
+"Name":{"S":"Charlie Jones"},
+"Title":{"S":"SDE7"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_004"},
+"SK":{"S":"E~4567"},
+"SK1":{"S":"E~4567"},
+"PK1":{"S":"david@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"PK3":{"S":"NYC"},
+"SK3":{"S":"~22.1.2.3"},
+"Name":{"S":"David Jones"},
+"Title":{"S":"SDE6"}
+}}}
+]}

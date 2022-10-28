@@ -1,0 +1,34 @@
+{"DemoPlain": [
+{"PutRequest":{"Item":{
+"PK":{"S":"project_001"},
+"SK":{"S":"~project_001"},
+"PK1":{"S":"Pending"},
+"SK1":{"S":"2022-11-01~"},
+"Description":{"S":"Turbo Crypto"},
+"Target":{"S":"2024-01-01"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"project_002"},
+"SK":{"S":"~project_002"},
+"PK1":{"S":"Active"},
+"SK1":{"S":"2022-07-04~"},
+"Description":{"S":"Scan Beacons"},
+"Target":{"S":"2023-02-27"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"project_003"},
+"SK":{"S":"~project_003"},
+"PK1":{"S":"Active"},
+"SK1":{"S":"2022-08-05~"},
+"Description":{"S":"Gazelle"},
+"Target":{"S":"2023-02-27"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"project_004"},
+"SK":{"S":"~project_004"},
+"PK1":{"S":"Done"},
+"SK1":{"S":"2020-03-03~"},
+"Description":{"S":"S3EC"},
+"Target":{"S":"2021-09-05"}
+}}}
+]}

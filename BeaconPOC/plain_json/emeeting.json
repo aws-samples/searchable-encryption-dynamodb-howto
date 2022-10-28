@@ -1,0 +1,62 @@
+{"DemoPlain": [
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_001"},
+"SK":{"S":"2022-07-04T13:00~12.403"},
+"SK1":{"S":"2022-07-04T13:00~12.403"},
+"PK1":{"S":"able@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Scan Beacons"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_002"},
+"SK":{"S":"2022-07-04T13:00~12.403"},
+"SK1":{"S":"2022-07-04T13:00~12.403"},
+"PK1":{"S":"barney@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Scan Beacons"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_003"},
+"SK":{"S":"2022-07-04T13:00~12.403"},
+"SK1":{"S":"2022-07-04T13:00~12.403"},
+"PK1":{"S":"charlie@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Scan Beacons"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_004"},
+"SK":{"S":"2022-07-04T13:00~12.403"},
+"SK1":{"S":"2022-07-04T13:00~12.403"},
+"PK1":{"S":"david@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Scan Beacons"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_002"},
+"SK":{"S":"2022-07-04T14:00~12.407"},
+"SK1":{"S":"2022-07-04T14:00~12.407"},
+"PK1":{"S":"barney@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Gazelle"}
+}}},
+{"PutRequest":{"Item":{
+"PK":{"S":"emp_003"},
+"SK":{"S":"2022-07-04T14:00~12.407"},
+"SK1":{"S":"2022-07-04T14:00~12.407"},
+"PK1":{"S":"charlie@gmail.com"},
+"PK2":{"S":"zorro@gmail.com"},
+"Duration":{"S":"30"},
+"Attendees":{"S":"SomeList"},
+"Subject":{"S":"Gazelle"}
+}}}
+]}
