@@ -20,8 +20,26 @@ for import into DynamoDB.
 One copy is written into [plain_json](./plain_json),
 holding the normal plaintext data you would expect. 
 Another copy is written into [encrypted_json](./encrypted_json),
-holding encrypted data fields, plus beacons for each.
+holding encrypted data fields, plus beacons for each encrypted field which
+needs to be involved in searching.
 
+
+## What this is NOT
+
+### This is NOT a guide to proper beacon security.
+
+ * There is no mention of proper truncation of the beacons
+ * The SK and SK1 fields are nearly identical, which is bad for security
+ * Some values, e.g. "Role", probably have too few unique values for reasonable beacon security.
+
+### This is NOT a full implementation
+
+ * It uses regular hashes, not HMACs
+ * It hard codes beacon values into queries
+ * It skips the post-query, client-side filtering necessary to remove false positives.
+
+**This is ONLY a proof of concept that querying can do what needs to be done.**
+## To run the demo
 
 If you want to reproduce the results, use the following steps.
 
