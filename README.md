@@ -1,6 +1,9 @@
 ## Seachable Encryption for DynamoDB and how to use it
 
-Examples, demos and POC's for Seachable Encryption
+Examples, demos and POC's for Seachable Encryption.
+
+[Beacons POC](./BeaconPOC) demonstrates that, yes, beacons can be used to
+handle most of the complex DyanmoDB access patterns.
 
 ## Security
 
