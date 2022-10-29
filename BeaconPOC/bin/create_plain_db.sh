@@ -1,18 +1,32 @@
 #!/bin/bash -eu
 
+if (($# == 1)); then
+    if [[ "$1" == "local" ]]; then
+	remote='--endpoint-url http://localhost:8000'
+    elif [[ "$1" == "remote" ]]; then
+	remote=''
+    else
+	echo 1>&2 "USAGE <program> local|remote"
+	exit 1
+    fi
+else
+    echo 1>&2 "USAGE <program> local|remote"
+    exit 1
+fi
+
 function wait_active {
-    while (($(aws dynamodb describe-table --table-name $1 | fgrep ACTIVE | wc -l) == 0)); do
+    while (($(aws dynamodb describe-table $remote --table-name $1 | fgrep ACTIVE | wc -l) == 0)); do
 	echo waiting for index $1 to be active
 	sleep 1
     done
-    while (($(aws dynamodb describe-table --table-name $1 | fgrep '"IndexStatus": "CREATING"' | wc -l) != 0)); do
+    while (($(aws dynamodb describe-table $remote --table-name $1 | fgrep '"IndexStatus": "CREATING"' | wc -l) != 0)); do
         echo waiting for index to be ready on $1
-        sleep 5
+        sleep 1
     done
 }
 
 echo creating table DemoPlain
-aws dynamodb create-table --table-name DemoPlain \
+aws dynamodb create-table $remote --table-name DemoPlain \
     --attribute-definitions AttributeName=PK,AttributeType=S \
          AttributeName=SK,AttributeType=S \
     --key-schema AttributeName=PK,KeyType=HASH \
@@ -21,7 +35,7 @@ aws dynamodb create-table --table-name DemoPlain \
 
 wait_active DemoPlain
 echo creating table GSI-1 on DemoPlain
-aws dynamodb update-table --table-name DemoPlain \
+aws dynamodb update-table $remote --table-name DemoPlain \
      --attribute-definitions AttributeName=PK1,AttributeType=S \
           AttributeName=SK1,AttributeType=S \
      --global-secondary-index-updates '[{"Create": {
@@ -34,7 +48,7 @@ aws dynamodb update-table --table-name DemoPlain \
 wait_active DemoPlain
 echo creating table GSI-2 on DemoPlain
 
-aws dynamodb update-table --table-name DemoPlain \
+aws dynamodb update-table $remote --table-name DemoPlain \
      --attribute-definitions AttributeName=PK2,AttributeType=S \
            AttributeName=SK,AttributeType=S \
      --global-secondary-index-updates '[{"Create": {
@@ -47,7 +61,7 @@ aws dynamodb update-table --table-name DemoPlain \
 wait_active DemoPlain
 echo creating table GSI-3 on DemoPlain
 
-aws dynamodb update-table --table-name DemoPlain \
+aws dynamodb update-table $remote --table-name DemoPlain \
      --attribute-definitions AttributeName=PK3,AttributeType=S \
            AttributeName=SK3,AttributeType=S \
      --global-secondary-index-updates '[{"Create": {

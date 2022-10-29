@@ -1,16 +1,20 @@
-# Searchable Encryption Demmo
+# Searchable Encryption Demo
 
-[AWS re:Invent 2021 - DynamoDB deep dive: Advanced design patterns](https://www.youtube.com/watch?v=xfxBhvGpoa0) presents a database used to run a business, tracking employees, meetings, projects and tickets. He takes six separate tables from an SQL database, and convertes them into a single DynamoDB table with three Global Secondary Indexes.
+[AWS re:Invent 2021 - DynamoDB deep dive: Advanced design patterns](https://www.youtube.com/watch?v=xfxBhvGpoa0) presents a database used to run a business, tracking employees, meetings, projects and tickets. He takes six separate tables from an SQL database, and converts them into a single DynamoDB table with three Global Secondary Indexes.
+
+**Question** : Can we do all of these things on an encrypted database
+with beacons?
 
 ## Record Types
 
 ### Employee Record
 
-one record per enployee
+one record per employee
 
 * PK  - employee number
 * SK  - employee tag : E1234
 * PK1 - employee email
+* SK1  - employee tag : E1234
 * PK2 - manager email
 * PK3 - City
 * SK3 - Building.floor.aisle.desk
@@ -24,6 +28,7 @@ one record per ticket modification
 * PK - ticket number
 * SK - ticket modification timestamp
 * PK1 - email of creator
+* SK1 - ticket modification timestamp
 * PK2 - email of assignee
 * PK3 - Severity
 * SK3 - ticket modification timestamp
@@ -37,6 +42,7 @@ one record for every (employee, meeting) pair
 * PK - employee ID
 * SK - start time of meeting + floor.room
 * PK1 - employee email
+* SK1 - start time of meeting + floor.room
 * Duration - duration of zero has some special meaning?
 * Attendees - list of employee email
 * Subject
@@ -67,6 +73,7 @@ one record per meeting
 * PK - building ID
 * SK - start time + floor + room
 * PK1 - organizer email
+* SK1 - start time + floor + room
 * Duration - duration of zero has some special meaning?
 * Attendees - list of attendee email
 * Subject
@@ -121,7 +128,7 @@ one record per meeting
 ### GSI-2 (Indexed on PK2 and SK)
 
  * Employee Record : PK2=manager email
- * Ticket Record : PK2=assigneee email
+ * Ticket Record : PK2=assignee email
 
 ### GSI-3 (Indexed on PK3 and SK3)
 
@@ -143,11 +150,11 @@ one record per meeting
 |10| Get employee Info by email | GSI-1 | PK1=email |SK starts_with("E")|
 |11| Get Ticket History by ticket ID | Table | PK=TicketID |    |
 |12| Get Ticket History by employee email | GSI-1 | PK1 = email |PK=TicketID|
-|13| Get Ticket History by asignee email | GSI-2 | PK2 = email |PK=TicketID|
+|13| Get Ticket History by assignee email | GSI-2 | PK2 = email |PK=TicketID|
 |14| Get employees by city.building.floor.aisle.desk | GSI-3 | PK3=city SK3 starts_with(building.floor.aisle.desk) |    |
 |15| Get employees by manager email | GSI-2 | PK2=email SK > 3 |    |
-|16| Get assigned tickets by asignee email | GSI-2 | PK2=email |    |
-|17| Get Tickets last touched in the past 24 hours | GSI-3 | PK3=Priority SK3>yesteray |    |
+|16| Get assigned tickets by assignee email | GSI-2 | PK2=email |    |
+|17| Get Tickets last touched in the past 24 hours | GSI-3 | PK3=Priority SK3>yesterday |    |
 |18| Get Projects by status, start and target date | GSI-1 | PK1=Status SK1 > startdate |targetDelivery < targetDate|
 |19| Get Projects by name | Table | PK=ProjectName SK=ProjectName |    |
 |20| Get Project History by date range | Table | PK=ProjectName SK between(date1, date2) |    |
@@ -168,7 +175,7 @@ These hashes are suitable only for exact match searches; however,
 using compound beacons (see below) we can leave some plaintext and/or
 some structure, that can be used with more complex query operators.
 
-Specifially, for each encrypted field `X` we also write a new field `gZ_b_X` holding the beacon. Indexes cannot be built on encrypted fields so, for example,
+Specifically, for each encrypted field `X` we also write a new field `gZ_b_X` holding the beacon. Indexes cannot be built on encrypted fields so, for example,
 GSI-3 for the encrypted database will be built on `gZ_b_PK3` and `gZ_b_SK3`.
 
 Beacons are specifically designed to produce false positives,
@@ -179,17 +186,17 @@ not, that result should be discarded.
 ### GSI-0
 
 The key schema for the main table has fields that we want to encrypt, but we can’t encrypt search keys. Thus we create a new index GSI-0, that holds exactly what the unencrypted main table held.
-The main table will have no sort key. it’s partition key will be an HMAC of the (unencrypted) PK and SK fields.
+The main table will have no sort key. its partition key will be an HMAC of the (unencrypted) PK and SK fields.
 
 ### Beacon Configuration
 
 If beacon configuration specifies a `prefix` character,
-the part of the string preceeding this character is kept, unencrypted,
+the part of the string preceding this character is kept, unencrypted,
 in the beacon value. e.g. `2022-10-28~ActualData` might become `2022-10-28~423`
 
 If beacon configuration specifies a `split` character, the unencrypted
 string is split on that character, a beacon value is calculated for each piece,
-and the pieces are re-joind on that character, e.g. `SEA33.12.402` might become `.99.42.86.`
+and the pieces are re-joined on that character, e.g. `SEA33.12.402` might become `.99.42.86.`
 
 These characters must be chosen with care.
 In this example `:` can't be the prefix character,
@@ -199,7 +206,7 @@ Specially SK, SK1 and SK3 are configured with a `prefix` of `~` and a `split` of
 
 *Employee Tag* in the original example is something like `E1234`,
 and is selected via `starts_with(“E”)`.
-To capture this in a beacon, we chage it to E~1234,
+To capture this in a beacon, we change it to E~1234,
 so that the beacon will be something like `E~42`
 
 *Date:building.floor.room* : uses both the prefix and the split, so that
