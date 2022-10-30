@@ -56,7 +56,7 @@ aws dynamodb query $remote --table DemoEncrypted --index-name GSI-1 \
     --filter-expression "gZ_b_PK = :pk"\
     --expression-attribute-values '{":pk1":{"S":"884"},":pk":{"S":"530"}}'
 
-echo 13 Get ticket history by asignee
+echo 13 Get ticket history by assignee
 aws dynamodb query $remote --table DemoEncrypted --index-name GSI-2 \
     --key-condition-expression "gZ_b_PK2 = :pk2" \
     --filter-expression "gZ_b_PK = :pk"\
@@ -72,7 +72,7 @@ aws dynamodb query $remote --table DemoEncrypted --index-name GSI-2 \
     --key-condition-expression "gZ_b_PK2 = :pk AND begins_with(gZ_b_SK, :sk)" \
     --expression-attribute-values '{":pk":{"S":"884"},":sk":{"S":"E~"}}'
 
-echo 16 Get tickets by asignee
+echo 16 Get tickets by assignee
 aws dynamodb query $remote --table DemoEncrypted --index-name GSI-2 \
     --key-condition-expression "gZ_b_PK2 = :pk2" \
     --expression-attribute-values '{":pk2":{"S":"824"}}'

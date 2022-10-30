@@ -56,7 +56,7 @@ aws dynamodb query $remote --table DemoPlain --index-name GSI-1\
     --filter-expression "PK = :pk"\
     --expression-attribute-values '{":pk1":{"S":"zorro@gmail.com"},":pk":{"S":"ticket_001"}}'
 
-echo 13 Get ticket history by asignee
+echo 13 Get ticket history by assignee
 aws dynamodb query $remote --table DemoPlain --index-name GSI-2\
     --key-condition-expression "PK2 = :pk2" \
     --filter-expression "PK = :pk"\
@@ -72,7 +72,7 @@ aws dynamodb query $remote --table DemoPlain --index-name GSI-2 \
     --key-condition-expression "PK2 = :pk AND begins_with(SK, :sk)" \
     --expression-attribute-values '{":pk":{"S":"zorro@gmail.com"},":sk":{"S":"E~"}}'
 
-echo 16 Get tickets by asignee
+echo 16 Get tickets by assignee
 aws dynamodb query $remote --table DemoPlain --index-name GSI-2\
     --key-condition-expression "PK2 = :pk2" \
     --expression-attribute-values '{":pk2":{"S":"able@gmail.com"}}'
