@@ -3,7 +3,9 @@
 Can one use beacons to implement Searchable Encryption for DynamoDB,
 and support real world complex use cases?
 
-Spoiler Alert : Yes.
+Spoiler Alert : Yes on can.
+
+[Sildes](./Overview.pptx) from a brief high-level overview are available.
 
 [This demo](Demo.md) starts with a talk from AWS re:Invent 2021 on
 advanced DynamoDB design patterns, pins down the details,
@@ -15,7 +17,7 @@ The [text](./text) directory holds tsv files with the data
 we want to import into our database.
 
 The [rust](./rust) directory holds a simple program that translates
-the files in the [text](./text) director into JSON, suitable
+the files in the [text](./text) directory into JSON, suitable
 for import into DynamoDB.
 One copy is written into [plain_json](./plain_json),
 holding the normal plaintext data you would expect. 
@@ -41,18 +43,23 @@ needs to be involved in searching.
 **This is ONLY a proof of concept that querying can do what needs to be done.**
 ## To run the demo
 
-If you want to reproduce the results, use the following steps.
+### Modify the data
 
-1. start [DynamoDBLocal](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)
-
-1. `make create_databases` : this will create two DynamoDB tables,
-one plain one encrypted, each with several Global Secondary Indexes.
-This takes several minutes to complete.
+1. Modify files in [text](./text) directory
 
 1. `make build` : this builds the rust program that converts then
 text to JSON.
 
 1. `make text` : this runs the program and create the JSON
+
+1. Examine results in [plain_json](./plain_json) and [encrypted_json](./encrypted_json).
+
+### Reproduce the results
+
+1. start [DynamoDBLocal](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)
+
+1. `make create_databases` : this will create two DynamoDB tables,
+one plain one encrypted, each with several Global Secondary Indexes.
 
 1. `make import` : load the JSON into DynamoDB
 
@@ -60,3 +67,5 @@ text to JSON.
 and encrypted tables, and ensures that they return the same number of records.
 
 If you want to work against the real DynamoDB, instead use `make create_databases_remote`, `make import_remote` and `make check_remote`.
+
+
