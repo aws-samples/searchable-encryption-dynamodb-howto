@@ -1,0 +1,4 @@
+
+# The temp directory that `mkdocs` creates
+# to serve the documentation site localy
+site/

@@ -1,0 +1,59 @@
+# Project information
+
+site_name: The busy engineer's database encryption, featuring Amazon DynamoDB
+site_description: An introduction to using AWS KMS and the AWS Database Encryption SDK
+site_author: aws-cryptools+workshop@amazon.com
+site_url: 'https://awssecworkshops.com'
+
+# Repository
+repo_name: aws-samples/searchable-encryption-dynamodb-howto
+repo_url: 'https://github.com/aws-samples/searchable-encryption-dynamodb-howto'
+
+# Copyright
+copyright: <a href="https://aws.amazon.com/privacy/" target="_blank">Privacy</a> | <a href="https://aws.amazon.com/terms/" target="_blank">Site terms</a> |
+    &copy; 2023, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+
+# Configuration
+theme:
+  name: 'material'
+  logo: 'assets/images/aws_smile_logo.png'
+  favicon: 'assets/images/aws-favicon.ico'
+  features:
+    - content.tabs.link
+    - tabs
+  font: false
+
+# Customization
+extra_css:
+  - 'stylesheets/custom.css'
+extra:
+  social:
+    - icon: fontawesome/solid/house    
+      link: https://awssecworkshops.com
+    - icon: fontawesome/solid/shield
+      link: https://aws.amazon.com/security/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/awssecurityinfo?lang=en
+    - icon: fontawesome/solid/square-rss
+      link: https://aws.amazon.com/blogs/security/
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - plantuml_markdown
+  - pymdownx.superfences
+  - pymdownx.highlight:
+        linenums: true
+  - pymdownx.tabbed:
+        alternate_style: true
+
+# Navigation
+nav:
+  - 'Home': 'index.md'
+  - 'Getting Started': 'getting-started.md'
+  - 'Exercise 1': 'adding-the-database-encryption-sdk.md'
+  - 'Exercise 2': 'adding-searchable-encryption-configuration.md'
+  - 'Exercise 3': 'adding-the-remaining-access-patterns.md'
+  - 'Clean Up and Closing': 'clean-up-and-closing.md'
+  - 'Tips and Troubleshooting': 'tips-and-troubleshooting.md'
