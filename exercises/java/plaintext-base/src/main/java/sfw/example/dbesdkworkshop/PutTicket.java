@@ -24,7 +24,7 @@ public class PutTicket implements Runnable {
   String severity;
   @Option( names = {"-S", "--subject"}, required = true, description = "set subject")
   String subject;
-  @Option( names = {"-m", "--message"}, required = true, description = "set message")
+  @Option( names = {"-M", "--message"}, required = true, description = "set message")
   String message;
 
   @Override

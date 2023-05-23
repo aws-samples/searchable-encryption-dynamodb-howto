@@ -5,6 +5,9 @@ package sfw.example.dbesdkworkshop;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import sfw.example.dbesdkworkshop.datamodel.*;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -44,6 +47,38 @@ public class Api {
     ddbClient.putItem(request);
     return ddbItem;
   }
+  protected void deleteTable() {
+    final DeleteTableRequest request =
+        DeleteTableRequest.builder()
+        .tableName(tableName)
+        .build();
+    ddbClient.deleteTable(request);
+  }
+
+  protected void createTable() {
+    try {deleteTable();}
+    catch (Exception e) {}
+
+    final String partKey = Config.contents.document_bucket.document_table.partition_key;
+    final String sortKey = Config.contents.document_bucket.document_table.sort_key;
+    final KeySchemaElement partSchema = KeySchemaElement.builder().attributeName(partKey).keyType(KeyType.HASH).build();
+    final KeySchemaElement sortSchema = KeySchemaElement.builder().attributeName(sortKey).keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
+    keySchema.add(partSchema);
+    keySchema.add(sortSchema);
+    final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
+    attrs.add(AttributeDefinition.builder().attributeName(partKey).attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName(sortKey).attributeType(ScalarAttributeType.S).build());
+    final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();
+    final CreateTableRequest request =
+        CreateTableRequest.builder()
+        .tableName(tableName)
+        .keySchema(keySchema)
+        .attributeDefinitions(attrs)
+        .provisionedThroughput(throughPut)
+        .build();
+    ddbClient.createTable(request);
+  }
 
   /**
    * Retrieves a {@link Employee} for the supplied key.
@@ -78,8 +113,32 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
-  //  public List<Emeeting> getMeetingsByDataAndEmail(String date, String email) {throw new
-  // IllegalArgumentException("not yet");}
+  public List<Emeeting> getMeetingsByDateAndEmail(String date, String email)
+  {
+    final String partKey = Config.contents.document_bucket.document_table.partition_key;
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":PartValue", AttributeValue.builder()
+        .s(email) 
+        .build());
+
+    final QueryRequest request =
+    QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression(partKey + " = :PartValue")
+    // .filterExpression("")
+    .expressionAttributeValues(attrValues)
+    .build();
+    final QueryResponse result = ddbClient.query(request);
+    final ArrayList<Emeeting> results = new ArrayList<Emeeting>();
+    for (Map<String,AttributeValue> item : result.items()) {
+      results.add(Emeeting.fromItem(item));
+    }
+    return results;
+  }
+
+
+  //PK1=email SK1 between(date1, date2)
+
   //  public List<Emeeting> getMeetingsByDateAndEmployeeId(){throw new IllegalArgumentException("not
   // yet");}
   //  public List<Emeeting> getMeetingsByDateAndBuilding(){throw new IllegalArgumentException("not

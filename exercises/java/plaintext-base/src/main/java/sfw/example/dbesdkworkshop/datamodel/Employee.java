@@ -47,6 +47,8 @@ public class Employee extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
     item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
+    item.put("employeeTag", AttributeValue.fromS(employeeTag));
     item.put("email", AttributeValue.fromS(email));
     item.put("managerEmail", AttributeValue.fromS(managerEmail));
     item.put("city", AttributeValue.fromS(city));
@@ -61,8 +63,8 @@ public class Employee extends BaseItem {
 
   public static Employee fromItem(Map<String, AttributeValue> item) {
     return new Employee(
-        item.get(PARTITION_KEY_NAME).s(),
-        item.get(SORT_KEY_NAME).s(),
+        item.get("employeeNumber").s(),
+        item.get("employeeTag").s(),
         item.get("email").s(),
         item.get("managerEmail").s(),
         item.get("city").s(),

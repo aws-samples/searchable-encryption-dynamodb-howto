@@ -39,9 +39,11 @@ public class Emeeting extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
-    // TODO, how???
-    //    item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    // item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
+    // item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeEmail));
+    item.put(SORT_KEY_NAME, AttributeValue.fromS("aaa"));
+    item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("floor", AttributeValue.fromS(floor));

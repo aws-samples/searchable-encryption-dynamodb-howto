@@ -9,8 +9,10 @@ import java.io.File;
 /** Helper to pull required Document Bucket configuration keys out of the configuration system. */
 public class Config {
   private static final File DEFAULT_CONFIG = new File("../../config.toml");
-  public static final ConfigContents contents =
-      new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
+  public static final ConfigContents contents = new ConfigContents(
+      new Base("MyStateFile"),
+      new DocumentBucket(new DocumentTable("MyTestTable", "PartKey", "SortKey", "4", "5"), new Bucket("", "", "")));
+      // new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
   private Config() { // Do not instantiate
   }

@@ -9,7 +9,7 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Emeeting;
 
-@Command(name = "put-emeeting", description = "Adds a record to the database.")
+@Command(name = "put-meeting", description = "Adds a record to the database.")
 public class PutEmeeting implements Runnable {
 
   @Option( names = {"-E", "--employeeNumber"}, required = true, description = "set employeeNumber")
