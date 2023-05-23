@@ -15,7 +15,7 @@ public class Reservation extends BaseItem {
   private String attendees;
   private String subject;
 
-  protected Reservation(
+  public Reservation(
       String building,
       String startTime,
       String floor,

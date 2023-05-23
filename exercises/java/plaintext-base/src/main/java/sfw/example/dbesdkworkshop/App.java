@@ -18,7 +18,12 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
   name = "Employee Portal",
   description = "Entrypoint for interacting with the employee portal",
   subcommands = {
+    PutEmeeting.class,
     PutEmployee.class,
+    PutProject.class,
+    PutReservation.class,
+    PutTicket.class,
+    PutTimecard.class,
     CommandLine.HelpCommand.class
   }
 )
@@ -53,7 +58,7 @@ public class App {
    * @param args the command-line arguments to the Document Bucket.
    */
   public static void main(String[] args) {
-    System.out.println("Something else");
+    //System.out.println("Something else");
     int exitCode = new CommandLine(new App()).execute(args);
     System.exit(exitCode);
   }

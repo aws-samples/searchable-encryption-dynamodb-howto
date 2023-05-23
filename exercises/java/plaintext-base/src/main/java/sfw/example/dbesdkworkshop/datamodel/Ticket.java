@@ -14,7 +14,7 @@ public class Ticket extends BaseItem {
   private String subject;
   private String message;
 
-  protected Ticket(
+  public Ticket(
       String ticketNumber,
       String modifiedDate,
       String authorEmail,

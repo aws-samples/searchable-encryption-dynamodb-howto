@@ -16,7 +16,7 @@ public class Emeeting extends BaseItem {
   private String attendees;
   private String subject;
 
-  protected Emeeting(
+  public Emeeting(
       String employeeNumber,
       String startTime,
       String employeeEmail,

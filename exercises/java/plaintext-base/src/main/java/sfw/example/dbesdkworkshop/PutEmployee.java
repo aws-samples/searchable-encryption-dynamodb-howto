@@ -12,7 +12,7 @@ import sfw.example.dbesdkworkshop.datamodel.Employee;
 @Command(name = "put-employee", description = "Adds a record to the database.")
 public class PutEmployee implements Runnable {
 
-  @Option( names = {"--employeeNumber"}, required = true, description = "set employeeNumber")
+  @Option( names = {"-E", "--employeeNumber"}, required = true, description = "set employeeNumber")
   String employeeNumber;
   @Option( names = {"-t", "--employeeTag"}, required = true, description = "set employeeTag")
   String employeeTag;
@@ -32,7 +32,7 @@ public class PutEmployee implements Runnable {
   String desk;
   @Option( names = {"-n", "--name"}, required = true, description = "set name")
   String name;
-  @Option( names = {"--title"}, required = true, description = "set title")
+  @Option( names = {"-T", "--title"}, required = true, description = "set title")
   String title;
 
   @Override

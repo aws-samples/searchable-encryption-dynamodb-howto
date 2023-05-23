@@ -11,7 +11,7 @@ public class Project extends BaseItem {
   private String description;
   private String targetDate;
 
-  protected Project(
+  public Project(
       String name, String status, String startDate, String description, String targetDate) {
     this.name = name;
     this.status = status;

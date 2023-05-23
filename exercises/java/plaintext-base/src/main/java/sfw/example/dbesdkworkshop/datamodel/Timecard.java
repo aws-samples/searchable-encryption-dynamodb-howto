@@ -12,7 +12,7 @@ public class Timecard extends BaseItem {
   private String hours;
   private String role;
 
-  protected Timecard(
+  public Timecard(
       String projectName, String startDate, String employeeEmail, String hours, String role) {
     this.projectName = projectName;
     this.startDate = startDate;
