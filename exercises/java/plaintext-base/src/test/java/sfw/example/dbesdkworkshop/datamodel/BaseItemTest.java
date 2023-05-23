@@ -1,14 +1,14 @@
 //// Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //// SPDX-License-Identifier: Apache-2.0
 //
-//package sfw.example.dbesdkworkshop.datamodel;
+// package sfw.example.dbesdkworkshop.datamodel;
 //
-//import static org.junit.jupiter.api.Assertions.*;
+// import static org.junit.jupiter.api.Assertions.*;
 //
-//import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-//import org.junit.jupiter.api.Test;
+// import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+// import org.junit.jupiter.api.Test;
 //
-//public class BaseItemTest {
+// public class BaseItemTest {
 //
 //  @Test
 //  void testEqualsDiffTypes() {
@@ -65,4 +65,4 @@
 //    assertTrue(test.toString().contains(contextKey));
 //    assertTrue(test.toString().contains(objectKey.toString()));
 //  }
-//}
+// }

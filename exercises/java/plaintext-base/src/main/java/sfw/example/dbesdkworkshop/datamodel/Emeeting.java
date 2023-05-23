@@ -1,9 +1,8 @@
 package sfw.example.dbesdkworkshop.datamodel;
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Emeeting extends BaseItem {
 
@@ -18,16 +17,15 @@ public class Emeeting extends BaseItem {
   private String subject;
 
   protected Emeeting(
-    String employeeNumber,
-    String startTime,
-    String employeeEmail,
-    String floor,
-    String room,
-    String managerEmail,
-    String duration,
-    String attendees,
-    String subject
-  ) {
+      String employeeNumber,
+      String startTime,
+      String employeeEmail,
+      String floor,
+      String room,
+      String managerEmail,
+      String duration,
+      String attendees,
+      String subject) {
     this.employeeNumber = employeeNumber;
     this.startTime = startTime;
     this.employeeEmail = employeeEmail;
@@ -43,7 +41,7 @@ public class Emeeting extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
     // TODO, how???
-//    item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    //    item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("floor", AttributeValue.fromS(floor));
@@ -57,16 +55,14 @@ public class Emeeting extends BaseItem {
 
   public static Emeeting fromItem(Map<String, AttributeValue> item) {
     return new Emeeting(
-      item.get(PARTITION_KEY_NAME).s(),
-      item.get("startTime").s(),
-      item.get("employeeEmail").s(),
-      item.get("floor").s(),
-      item.get("room").s(),
-      item.get("managerEmail").s(),
-      item.get("duration").s(),
-      item.get("attendees").s(),
-      item.get("subject").s()
-    );
+        item.get(PARTITION_KEY_NAME).s(),
+        item.get("startTime").s(),
+        item.get("employeeEmail").s(),
+        item.get("floor").s(),
+        item.get("room").s(),
+        item.get("managerEmail").s(),
+        item.get("duration").s(),
+        item.get("attendees").s(),
+        item.get("subject").s());
   }
-
 }

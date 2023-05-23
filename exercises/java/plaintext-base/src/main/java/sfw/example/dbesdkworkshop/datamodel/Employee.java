@@ -1,9 +1,8 @@
 package sfw.example.dbesdkworkshop.datamodel;
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Employee extends BaseItem {
   private String employeeNumber;
@@ -18,18 +17,18 @@ public class Employee extends BaseItem {
   private String name;
   private String title;
 
-  protected Employee(
-    String employeeNumber,
-    String employeeTag,
-    String email,
-    String managerEmail,
-    String city,
-    String building,
-    String floor,
-    String room,
-    String desk,
-    String name,
-    String title
+  public Employee(
+      String employeeNumber,
+      String employeeTag,
+      String email,
+      String managerEmail,
+      String city,
+      String building,
+      String floor,
+      String room,
+      String desk,
+      String name,
+      String title
   ) {
     this.employeeNumber = employeeNumber;
     this.employeeTag = employeeTag;
@@ -62,20 +61,16 @@ public class Employee extends BaseItem {
 
   public static Employee fromItem(Map<String, AttributeValue> item) {
     return new Employee(
-      item.get(PARTITION_KEY_NAME).s(),
-      item.get(SORT_KEY_NAME).s(),
-      item.get("email").s(),
-      item.get("managerEmail").s(),
-      item.get("city").s(),
-      item.get("building").s(),
-      item.get("floor").s(),
-      item.get("room").s(),
-      item.get("desk").s(),
-      item.get("name").s(),
-      item.get("title").s()
-    );
+        item.get(PARTITION_KEY_NAME).s(),
+        item.get(SORT_KEY_NAME).s(),
+        item.get("email").s(),
+        item.get("managerEmail").s(),
+        item.get("city").s(),
+        item.get("building").s(),
+        item.get("floor").s(),
+        item.get("room").s(),
+        item.get("desk").s(),
+        item.get("name").s(),
+        item.get("title").s());
   }
-
-
-
 }

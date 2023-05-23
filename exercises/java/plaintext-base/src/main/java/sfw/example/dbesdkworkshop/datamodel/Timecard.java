@@ -1,9 +1,8 @@
 package sfw.example.dbesdkworkshop.datamodel;
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Timecard extends BaseItem {
 
@@ -14,12 +13,7 @@ public class Timecard extends BaseItem {
   private String role;
 
   protected Timecard(
-    String projectName,
-    String startDate,
-    String employeeEmail,
-    String hours,
-    String role
-  ) {
+      String projectName, String startDate, String employeeEmail, String hours, String role) {
     this.projectName = projectName;
     this.startDate = startDate;
     this.employeeEmail = employeeEmail;
@@ -39,11 +33,10 @@ public class Timecard extends BaseItem {
 
   public static Timecard fromItem(Map<String, AttributeValue> item) {
     return new Timecard(
-      item.get(PARTITION_KEY_NAME).s(),
-      item.get("startDate").s(),
-      item.get("employeeEmail").s(),
-      item.get("hours").s(),
-      item.get("role").s()
-    );
+        item.get(PARTITION_KEY_NAME).s(),
+        item.get("startDate").s(),
+        item.get("employeeEmail").s(),
+        item.get("hours").s(),
+        item.get("role").s());
   }
 }

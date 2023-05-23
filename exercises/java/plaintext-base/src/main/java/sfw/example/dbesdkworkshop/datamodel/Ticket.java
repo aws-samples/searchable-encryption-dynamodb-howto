@@ -1,9 +1,8 @@
 package sfw.example.dbesdkworkshop.datamodel;
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Ticket extends BaseItem {
 
@@ -16,14 +15,13 @@ public class Ticket extends BaseItem {
   private String message;
 
   protected Ticket(
-    String ticketNumber,
-    String modifiedDate,
-    String authorEmail,
-    String assigneeEmail,
-    String severity,
-    String subject,
-    String message
-  ) {
+      String ticketNumber,
+      String modifiedDate,
+      String authorEmail,
+      String assigneeEmail,
+      String severity,
+      String subject,
+      String message) {
     this.ticketNumber = ticketNumber;
     this.modifiedDate = modifiedDate;
     this.authorEmail = authorEmail;
@@ -47,13 +45,12 @@ public class Ticket extends BaseItem {
 
   public static Ticket fromItem(Map<String, AttributeValue> item) {
     return new Ticket(
-      item.get(PARTITION_KEY_NAME).s(),
-      item.get("modifiedDate").s(),
-      item.get("authorEmail").s(),
-      item.get("assigneeEmail").s(),
-      item.get("severity").s(),
-      item.get("subject").s(),
-      item.get("message").s()
-    );
+        item.get(PARTITION_KEY_NAME).s(),
+        item.get("modifiedDate").s(),
+        item.get("authorEmail").s(),
+        item.get("assigneeEmail").s(),
+        item.get("severity").s(),
+        item.get("subject").s(),
+        item.get("message").s());
   }
 }

@@ -1,9 +1,8 @@
 package sfw.example.dbesdkworkshop.datamodel;
 
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Reservation extends BaseItem {
 
@@ -15,16 +14,16 @@ public class Reservation extends BaseItem {
   private String duration;
   private String attendees;
   private String subject;
+
   protected Reservation(
-    String building,
-    String startTime,
-    String floor,
-    String room,
-    String organizerEmail,
-    String duration,
-    String attendees,
-    String subject
-  ) {
+      String building,
+      String startTime,
+      String floor,
+      String room,
+      String organizerEmail,
+      String duration,
+      String attendees,
+      String subject) {
     this.building = building;
     this.startTime = startTime;
     this.floor = floor;
@@ -50,15 +49,13 @@ public class Reservation extends BaseItem {
 
   public static Reservation fromItem(Map<String, AttributeValue> item) {
     return new Reservation(
-      item.get(PARTITION_KEY_NAME).s(),
-      item.get("startTime").s(),
-      item.get("floor").s(),
-      item.get("room").s(),
-      item.get("organizerEmail").s(),
-      item.get("duration").s(),
-      item.get("attendees").s(),
-      item.get("subject").s()
-    );
+        item.get(PARTITION_KEY_NAME).s(),
+        item.get("startTime").s(),
+        item.get("floor").s(),
+        item.get("room").s(),
+        item.get("organizerEmail").s(),
+        item.get("duration").s(),
+        item.get("attendees").s(),
+        item.get("subject").s());
   }
-
 }

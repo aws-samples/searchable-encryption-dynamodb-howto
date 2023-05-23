@@ -6,6 +6,5 @@ coverage:
 	elinks http://localhost:8000
 	killall python3
 
-javadoc:
-	mvn javadoc:javadoc
-	cd ./target/site/apidocs; python3 -m http.server 8080
+fatJar:
+	gradle fatJar
