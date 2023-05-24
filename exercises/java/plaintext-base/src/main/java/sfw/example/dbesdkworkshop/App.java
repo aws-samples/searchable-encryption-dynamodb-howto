@@ -21,7 +21,7 @@ import java.net.URI;
   subcommands = {
     CreateTable.class,
     GetMeetings.class,
-    PutEmeeting.class,
+    PutMeeting.class,
     PutEmployee.class,
     PutProject.class,
     PutReservation.class,

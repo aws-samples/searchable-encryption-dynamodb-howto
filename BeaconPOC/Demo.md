@@ -24,14 +24,14 @@ or
 
 one record per employee
 
-* PK  - employee ID
-* SK  - "E" + employee ID
+* PK  - EmployeeNumber
+* SK  - "E" + EmployeeNumber
 * PK1 - employee email
-* SK1  - "E" + employee ID
+* SK1  - "E" + EmployeeNumber
 * PK2 - manager email
 * PK3 - City
 * SK3 - Building.floor.desk
-* EmployeeID^
+* EmployeeNumber^
 * EmployeeEmail^
 * ManagerEmail^
 * Location^
@@ -57,15 +57,15 @@ one record per ticket modification
 * Subject
 * Message
 
-### Employee Meeting Record
+### Meeting Record
 
 one record for every (employee, meeting) pair
 
-* PK - employee ID
+* PK - EmployeeNumber
 * SK - start time of meeting + floor.room
 * PK1 - employee email
 * SK1 - start time of meeting + floor.room
-* EmployeeID^
+* EmployeeNumber^
 * EmployeeEmail^
 * MeetingStart^
 * Location^
@@ -98,7 +98,7 @@ one record per employee per project per week
 * Hours
 * Role
 
-### Meeting Reservation Record
+### Reservation Record
 
 one record per meeting
 
@@ -117,14 +117,14 @@ one record per meeting
 ## Required Access Patterns
 
 1. Get meetings by date and email
-1. Get meetings by date and employeeID
-1. Get meetings by date and building/floor/room
+1. Get meetings by date and EmployeeNumber
+1. Get reservations by date and building/floor/room
 1. Get employee data	by email
 1. Get meetings by email
 1. Get tickets by email
 1. Get reservations by email
 1. Get time cards by email
-1. Get employee Info by employeeID
+1. Get employee Info by EmployeeNumber
 1. Get employee Info by email
 1. Get Ticket History by ticket ID
 1. Get Ticket History by employee email
@@ -144,9 +144,9 @@ one record per meeting
 
 ### Main Table (Indexed on PK and SK)
 
- * Employee Record : PK=EmployeeID, SK="E" + EmployeeID
+ * Employee Record : PK=EmployeeNumber, SK="E" + EmployeeNumber
  * Ticket Record : PK=TicketNumber, SK=TicketModTime
- * Employee Meeting Record : PK=EmployeeID, SK=MeetingStart + floor.room
+ * Employee Meeting Record : PK=EmployeeNumber, SK=MeetingStart + floor.room
  * Project Record : PK=ProjectName, SK=ProjectName
  * Time Card : PK=ProjectName, SK=TimeCardStart + EmployeeEmail
  * Meeting Reservation Record : PK=building ID, SK=MeetingStart + floor.room
@@ -174,14 +174,14 @@ one record per meeting
 | # | Access Pattern | Index | Key Condition | Filter Condition |
 |:----------|:----------|:----------|:----------|:----------|
 |1| Get meetings by date and email | GSI-1 | PK1=email SK1 between(date1, date2) | duration > 0 |
-|2| Get meetings by date and employeeID | Table | PK=employeeID SK between(date1, date2) | duration > 0 |
-|3| Get meetings by date and building/floor/room | Table | PK=buildingID SK between(date1, date2) | SK contains building.floor.room |
+|2| Get meetings by date and EmployeeNumber | Table | PK=EmployeeNumber SK between(date1, date2) | duration > 0 |
+|3| Get reservations by date and building/floor/room | Table | PK=buildingID SK between(date1, date2) | SK contains building.floor.room |
 |4| Get employee data by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |5| Get meetings by email |GSI-1 | PK1=email SK1 > 30 days ago |    |
 |6| Get tickets by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |7| Get reservations by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |8| Get time cards by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
-|9| Get employee Info by employeeID | Table | PK=employeeID SK starts_with("E") |    |
+|9| Get employee Info by EmployeeNumber | Table | PK=EmployeeNumber SK starts_with("E") |    |
 |10| Get employee Info by email | GSI-1 | PK1=email |SK starts_with("E")|
 |11| Get Ticket History by ticket ID | Table | PK=TicketID |    |
 |12| Get Ticket History by employee email | GSI-1 | PK1 = email |PK=TicketID|
@@ -238,18 +238,18 @@ All of the index beacons are of necessity Compound Beacons.
 All constructor parts are required.
 
 #### PK Parts
- * EmployeeID  E-
+ * EmployeeNumber  E-
  * TicketNumber T-
  * ProjectName P-
  * Building B- Location.Building
 
 #### PK Constructors
- * EmployeeID
+ * EmployeeNumber
  * TicketNumber
  * ProjectName
 
 #### SK Parts
- * EmployeeID  E-
+ * EmployeeNumber  E-
  * TicketModTime M-
  * MeetingStart S-
  * Floor F- Location.Floor
@@ -259,7 +259,7 @@ All constructor parts are required.
  * EmployeeEmail EE-
 
 #### SK Constructors
- * EmployeeID
+ * EmployeeNumber
  * TicketModTime
  * MeetingStart, Floor, Room
  * ProjectName
@@ -278,7 +278,7 @@ All constructor parts are required.
  * OrganizerEmail
 
 #### SK1 Parts
- * EmployeeID  E-
+ * EmployeeNumber  E-
  * TicketModTime M-
  * MeetingStart S-
  * Floor F- Location.Floor
@@ -286,7 +286,7 @@ All constructor parts are required.
  * ProjectStart P-
 
 #### SK1 Constructors
- * EmployeeID
+ * EmployeeNumber
  * TicketModTime
  * MeetingStart, Floor, Room
  * ProjectStart

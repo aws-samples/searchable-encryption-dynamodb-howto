@@ -157,22 +157,12 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
-  public List<Emeeting> getMeetingsByEmail(String email, String startDate, String endDate)
+  public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":email", AttributeValue.builder()
-      .s(email) 
-      .build());
-      if (startDate != null) {
-        attrValues.put(":startDate", AttributeValue.builder()
-      .s(startDate) 
-      .build());
-    }
-    if (endDate != null) {
-      attrValues.put(":endDate", AttributeValue.builder()
-      .s(endDate) 
-      .build());
-    }
+    attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
+    AddValue(attrValues, ":startDate", startDate, "S-");
+    AddValue(attrValues, ":endDate", endDate, "S-");
     String filterExpr = null;
     if (startDate != null && endDate != null) {
       filterExpr = "SK between :startDate and :endDate";
@@ -193,29 +183,30 @@ public class Api {
     final QueryRequest request = builder.build();
 
     final QueryResponse result = ddbClient.query(request);
-    final ArrayList<Emeeting> results = new ArrayList<Emeeting>();
+    final ArrayList<Meeting> results = new ArrayList<Meeting>();
     for (Map<String,AttributeValue> item : result.items()) {
-      results.add(Emeeting.fromItem(item));
+      results.add(Meeting.fromItem(item));
     }
     return results;
   }
 
-  public List<Emeeting> getMeetingsById(String id, String startDate, String endDate)
+  void AddValue(HashMap<String, AttributeValue> attrValues, String name, String value, String prefix)
+  {
+    if (value != null) {
+      attrValues.put(name,
+      AttributeValue.builder()
+      .s(prefix + value) 
+      .build());
+    }
+  }
+
+  public List<Meeting> getMeetingsById(String id, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":id", AttributeValue.builder()
-      .s(id) 
-      .build());
-    if (startDate != null) {
-      attrValues.put(":startDate", AttributeValue.builder()
-      .s(startDate) 
-      .build());
-    }
-    if (endDate != null) {
-      attrValues.put(":endDate", AttributeValue.builder()
-      .s(endDate) 
-      .build());
-    }
+    attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
+    AddValue(attrValues, ":startDate", startDate, "S-");
+    AddValue(attrValues, ":endDate", endDate, "S-");
+
     String filterExpr = null;
     if (startDate != null && endDate != null) {
       filterExpr = "SK between :startDate and :endDate";
@@ -235,9 +226,9 @@ public class Api {
     final QueryRequest request = builder.build();
 
     final QueryResponse result = ddbClient.query(request);
-    final ArrayList<Emeeting> results = new ArrayList<Emeeting>();
+    final ArrayList<Meeting> results = new ArrayList<Meeting>();
     for (Map<String,AttributeValue> item : result.items()) {
-      results.add(Emeeting.fromItem(item));
+      results.add(Meeting.fromItem(item));
     }
     return results;
   }
@@ -245,15 +236,13 @@ public class Api {
 
   //PK1=email SK1 between(date1, date2)
 
-  //  public List<Emeeting> getMeetingsByDateAndEmployeeId(){throw new IllegalArgumentException("not
+  //  public List<Meeting> getMeetingsByDateAndBuilding(){throw new IllegalArgumentException("not
   // yet");}
-  //  public List<Emeeting> getMeetingsByDateAndBuilding(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Emeeting> getMeetingsByDateAndBuildingFloor(){throw new
+  //  public List<Meeting> getMeetingsByDateAndBuildingFloor(){throw new
   // IllegalArgumentException("not yet");}
-  //  public List<Emeeting> getMeetingsByDateAndBuildingFloorRoom(){throw new
+  //  public List<Meeting> getMeetingsByDateAndBuildingFloorRoom(){throw new
   // IllegalArgumentException("not yet");}
-  //  public List<Emeeting> getMeetingsByEmail(){throw new IllegalArgumentException("not yet");}
+  //  public List<Meeting> getMeetingsByEmail(){throw new IllegalArgumentException("not yet");}
   //
   //  public List<Employee> getEmployeeDataByEmail(){throw new IllegalArgumentException("not yet");}
   //  public List<Employee> getEmployeeInfoByEmployeeId(){throw new IllegalArgumentException("not

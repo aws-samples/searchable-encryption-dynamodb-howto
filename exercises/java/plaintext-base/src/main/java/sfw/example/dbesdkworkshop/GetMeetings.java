@@ -7,7 +7,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
-import sfw.example.dbesdkworkshop.datamodel.Emeeting;
+import sfw.example.dbesdkworkshop.datamodel.Meeting;
 
 // There is one get-meetings command
 // for all of the "get meetings by" searches
@@ -30,10 +30,10 @@ public class GetMeetings implements Runnable {
     if (email != null && id != null) {
         // throw not both
     } else if (email != null) {
-      final List<Emeeting> results = api.getMeetingsByEmail(email, startDate, endDate);
+      final List<Meeting> results = api.getMeetingsByEmail(email, startDate, endDate);
       System.out.println(results);
     } else if (id != null) {
-      final List<Emeeting> results = api.getMeetingsById(id, startDate, endDate);
+      final List<Meeting> results = api.getMeetingsById(id, startDate, endDate);
       System.out.println(results);
     } else {
       // throw at least one

@@ -1,18 +1,18 @@
 package sfw.example.dbesdkworkshop;
 
-
+import java.util.HashMap;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
-import sfw.example.dbesdkworkshop.datamodel.Emeeting;
+import sfw.example.dbesdkworkshop.datamodel.Meeting;
 
 @Command(name = "put-meeting", description = "Adds a record to the database.")
-public class PutEmeeting implements Runnable {
+public class PutMeeting implements Runnable {
 
-  @Option( names = {"-E", "--employeeNumber"}, required = true, description = "set employeeNumber")
+  @Option( names = {"-n", "--employeeNumber"}, required = true, description = "set employeeNumber")
   String employeeNumber;
   @Option( names = {"-s", "--startTime"}, required = true, description = "set startTime")
   String startTime;
@@ -32,7 +32,7 @@ public class PutEmeeting implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
-    api.putItem(new Emeeting(
+    api.putItem(new Meeting(
       employeeNumber,
       startTime,
       employeeEmail,
