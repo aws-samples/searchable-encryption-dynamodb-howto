@@ -33,7 +33,14 @@ public class Ticket extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(ticketNumber));
+    item.put("PK", AttributeValue.fromS("T-" + ticketNumber));
+    item.put("SK", AttributeValue.fromS("M-" + modifiedDate));
+    item.put("PK1", AttributeValue.fromS("CE-" + authorEmail));
+    item.put("SK1", AttributeValue.fromS("M-" + modifiedDate));
+    item.put("PK2", AttributeValue.fromS("AE-" + assigneeEmail));
+    item.put("PK3", AttributeValue.fromS("V-" + severity));
+    item.put("SK3", AttributeValue.fromS("M-" + modifiedDate));
+    item.put("ticketNumber", AttributeValue.fromS(ticketNumber));
     item.put("modifiedDate", AttributeValue.fromS(modifiedDate));
     item.put("authorEmail", AttributeValue.fromS(authorEmail));
     item.put("assigneeEmail", AttributeValue.fromS(assigneeEmail));
@@ -45,7 +52,7 @@ public class Ticket extends BaseItem {
 
   public static Ticket fromItem(Map<String, AttributeValue> item) {
     return new Ticket(
-        item.get(PARTITION_KEY_NAME).s(),
+        item.get("ticketNumber").s(),
         item.get("modifiedDate").s(),
         item.get("authorEmail").s(),
         item.get("assigneeEmail").s(),

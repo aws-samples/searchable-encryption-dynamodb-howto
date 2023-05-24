@@ -14,9 +14,9 @@ public class PutProject implements Runnable {
 
   @Option( names = {"-N", "--name"}, required = true, description = "set name")
   String name;
-  @Option( names = {"-S", "--status"}, required = true, description = "set status")
+  @Option( names = {"-s", "--status"}, required = true, description = "set status")
   String status;
-  @Option( names = {"-s", "--start"}, required = true, description = "set startDate")
+  @Option( names = {"-S", "--start"}, required = true, description = "set startDate")
   String startDate;
   @Option( names = {"-P", "--description"}, required = true, description = "set description")
   String description;

@@ -16,8 +16,8 @@ public class PutEmployee implements Runnable {
   String employeeNumber;
   @Option( names = {"-e", "--email"}, required = true, description = "set email")
   String email;
-  @Option( names = {"-G", "--manager-email"}, required = true, description = "set managerEmail")
-  String managerEmail;
+  @Option( names = {"-g", "--assignee-email"}, required = true, description = "set assignee email")
+  String assigneeEmail;
   @Option( names = {"-c", "--city"}, required = true, description = "set city")
   String city;
   @Option( names = {"-b", "--building"}, required = true, description = "set building")
@@ -39,7 +39,7 @@ public class PutEmployee implements Runnable {
     api.putItem(new Employee(
       employeeNumber,
       email,
-      managerEmail,
+      assigneeEmail,
       city,
       building,
       floor,

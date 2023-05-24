@@ -23,8 +23,8 @@ Command Line Args - Names and Short Options
 -p project-name
 -R role
 -r room
--s start (Time / startDate)
--S status
+-S start
+-s status
 -t target
 -T title
 -v Severity

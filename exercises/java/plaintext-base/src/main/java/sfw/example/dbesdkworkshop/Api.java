@@ -156,37 +156,48 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
+  public String GetFilterForRange(String startDate, String endDate, String sk)
+  {
+    if (startDate != null && endDate != null) {
+      return sk + " between :startDate and :endDate";
+    } else if (startDate != null) {
+      return sk + " >= :startDate";
+    } else if (endDate != null) {
+      return sk + " <= :endDate";
+    } else {
+      return null;
+    }
+  }
+
+  public String GetKeyExprForRange(String startDate, String endDate, String sk)
+  {
+    if (startDate != null && endDate != null) {
+      return " AND " + sk + " between :startDate and :endDate";
+    } else if (startDate != null) {
+      return " AND " + sk + " >= :startDate";
+    } else if (endDate != null) {
+      return " AND " + sk + " <= :endDate";
+    } else {
+      return "";
+    }
+  }
+
+
   public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-    String filterExpr = null;
-    if (startDate != null && endDate != null) {
-      filterExpr = "SK between :startDate and :endDate";
-    } else if (startDate != null) {
-      filterExpr = "SK >= :startDate";
-    } else if (endDate != null) {
-      filterExpr = "SK <= :endDate";
-    }
+    String filterExpr = GetFilterForRange(startDate, endDate, "SK");
     
     QueryRequest.Builder builder = QueryRequest.builder()
-    .tableName(tableName)
-    .indexName("GSI1")
-    .keyConditionExpression("PK1 = :email")
-    .expressionAttributeValues(attrValues);
-    if (filterExpr != null) {
-      builder = builder.filterExpression(filterExpr);
-    }
-    final QueryRequest request = builder.build();
-
-    final QueryResponse result = ddbClient.query(request);
-    final ArrayList<Meeting> results = new ArrayList<Meeting>();
-    for (Map<String,AttributeValue> item : result.items()) {
-      results.add(Meeting.fromItem(item));
-    }
-    return results;
+      .tableName(tableName)
+      .indexName("GSI1")
+      .keyConditionExpression("PK1 = :email")
+      .expressionAttributeValues(attrValues);
+    if (filterExpr != null) builder = builder.filterExpression(filterExpr);
+    return MeetingFromResp(ddbClient.query(builder.build()));
   }
 
   void AddValue(HashMap<String, AttributeValue> attrValues, String name, String value, String prefix)
@@ -205,37 +216,34 @@ public class Api {
     attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-
-    String filterExpr = null;
-    if (startDate != null && endDate != null) {
-      filterExpr = "SK between :startDate and :endDate";
-    } else if (startDate != null) {
-      filterExpr = "SK >= :startDate";
-    } else if (endDate != null) {
-      filterExpr = "SK <= :endDate";
-    }
+    String filterExpr = GetFilterForRange(startDate, endDate, "SK");
     
     QueryRequest.Builder builder = QueryRequest.builder()
     .tableName(tableName)
     .keyConditionExpression("PK = :id")
     .expressionAttributeValues(attrValues);
-    if (filterExpr != null) {
-      builder = builder.filterExpression(filterExpr);
-    }
-    final QueryRequest request = builder.build();
-
-    final QueryResponse result = ddbClient.query(request);
-    final ArrayList<Meeting> results = new ArrayList<Meeting>();
-    for (Map<String,AttributeValue> item : result.items()) {
-      results.add(Meeting.fromItem(item));
-    }
-    return results;
+    if (filterExpr != null) builder = builder.filterExpression(filterExpr);
+    return MeetingFromResp(ddbClient.query(builder.build()));
   }
 
   protected List<Employee> EmployeeFromResp(QueryResponse resp) {
     final ArrayList<Employee> results = new ArrayList<Employee>();
     for (Map<String,AttributeValue> item : resp.items()) {
       results.add(Employee.fromItem(item));
+    }
+    return results;
+  }
+  protected List<Ticket> TicketFromResp(QueryResponse resp) {
+    final ArrayList<Ticket> results = new ArrayList<Ticket>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Ticket.fromItem(item));
+    }
+    return results;
+  }
+  protected List<Meeting> MeetingFromResp(QueryResponse resp) {
+    final ArrayList<Meeting> results = new ArrayList<Meeting>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Meeting.fromItem(item));
     }
     return results;
   }
@@ -322,31 +330,57 @@ public class Api {
     return EmployeeFromResp(ddbClient.query(request));
   }
 
+  public List<Ticket> getTicketById(String ticket, String startDate, String endDate)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":ticket", AttributeValue.builder().s("T-" + ticket).build());
+    AddValue(attrValues, ":startDate", startDate, "M-");
+    AddValue(attrValues, ":endDate", endDate, "M-");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK");
+    
+    QueryRequest.Builder builder = QueryRequest.builder()
+      .tableName(tableName)
+      .keyConditionExpression("PK = :ticket" + dateExpr)
+      .expressionAttributeValues(attrValues);
+    return TicketFromResp(ddbClient.query(builder.build()));
+  }
 
-  //PK1=email SK1 between(date1, date2)
+  public List<Ticket> getTicketByAuthor(String author, String ticket, String startDate, String endDate)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":author", AttributeValue.builder().s("CE-" + author).build());
+    AddValue(attrValues, ":startDate", startDate, "M-");
+    AddValue(attrValues, ":endDate", endDate, "M-");
+    AddValue(attrValues, ":ticket", ticket, "T-");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK1");
+    
+    QueryRequest.Builder builder = QueryRequest.builder()
+      .tableName(tableName)
+      .indexName("GSI1")
+      .keyConditionExpression("PK1 = :author" + dateExpr)
+      .expressionAttributeValues(attrValues);
+    if (ticket != null) builder = builder.filterExpression("PK = :ticket");
+    return TicketFromResp(ddbClient.query(builder.build()));
+  }
 
-  //  public List<Meeting> getMeetingsByDateAndBuilding(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Meeting> getMeetingsByDateAndBuildingFloor(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Meeting> getMeetingsByDateAndBuildingFloorRoom(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Meeting> getMeetingsByEmail(){throw new IllegalArgumentException("not yet");}
-  //
-  //  public List<Employee> getEmployeeDataByEmail(){throw new IllegalArgumentException("not yet");}
-  //  public List<Employee> getEmployeeInfoByEmployeeId(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Employee> getEmployeeInfoByEmail(){throw new IllegalArgumentException("not yet");}
-  //  public List<Employee> getEmployeesByCity(){throw new IllegalArgumentException("not yet");}
-  //  public List<Employee> getEmployeesByCityBuilding(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Employee> getEmployeesByCityBuildingFloor(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Employee> getEmployeesByCityBuildingFloorDesk(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Employee> getEmployeesByManagerEmail(){throw new IllegalArgumentException("not
-  // yet");}
-  //
+  public List<Ticket> getTicketByAssignee(String assignee, String ticket, String startDate, String endDate)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":assignee", AttributeValue.builder().s("AE-" + assignee).build());
+    AddValue(attrValues, ":startDate", startDate, "M-");
+    AddValue(attrValues, ":endDate", endDate, "M-");
+    AddValue(attrValues, ":ticket", ticket, "T-");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK");
+    
+    QueryRequest.Builder builder = QueryRequest.builder()
+      .tableName(tableName)
+      .indexName("GSI2")
+      .keyConditionExpression("PK2 = :assignee" + dateExpr)
+      .expressionAttributeValues(attrValues);
+    if (ticket != null) builder = builder.filterExpression("PK = :ticket");
+    return TicketFromResp(ddbClient.query(builder.build()));
+  }
+
   //  public List<Project> getProjectsByStatusStartAndTargetDate(){throw new
   // IllegalArgumentException("not yet");}
   //  public List<Project> getProjectsByName(){throw new IllegalArgumentException("not yet");}
@@ -361,15 +395,6 @@ public class Api {
   //  public List<Reservation> getReservationsByEmail(){throw new IllegalArgumentException("not
   // yet");}
   //
-  //  public List<Ticket> getTicketsByEmail(){throw new IllegalArgumentException("not yet");}
-  //  public List<Ticket> getTicketHistoryByTicketId(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Ticket> getTicketHistoryByEmployeeEmail(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Ticket> getTicketHistoryByAssigneeEmail(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Ticket> getAssignedTicketsByAssigneeEmail(){throw new
-  // IllegalArgumentException("not yet");}
   //  public List<Ticket> getTicketsLastTouchedInThePast_24Hours(){throw new
   // IllegalArgumentException("not yet");}
   //

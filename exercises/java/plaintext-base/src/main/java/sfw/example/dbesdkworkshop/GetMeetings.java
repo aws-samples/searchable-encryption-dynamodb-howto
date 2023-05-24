@@ -15,7 +15,7 @@ import sfw.example.dbesdkworkshop.datamodel.Meeting;
 @Command(name = "get-meetings", description = "get meetings.")
 public class GetMeetings implements Runnable {
 
-  @Option( names = {"-s", "--start"}, required = false, description = "by start date")
+  @Option( names = {"-S", "--start"}, required = false, description = "by start date")
   String startDate;
   @Option( names = {"-E", "--end"}, required = false, description = "by end date")
   String endDate;
