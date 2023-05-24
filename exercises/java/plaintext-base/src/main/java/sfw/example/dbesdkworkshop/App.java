@@ -51,7 +51,10 @@ public class App {
     // Configure DynamoDB client
     // String tableName = stateConfig.contents.state.DocumentTable;
     String tableName = "MyTestTable";
-    final DynamoDbClient ddbClient = DynamoDbClient.builder().endpointOverride(URI.create("http://localhost:8000")).build();
+    final DynamoDbClient ddbClient = DynamoDbClient
+      .builder()
+      .endpointOverride(URI.create("http://localhost:8000"))
+      .build();
 
     // ADD-ESDK-START: Configure the Faythe KMS Key in the Encryption SDK
     return new Api(ddbClient, tableName);
