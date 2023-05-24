@@ -42,5 +42,7 @@ public class PutMeeting implements Runnable {
       attendees,
       subject
     ));
+
+    System.out.println("Meeting Added");
   }
 }

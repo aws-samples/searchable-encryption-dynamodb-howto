@@ -33,5 +33,7 @@ public class PutTimecard implements Runnable {
       hours,
       role
     ));
+
+    System.out.println("Timecard Added");
   }
 }

@@ -39,5 +39,7 @@ public class PutTicket implements Runnable {
       subject,
       message
     ));
+
+    System.out.println("Ticket Added");
   }
 }

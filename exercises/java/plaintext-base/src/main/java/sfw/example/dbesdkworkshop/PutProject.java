@@ -33,5 +33,7 @@ public class PutProject implements Runnable {
       description,
       targetDate
     ));
+
+    System.out.println("Project Added");
   }
 }

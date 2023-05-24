@@ -42,5 +42,7 @@ public class PutReservation implements Runnable {
       attendees,
       subject
     ));
+
+    System.out.println("Reservation Added");
   }
 }

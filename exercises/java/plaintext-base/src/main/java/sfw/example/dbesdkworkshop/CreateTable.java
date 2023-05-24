@@ -15,5 +15,7 @@ public class CreateTable implements Runnable {
   public void run() {
     final Api api = App.initializeEmployeePortal();
     api.createTable();
+
+    System.out.println("Table Created");
   }
 }

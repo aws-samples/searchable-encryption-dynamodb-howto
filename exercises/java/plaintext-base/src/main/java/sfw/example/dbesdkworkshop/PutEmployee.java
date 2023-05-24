@@ -48,5 +48,7 @@ public class PutEmployee implements Runnable {
       name,
       title
     ));
+
+    System.out.println("Employee Added");
   }
 }
