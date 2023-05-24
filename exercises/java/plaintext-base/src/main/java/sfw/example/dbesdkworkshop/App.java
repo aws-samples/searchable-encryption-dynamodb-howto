@@ -20,6 +20,7 @@ import java.net.URI;
   description = "Entrypoint for interacting with the employee portal",
   subcommands = {
     CreateTable.class,
+    GetEmployees.class,
     GetMeetings.class,
     PutMeeting.class,
     PutEmployee.class,

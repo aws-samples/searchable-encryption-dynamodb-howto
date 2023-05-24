@@ -53,6 +53,25 @@ public abstract class BaseItem {
     return key;
   }
 
+  public static Map<String, AttributeValue> StringMapToAttr(Map<String, String> m)
+  {
+    Map<String, AttributeValue> item = new HashMap<>();
+    for (Map.Entry<String, String> entry : m.entrySet()) {
+      item.put(entry.getKey(), AttributeValue.fromS(entry.getValue()));
+    }
+    return item;
+  }
+
+  public static Map<String, String> AttrToStringMap(Map<String, AttributeValue> m)
+  {
+    Map<String, String> item = new HashMap<>();
+    for (Map.Entry<String, AttributeValue> entry : m.entrySet()) {
+      item.put(entry.getKey(), entry.getValue().s());
+    }
+    return item;
+  }
+
+
   @Override
   public String toString() {
     return this.toItem().toString();

@@ -12,19 +12,19 @@ import sfw.example.dbesdkworkshop.datamodel.Ticket;
 @Command(name = "put-ticket", description = "Adds a record to the database.")
 public class PutTicket implements Runnable {
 
-  @Option( names = {"-t", "--ticketNumber"}, required = true, description = "set ticketNumber")
+  @Option( names = {"-k", "--ticket-number"}, required = true, description = "set ticketNumber")
   String ticketNumber;
-  @Option( names = {"-m", "--modifiedDate"}, required = true, description = "set modifiedDate")
+  @Option( names = {"-M", "--modified-date"}, required = true, description = "set modifiedDate")
   String modifiedDate;
-  @Option( names = {"-a", "--authorEmail"}, required = true, description = "set authorEmail")
+  @Option( names = {"-A", "--author-email"}, required = true, description = "set authorEmail")
   String authorEmail;
-  @Option( names = {"-A", "--assigneeEmail"}, required = true, description = "set assigneeEmail")
+  @Option( names = {"-g", "--assignee-email"}, required = true, description = "set assigneeEmail")
   String assigneeEmail;
-  @Option( names = {"-s", "--severity"}, required = true, description = "set severity")
+  @Option( names = {"-v", "--severity"}, required = true, description = "set severity")
   String severity;
-  @Option( names = {"-S", "--subject"}, required = true, description = "set subject")
+  @Option( names = {"-j", "--subject"}, required = true, description = "set subject")
   String subject;
-  @Option( names = {"-M", "--message"}, required = true, description = "set message")
+  @Option( names = {"-m", "--message"}, required = true, description = "set message")
   String message;
 
   @Override

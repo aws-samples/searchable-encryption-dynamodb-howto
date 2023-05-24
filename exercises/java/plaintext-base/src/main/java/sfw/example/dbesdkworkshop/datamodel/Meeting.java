@@ -37,23 +37,6 @@ public class Meeting extends BaseItem {
     this.subject = subject;
   }
 
-  static Map<String, AttributeValue> StringMapToAttr(Map<String, String> m)
-  {
-    Map<String, AttributeValue> item = new HashMap<>();
-    for (Map.Entry<String, String> entry : m.entrySet()) {
-      item.put(entry.getKey(), AttributeValue.fromS(entry.getValue()));
-    }
-    return item;
-  }
-
-  static Map<String, String> AttrToStringMap(Map<String, AttributeValue> m)
-  {
-    Map<String, String> item = new HashMap<>();
-    for (Map.Entry<String, AttributeValue> entry : m.entrySet()) {
-      item.put(entry.getKey(), entry.getValue().s());
-    }
-    return item;
-  }
   public Map<String, AttributeValue> toItem() {
     String floor = location.get("floor");
     String room = location.get("room");

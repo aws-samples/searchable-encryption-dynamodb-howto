@@ -14,19 +14,19 @@ public class PutReservation implements Runnable {
 
   @Option( names = {"-b", "--building"}, required = true, description = "set building")
   String building;
-  @Option( names = {"-s", "--startTime"}, required = true, description = "set startTime")
+  @Option( names = {"-s", "--start"}, required = true, description = "set startTime")
   String startTime;
   @Option( names = {"-f", "--floor"}, required = true, description = "set floor")
   String floor;
   @Option( names = {"-r", "--room"}, required = true, description = "set room")
   String room;
-  @Option( names = {"-o", "--organizerEmail"}, required = true, description = "set organizerEmail")
+  @Option( names = {"-o", "--organizer-email"}, required = true, description = "set organizerEmail")
   String organizerEmail;
-  @Option( names = {"-d", "--duration"}, required = true, description = "set duration")
+  @Option( names = {"-D", "--duration"}, required = true, description = "set duration")
   String duration;
   @Option( names = {"-a", "--attendees"}, required = true, description = "set attendees")
   String attendees;
-  @Option( names = {"-S", "--subject"}, required = true, description = "set subject")
+  @Option( names = {"-j", "--subject"}, required = true, description = "set subject")
   String subject;
 
   @Override

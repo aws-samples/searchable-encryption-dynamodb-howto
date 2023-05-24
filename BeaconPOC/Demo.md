@@ -119,13 +119,13 @@ one record per meeting
 1. Get meetings by date and email
 1. Get meetings by date and EmployeeNumber
 1. Get reservations by date and building/floor/room
-1. Get employee data	by email
+1. Get employee data by email ???????????????????
 1. Get meetings by email
 1. Get tickets by email
 1. Get reservations by email
 1. Get time cards by email
-1. Get employee Info by EmployeeNumber
-1. Get employee Info by email
+1. Get employee by EmployeeNumber
+1. Get employee by email
 1. Get Ticket History by ticket ID
 1. Get Ticket History by employee email
 1. Get Ticket History by assignee email
@@ -176,18 +176,18 @@ one record per meeting
 |1| Get meetings by date and email | GSI-1 | PK1=email SK1 between(date1, date2) | duration > 0 |
 |2| Get meetings by date and EmployeeNumber | Table | PK=EmployeeNumber SK between(date1, date2) | duration > 0 |
 |3| Get reservations by date and building/floor/room | Table | PK=buildingID SK between(date1, date2) | SK contains building.floor.room |
-|4| Get employee data by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
+|4| Get employee data by email  ????? | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |5| Get meetings by email |GSI-1 | PK1=email SK1 > 30 days ago |    |
 |6| Get tickets by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |7| Get reservations by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
 |8| Get time cards by email | GSI-1 | PK1=email SK1 > 30 days ago |    |
-|9| Get employee Info by EmployeeNumber | Table | PK=EmployeeNumber SK starts_with("E") |    |
-|10| Get employee Info by email | GSI-1 | PK1=email |SK starts_with("E")|
+|9| Get employee by EmployeeNumber | Table | PK=EmployeeNumber SK starts_with("E") |    |
+|10| Get employee by email | GSI-1 | PK1=email |SK starts_with("E")|
 |11| Get Ticket History by ticket ID | Table | PK=TicketID |    |
 |12| Get Ticket History by employee email | GSI-1 | PK1 = email |PK=TicketID|
 |13| Get Ticket History by assignee email | GSI-2 | PK2 = email |PK=TicketID|
 |14| Get employees by city.building.floor.desk | GSI-3 | PK3=city SK3 starts_with(building.floor.desk) |    |
-|15| Get employees by manager email | GSI-2 | PK2=email SK > 3 |    |
+|15| Get employees by manager email | GSI-2 | PK2=email starts_with(SK, E-) |    |
 |16| Get assigned tickets by assignee email | GSI-2 | PK2=email |    |
 |17| Get Tickets last touched in the past 24 hours | GSI-3 | PK3=Priority SK3>yesterday |    |
 |18| Get Projects by status, start and target date | GSI-1 | PK1=Status SK1 > StartDate |targetDelivery < targetDate|

@@ -63,6 +63,12 @@ public class Api {
     final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();
     final ArrayList<GlobalSecondaryIndex> gsi = new ArrayList<GlobalSecondaryIndex>();
 
+    final KeySchemaElement pkSchema = KeySchemaElement.builder().attributeName("PK").keyType(KeyType.HASH).build();
+    final KeySchemaElement skSchema = KeySchemaElement.builder().attributeName("SK").keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
+    keySchema.add(pkSchema);
+    keySchema.add(skSchema);
+
     final KeySchemaElement pk1Schema = KeySchemaElement.builder().attributeName("PK1").keyType(KeyType.HASH).build();
     final KeySchemaElement sk1Schema = KeySchemaElement.builder().attributeName("SK1").keyType(KeyType.RANGE).build();
     final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
@@ -76,10 +82,9 @@ public class Api {
       .build());
 
     final KeySchemaElement pk2Schema = KeySchemaElement.builder().attributeName("PK2").keyType(KeyType.HASH).build();
-    final KeySchemaElement sk2Schema = KeySchemaElement.builder().attributeName("SK2").keyType(KeyType.RANGE).build();
     final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
     gsi2Schema.add(pk2Schema);
-    gsi2Schema.add(sk2Schema);
+    gsi2Schema.add(skSchema);
     gsi.add(GlobalSecondaryIndex.builder()
       .indexName("GSI2")
       .keySchema(gsi2Schema)
@@ -99,18 +104,12 @@ public class Api {
       .projection(proj)
       .build());
 
-    final KeySchemaElement pkSchema = KeySchemaElement.builder().attributeName("PK").keyType(KeyType.HASH).build();
-    final KeySchemaElement skSchema = KeySchemaElement.builder().attributeName("SK").keyType(KeyType.RANGE).build();
-    final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-    keySchema.add(pkSchema);
-    keySchema.add(skSchema);
     final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
     attrs.add(AttributeDefinition.builder().attributeName("PK").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("SK").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("PK1").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("SK1").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("PK2").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("SK2").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("PK3").attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder().attributeName("SK3").attributeType(ScalarAttributeType.S).build());
     final CreateTableRequest request =
@@ -231,6 +230,96 @@ public class Api {
       results.add(Meeting.fromItem(item));
     }
     return results;
+  }
+
+  protected List<Employee> EmployeeFromResp(QueryResponse resp) {
+    final ArrayList<Employee> results = new ArrayList<Employee>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Employee.fromItem(item));
+    }
+    return results;
+  }
+
+  public List<Employee> getEmployeeById(String id)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression("PK = :id and SK = :id")
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return EmployeeFromResp(ddbClient.query(request));
+  }
+
+  public List<Employee> getEmployeeByEmail(String email)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
+    attrValues.put(":e", AttributeValue.builder().s("E-").build());
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName("GSI1")
+    .keyConditionExpression("PK1 = :email and begins_with(SK1, :e)")
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return EmployeeFromResp(ddbClient.query(request));
+  }
+
+  public List<Employee> getEmployeeByManager(String email)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":email", AttributeValue.builder().s("ME-" + email).build());
+    attrValues.put(":e", AttributeValue.builder().s("E-").build());
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName("GSI2")
+    .keyConditionExpression("PK2 = :email and begins_with(SK, :e)")
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return EmployeeFromResp(ddbClient.query(request));
+  }
+
+  public static String AppendStrWithPrefix(String base, String value, String prefix)
+  {
+    if (value == null) return base;
+    if (base.isEmpty()) return prefix + value;
+    return base + '.' + prefix + value;
+  }
+
+  public List<Employee> getEmployeeByCity(String city, String building, String floor, String room, String desk)
+  {
+    String locTag = "";
+    locTag = AppendStrWithPrefix(locTag, building, "B-");
+    locTag = AppendStrWithPrefix(locTag, floor, "F-");
+    locTag = AppendStrWithPrefix(locTag, room, "R-");
+    locTag = AppendStrWithPrefix(locTag, desk, "D-");
+
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":city", AttributeValue.builder().s("C-" + city).build());
+    
+    String keyExpr;
+    if (locTag.isEmpty()) {
+      keyExpr = "PK3 = :city";
+    } else {
+      keyExpr = "PK3 = :city and begins_with(SK3, :loc)";
+      attrValues.put(":loc", AttributeValue.builder().s(locTag).build());
+    }
+
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName("GSI3")
+    .keyConditionExpression(keyExpr)
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return EmployeeFromResp(ddbClient.query(request));
   }
 
 

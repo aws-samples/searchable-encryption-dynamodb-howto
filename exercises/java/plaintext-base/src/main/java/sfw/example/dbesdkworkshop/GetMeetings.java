@@ -15,20 +15,20 @@ import sfw.example.dbesdkworkshop.datamodel.Meeting;
 @Command(name = "get-meetings", description = "get meetings.")
 public class GetMeetings implements Runnable {
 
-  @Option( names = {"-s", "--startDate"}, required = false, description = "by start date")
+  @Option( names = {"-s", "--start"}, required = false, description = "by start date")
   String startDate;
-  @Option( names = {"-e", "--endDate"}, required = false, description = "by end date")
+  @Option( names = {"-E", "--end"}, required = false, description = "by end date")
   String endDate;
-  @Option( names = {"-E", "--email"}, required = false, description = "by email")
+  @Option( names = {"-e", "--email"}, required = false, description = "by email")
   String email;
-  @Option( names = {"-i", "--employee-id"}, required = false, description = "by id")
+  @Option( names = {"-n", "--employee-number"}, required = false, description = "by id")
   String id;
 
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
     if (email != null && id != null) {
-        // throw not both
+      throw new IllegalArgumentException("get-meetings must not specify both email and employee-number");
     } else if (email != null) {
       final List<Meeting> results = api.getMeetingsByEmail(email, startDate, endDate);
       System.out.println(results);
@@ -36,7 +36,7 @@ public class GetMeetings implements Runnable {
       final List<Meeting> results = api.getMeetingsById(id, startDate, endDate);
       System.out.println(results);
     } else {
-      // throw at least one
+      throw new IllegalArgumentException("get-meetings must specify either email or employee-number");
     }
   }
 }

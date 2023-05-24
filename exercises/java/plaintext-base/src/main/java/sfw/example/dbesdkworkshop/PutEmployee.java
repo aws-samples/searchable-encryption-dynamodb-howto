@@ -12,25 +12,23 @@ import sfw.example.dbesdkworkshop.datamodel.Employee;
 @Command(name = "put-employee", description = "Adds a record to the database.")
 public class PutEmployee implements Runnable {
 
-  @Option( names = {"-E", "--employeeNumber"}, required = true, description = "set employeeNumber")
+  @Option( names = {"-n", "--employee-number"}, required = true, description = "set employeeNumber")
   String employeeNumber;
-  @Option( names = {"-t", "--employeeTag"}, required = true, description = "set employeeTag")
-  String employeeTag;
   @Option( names = {"-e", "--email"}, required = true, description = "set email")
   String email;
-  @Option( names = {"-m", "--managerEmail"}, required = true, description = "set managerEmail")
+  @Option( names = {"-G", "--manager-email"}, required = true, description = "set managerEmail")
   String managerEmail;
   @Option( names = {"-c", "--city"}, required = true, description = "set city")
   String city;
   @Option( names = {"-b", "--building"}, required = true, description = "set building")
   String building;
-  @Option( names = {"-f", "--floor"}, required = true, description = "set floor")
+  @Option( names = {"-f", "--floor"}, required = false, description = "set floor")
   String floor;
-  @Option( names = {"-r", "--room"}, required = true, description = "set room")
+  @Option( names = {"-r", "--room"}, required = false, description = "set room")
   String room;
-  @Option( names = {"-d", "--desk"}, required = true, description = "set desk")
+  @Option( names = {"-d", "--desk"}, required = false, description = "set desk")
   String desk;
-  @Option( names = {"-n", "--name"}, required = true, description = "set name")
+  @Option( names = {"-N", "--name"}, required = true, description = "set name")
   String name;
   @Option( names = {"-T", "--title"}, required = true, description = "set title")
   String title;
@@ -40,7 +38,6 @@ public class PutEmployee implements Runnable {
     final Api api = App.initializeEmployeePortal();
     api.putItem(new Employee(
       employeeNumber,
-      employeeTag,
       email,
       managerEmail,
       city,

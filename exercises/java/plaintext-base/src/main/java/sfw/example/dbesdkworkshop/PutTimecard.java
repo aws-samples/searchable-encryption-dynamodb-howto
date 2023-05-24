@@ -12,15 +12,15 @@ import sfw.example.dbesdkworkshop.datamodel.Timecard;
 @Command(name = "put-timecard", description = "Adds a record to the database.")
 public class PutTimecard implements Runnable {
 
-  @Option( names = {"-p", "--projectName"}, required = true, description = "set projectName")
+  @Option( names = {"-p", "--project-name"}, required = true, description = "set projectName")
   String projectName;
-  @Option( names = {"-s", "--startDate"}, required = true, description = "set startDate")
+  @Option( names = {"-s", "--start"}, required = true, description = "set startDate")
   String startDate;
-  @Option( names = {"-e", "--employeeEmail"}, required = true, description = "set employeeEmail")
+  @Option( names = {"-e", "--email"}, required = true, description = "set employeeEmail")
   String employeeEmail;
   @Option( names = {"-h", "--hours"}, required = true, description = "set hours")
   String hours;
-  @Option( names = {"-r", "--role"}, required = true, description = "set role")
+  @Option( names = {"-R", "--role"}, required = true, description = "set role")
   String role;
 
   @Override

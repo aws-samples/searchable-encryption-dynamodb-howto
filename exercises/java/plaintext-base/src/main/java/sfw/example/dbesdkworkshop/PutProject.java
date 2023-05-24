@@ -12,15 +12,15 @@ import sfw.example.dbesdkworkshop.datamodel.Project;
 @Command(name = "put-project", description = "Adds a record to the database.")
 public class PutProject implements Runnable {
 
-  @Option( names = {"-n", "--name"}, required = true, description = "set name")
+  @Option( names = {"-N", "--name"}, required = true, description = "set name")
   String name;
-  @Option( names = {"-s", "--status"}, required = true, description = "set status")
+  @Option( names = {"-S", "--status"}, required = true, description = "set status")
   String status;
-  @Option( names = {"-S", "--startDate"}, required = true, description = "set startDate")
+  @Option( names = {"-s", "--start"}, required = true, description = "set startDate")
   String startDate;
-  @Option( names = {"-d", "--description"}, required = true, description = "set description")
+  @Option( names = {"-P", "--description"}, required = true, description = "set description")
   String description;
-  @Option( names = {"-t", "--targetDate"}, required = true, description = "set targetDate")
+  @Option( names = {"-t", "--target"}, required = true, description = "set target date")
   String targetDate;
 
   @Override

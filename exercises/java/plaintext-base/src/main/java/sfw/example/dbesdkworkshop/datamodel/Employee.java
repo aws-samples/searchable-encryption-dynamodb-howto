@@ -6,20 +6,14 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Employee extends BaseItem {
   private String employeeNumber;
-  private String employeeTag;
   private String email;
   private String managerEmail;
-  private String city;
-  private String building;
-  private String floor;
-  private String room;
-  private String desk;
+  private Map<String, String> location;
   private String name;
   private String title;
 
   public Employee(
       String employeeNumber,
-      String employeeTag,
       String email,
       String managerEmail,
       String city,
@@ -30,48 +24,69 @@ public class Employee extends BaseItem {
       String name,
       String title
   ) {
+    Map<String, String> loc = new HashMap<>();
+    if (city != null) loc.put("city", city);
+    if (building != null) loc.put("building", building);
+    if (floor != null) loc.put("floor", floor);
+    if (room != null) loc.put("room", room);
+    if (desk != null) loc.put("desk", desk);
+
     this.employeeNumber = employeeNumber;
-    this.employeeTag = employeeTag;
     this.email = email;
     this.managerEmail = managerEmail;
-    this.city = city;
-    this.building = building;
-    this.floor = floor;
-    this.room = room;
-    this.desk = desk;
+    this.location = loc;
     this.name = name;
     this.title = title;
   }
 
+  public static String AppendStrWithPrefix(String base, String value, String prefix)
+  {
+    if (value == null) return base;
+    if (base.isEmpty()) return prefix + value;
+    return base + '.' + prefix + value;
+  }
+  public static String StringOrNull(Map<String, AttributeValue> m, String name)
+  {
+    AttributeValue v = m.get(name);
+    if (v == null) return null;
+    return v.s();
+  }
+  
   public Map<String, AttributeValue> toItem() {
+    String locTag = "";
+    locTag = AppendStrWithPrefix(locTag, location.get("building"), "B-");
+    locTag = AppendStrWithPrefix(locTag, location.get("floor"), "F-");
+    locTag = AppendStrWithPrefix(locTag, location.get("room"), "R-");
+    locTag = AppendStrWithPrefix(locTag, location.get("desk"), "D-");
+
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    item.put("PK", AttributeValue.fromS("E-" + employeeNumber));
+    item.put("SK", AttributeValue.fromS("E-" + employeeNumber));
+    item.put("PK1", AttributeValue.fromS("EE-" + email));
+    item.put("SK1", AttributeValue.fromS("E-" + employeeNumber));
+    item.put("PK2", AttributeValue.fromS("ME-" + managerEmail));
+    item.put("PK3", AttributeValue.fromS("C-" + location.get("city")));
+    item.put("SK3", AttributeValue.fromS(locTag));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
-    item.put("employeeTag", AttributeValue.fromS(employeeTag));
     item.put("email", AttributeValue.fromS(email));
     item.put("managerEmail", AttributeValue.fromS(managerEmail));
-    item.put("city", AttributeValue.fromS(city));
-    item.put("building", AttributeValue.fromS(building));
-    item.put("floor", AttributeValue.fromS(floor));
-    item.put("room", AttributeValue.fromS(room));
-    item.put("desk", AttributeValue.fromS(desk));
+    item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
     item.put("name", AttributeValue.fromS(name));
     item.put("title", AttributeValue.fromS(title));
     return item;
   }
 
   public static Employee fromItem(Map<String, AttributeValue> item) {
+    Map<String, AttributeValue> loc = item.get("location").m();
     return new Employee(
         item.get("employeeNumber").s(),
-        item.get("employeeTag").s(),
         item.get("email").s(),
         item.get("managerEmail").s(),
-        item.get("city").s(),
-        item.get("building").s(),
-        item.get("floor").s(),
-        item.get("room").s(),
-        item.get("desk").s(),
+        StringOrNull(loc, "city"),
+        StringOrNull(loc, "building"),
+        StringOrNull(loc, "floor"),
+        StringOrNull(loc, "room"),
+        StringOrNull(loc, "desk"),
         item.get("name").s(),
         item.get("title").s());
   }
