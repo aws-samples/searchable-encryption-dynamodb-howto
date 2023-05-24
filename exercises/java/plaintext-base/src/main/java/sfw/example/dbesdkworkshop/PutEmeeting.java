@@ -18,8 +18,6 @@ public class PutEmeeting implements Runnable {
   String startTime;
   @Option( names = {"-e", "--employeeEmail"}, required = true, description = "set employeeEmail")
   String employeeEmail;
-  @Option( names = {"-m", "--managerEmail"}, required = true, description = "set managerEmail")
-  String managerEmail;
   @Option( names = {"-f", "--floor"}, required = true, description = "set floor")
   String floor;
   @Option( names = {"-r", "--room"}, required = true, description = "set room")
@@ -40,7 +38,6 @@ public class PutEmeeting implements Runnable {
       employeeEmail,
       floor,
       room,
-      managerEmail,
       duration,
       attendees,
       subject

@@ -59,23 +59,67 @@ public class Api {
     try {deleteTable();}
     catch (Exception e) {}
 
-    final String partKey = Config.contents.document_bucket.document_table.partition_key;
-    final String sortKey = Config.contents.document_bucket.document_table.sort_key;
-    final KeySchemaElement partSchema = KeySchemaElement.builder().attributeName(partKey).keyType(KeyType.HASH).build();
-    final KeySchemaElement sortSchema = KeySchemaElement.builder().attributeName(sortKey).keyType(KeyType.RANGE).build();
-    final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-    keySchema.add(partSchema);
-    keySchema.add(sortSchema);
-    final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
-    attrs.add(AttributeDefinition.builder().attributeName(partKey).attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName(sortKey).attributeType(ScalarAttributeType.S).build());
+    final Projection proj = Projection.builder().projectionType(ProjectionType.ALL).build();
     final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();
+    final ArrayList<GlobalSecondaryIndex> gsi = new ArrayList<GlobalSecondaryIndex>();
+
+    final KeySchemaElement pk1Schema = KeySchemaElement.builder().attributeName("PK1").keyType(KeyType.HASH).build();
+    final KeySchemaElement sk1Schema = KeySchemaElement.builder().attributeName("SK1").keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
+    gsi1Schema.add(pk1Schema);
+    gsi1Schema.add(sk1Schema);
+    gsi.add(GlobalSecondaryIndex.builder()
+      .indexName("GSI1")
+      .keySchema(gsi1Schema)
+      .provisionedThroughput(throughPut)
+      .projection(proj)
+      .build());
+
+    final KeySchemaElement pk2Schema = KeySchemaElement.builder().attributeName("PK2").keyType(KeyType.HASH).build();
+    final KeySchemaElement sk2Schema = KeySchemaElement.builder().attributeName("SK2").keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
+    gsi2Schema.add(pk2Schema);
+    gsi2Schema.add(sk2Schema);
+    gsi.add(GlobalSecondaryIndex.builder()
+      .indexName("GSI2")
+      .keySchema(gsi2Schema)
+      .provisionedThroughput(throughPut)
+      .projection(proj)
+      .build());
+
+    final KeySchemaElement pk3Schema = KeySchemaElement.builder().attributeName("PK3").keyType(KeyType.HASH).build();
+    final KeySchemaElement sk3Schema = KeySchemaElement.builder().attributeName("SK3").keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> gsi3Schema = new ArrayList<KeySchemaElement>();
+    gsi3Schema.add(pk3Schema);
+    gsi3Schema.add(sk3Schema);
+    gsi.add(GlobalSecondaryIndex.builder()
+      .indexName("GSI3")
+      .keySchema(gsi3Schema)
+      .provisionedThroughput(throughPut)
+      .projection(proj)
+      .build());
+
+    final KeySchemaElement pkSchema = KeySchemaElement.builder().attributeName("PK").keyType(KeyType.HASH).build();
+    final KeySchemaElement skSchema = KeySchemaElement.builder().attributeName("SK").keyType(KeyType.RANGE).build();
+    final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
+    keySchema.add(pkSchema);
+    keySchema.add(skSchema);
+    final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
+    attrs.add(AttributeDefinition.builder().attributeName("PK").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("SK").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("PK1").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("SK1").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("PK2").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("SK2").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("PK3").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder().attributeName("SK3").attributeType(ScalarAttributeType.S).build());
     final CreateTableRequest request =
         CreateTableRequest.builder()
         .tableName(tableName)
         .keySchema(keySchema)
         .attributeDefinitions(attrs)
         .provisionedThroughput(throughPut)
+        .globalSecondaryIndexes(gsi)
         .build();
     ddbClient.createTable(request);
   }
@@ -113,21 +157,83 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
-  public List<Emeeting> getMeetingsByDateAndEmail(String date, String email)
+  public List<Emeeting> getMeetingsByEmail(String email, String startDate, String endDate)
   {
-    final String partKey = Config.contents.document_bucket.document_table.partition_key;
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":PartValue", AttributeValue.builder()
-        .s(email) 
-        .build());
-
-    final QueryRequest request =
-    QueryRequest.builder()
+    attrValues.put(":email", AttributeValue.builder()
+      .s(email) 
+      .build());
+      if (startDate != null) {
+        attrValues.put(":startDate", AttributeValue.builder()
+      .s(startDate) 
+      .build());
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder()
+      .s(endDate) 
+      .build());
+    }
+    String filterExpr = null;
+    if (startDate != null && endDate != null) {
+      filterExpr = "SK between :startDate and :endDate";
+    } else if (startDate != null) {
+      filterExpr = "SK >= :startDate";
+    } else if (endDate != null) {
+      filterExpr = "SK <= :endDate";
+    }
+    
+    QueryRequest.Builder builder = QueryRequest.builder()
     .tableName(tableName)
-    .keyConditionExpression(partKey + " = :PartValue")
-    // .filterExpression("")
-    .expressionAttributeValues(attrValues)
-    .build();
+    .indexName("GSI1")
+    .keyConditionExpression("PK1 = :email")
+    .expressionAttributeValues(attrValues);
+    if (filterExpr != null) {
+      builder = builder.filterExpression(filterExpr);
+    }
+    final QueryRequest request = builder.build();
+
+    final QueryResponse result = ddbClient.query(request);
+    final ArrayList<Emeeting> results = new ArrayList<Emeeting>();
+    for (Map<String,AttributeValue> item : result.items()) {
+      results.add(Emeeting.fromItem(item));
+    }
+    return results;
+  }
+
+  public List<Emeeting> getMeetingsById(String id, String startDate, String endDate)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":id", AttributeValue.builder()
+      .s(id) 
+      .build());
+    if (startDate != null) {
+      attrValues.put(":startDate", AttributeValue.builder()
+      .s(startDate) 
+      .build());
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder()
+      .s(endDate) 
+      .build());
+    }
+    String filterExpr = null;
+    if (startDate != null && endDate != null) {
+      filterExpr = "SK between :startDate and :endDate";
+    } else if (startDate != null) {
+      filterExpr = "SK >= :startDate";
+    } else if (endDate != null) {
+      filterExpr = "SK <= :endDate";
+    }
+    
+    QueryRequest.Builder builder = QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression("PK = :id")
+    .expressionAttributeValues(attrValues);
+    if (filterExpr != null) {
+      builder = builder.filterExpression(filterExpr);
+    }
+    final QueryRequest request = builder.build();
+
     final QueryResponse result = ddbClient.query(request);
     final ArrayList<Emeeting> results = new ArrayList<Emeeting>();
     for (Map<String,AttributeValue> item : result.items()) {

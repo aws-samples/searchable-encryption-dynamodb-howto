@@ -11,7 +11,6 @@ public class Emeeting extends BaseItem {
   private String employeeEmail;
   private String floor;
   private String room;
-  private String managerEmail;
   private String duration;
   private String attendees;
   private String subject;
@@ -22,7 +21,6 @@ public class Emeeting extends BaseItem {
       String employeeEmail,
       String floor,
       String room,
-      String managerEmail,
       String duration,
       String attendees,
       String subject) {
@@ -31,7 +29,6 @@ public class Emeeting extends BaseItem {
     this.employeeEmail = employeeEmail;
     this.floor = floor;
     this.room = room;
-    this.managerEmail = managerEmail;
     this.duration = duration;
     this.attendees = attendees;
     this.subject = subject;
@@ -39,16 +36,15 @@ public class Emeeting extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    // item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
-    // item.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeEmail));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("aaa"));
+    item.put("PK", AttributeValue.fromS(employeeNumber));
+    item.put("SK", AttributeValue.fromS(startTime + "." + floor + "." + room));
+    item.put("PK1", AttributeValue.fromS(employeeEmail));
+    item.put("SK1", AttributeValue.fromS(startTime + "." + floor + "." + room));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("floor", AttributeValue.fromS(floor));
     item.put("room", AttributeValue.fromS(room));
-    item.put("managerEmail", AttributeValue.fromS(managerEmail));
     item.put("duration", AttributeValue.fromS(duration));
     item.put("attendees", AttributeValue.fromS(attendees));
     item.put("subject", AttributeValue.fromS(subject));
@@ -62,7 +58,6 @@ public class Emeeting extends BaseItem {
         item.get("employeeEmail").s(),
         item.get("floor").s(),
         item.get("room").s(),
-        item.get("managerEmail").s(),
         item.get("duration").s(),
         item.get("attendees").s(),
         item.get("subject").s());
