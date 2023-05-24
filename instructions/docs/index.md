@@ -1,16 +1,27 @@
-# The Busy Engineer's database encryption, featuring Amazon DynamoDB
+# The Busy Engineer's Database Encryption
 
 Welcome to the Busy Engineer's database encryption workshop.
 In this workshop, you will be guided through adding client-side encryption
-with KMS and the AWS Database Encryption SDK.
+with AWS Key Management Service and the AWS Database Encryption SDK.
 Each exercise has step-by-step instructions.
 Each exercise also has a `-complete` version available to use as a reference.
 
 ## Background: The Employee Portal Service
 
-This example codes form [DynamoDb Deep Dive: Advanced Design Patterns](https://youtu.be/xfxBhvGpoa0?t=2293).
-Seriously, it’s a really good talk and will change the way you think about and use DynamoDb.
-Here is the entity relationship diagram for the service you will be working on.
+This workshop is centered around an example Employee Portal Service,
+which [TODO explain what the Employee Portal Service does].
+
+This example originates from [DynamoDb Deep Dive: Advanced Design Patterns](https://youtu.be/xfxBhvGpoa0?t=2293).
+While not required to continue with this workshop,
+we recommend that you watch this talk.
+It highlights the powerful ways you can use DynamoDb
+to support a wide array of complex access patterns on a single table.
+We will be using some of these advanced patterns, such as the
+[Adjacency list design pattern](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-adjacency-graphs.html#bp-adjacency-lists),
+in this workshop.
+Refer to the [AWS docs for Amazon DynamoDb if you want to learn more](TODO).
+
+Here is the entity relationship diagram for the Employee Portal Service.
 
 ```plantuml alt="Data Model" title="Data Model"
 @startuml
@@ -87,7 +98,6 @@ from the plaintext version.
 You will be able to execute DynamoDB queries
 on this client-side encrypted as well as a plaintext version.
 You can explore how to build and query data in DynamoDB.
-
 
 ```plantuml alt="Final architecture overview" title="Final architecture overview"
 @startuml

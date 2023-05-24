@@ -5,13 +5,18 @@ to configure the remaining access patterns.
 
 ## Background
 
-You have one access pattern,
-but you wanted to query.
-There is a whole list of access patterns you want to use.
+In Exercise 2, you configured [searchable encryption](TODO)
+to enable you to perform [TODO what is the access pattern?].
+However, this is just one access pattern out of many we want to support.
 
-BUG BUG -- link to docs on warnings.
+In this exercise, you will add support for the remaining access patterns
+originally supported in Exercise 1.
 
-
+As you configure each new beacon to support a new access pattern,
+consider what [truncation length is appropriate for that beacon](TODO)
+as well as whether [beacons are right that access pattern in the first place](TODO).
+As you go through the workshop, note that various
+considerations on the tradeoffs being made between security and performance.
 
 ## Let's Go!
 

@@ -4,49 +4,6 @@ This page contains reference information that might be useful as you work throug
 
 ## Troubleshooting
 
-### Errors with configuration
-
-If you are getting a `NullPointerException` (Java), or a `KeyError` (Python), or similar errors when interacting with the TOML files (config and state), try running the state generation step again to make sure the file is generated and well formed.
-
-```bash
-# Check the contents of your state file
-cat ~/.busy_engineers_state.toml
-
-# Regenerate your state file, if needed
-cd ~/environment/workshop/cdk/
-make state
-```
-
-Now try your work again.
-
-### Automated code checks
-
-These commands will check your code for missing imports, syntax issues, and other minor issues that might trip you up.
-
-=== "Java"
-
-    ```bash 
-    mvn verify
-    ```
-
-=== "JavaScript Node.JS"
-
-    ```bash
-    npm run prettier
-    ```
-
-=== "Typescript Node.JS"
-
-    ```bash
-    npm run prettier
-    ```
-
-=== "Python"
-
-    ```bash
-    tox -e check
-    ```
-
 ### Missing CloudFormation resources
 
 Make sure you take the defaults for which region to launch in (us-east-2). If you've changed the region for any part of the workshop, tear your stack down and start fresh.
@@ -104,12 +61,6 @@ Python and Java have API documentation available for each exercise. You can view
 
     ```bash 
     make javadoc
-    ```
-
-=== "Python"
-
-    ```bash
-    tox -e docs
     ```
 
 Now select "Preview -> Preview Running Application" from the Cloud9 menu bar.

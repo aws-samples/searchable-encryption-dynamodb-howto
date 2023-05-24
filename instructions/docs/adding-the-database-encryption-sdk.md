@@ -2,7 +2,8 @@
 
 In this section, you will add client-side encryption
 to the example Employee Portal Service
-using the AWS Database Encryption SDK and AWS KMS.
+using the [AWS Database Encryption SDK](TODO)
+and [AWS Key Management Service](TODO).
 
 ## Background
 
@@ -10,10 +11,23 @@ In [Getting Started](./getting-started.md),
 you set up your Employee Portal Service environment
 and selected a workshop language. 
 
-Now you will add the AWS Database Encryption SDK to encrypt items on the client,
-before they are transmitted off of the host machine to the internet.
-You will use AWS KMS to provide a `data key` for each object,
-using a KMS Key that you set up in [Getting Started](./getting-started.md).
+Now you will add the [AWS Database Encryption SDK](#TODO)
+to encrypt items on the client,
+before they are transmitted off of the host machine to DynamoDB.
+When you encrypt items client-side, you choose which attributes
+values to encrypt and which attributes to include in the signature.
+When you retrieve these encrypted items from DynamoDB,
+the client locally decrypts and verifies these items on your host.
+In this way, DynamoDB never has access to the plaintext
+of the item attributes you encrypt.
+This process is called [client-side encryption](TODO).
+
+To perform this encryption, the AWS Database Encryption SDK
+will use a strategy known as [envelope encryption](TODO).
+For every item that is encrypted, AWS KMS will provide
+a unique `data key` that is responsible for encrypting that item.
+You will configure the client to generate and protect these data keys
+using the KMS Key that you set up in [Getting Started](./getting-started.md).
 
 ## Let's Go!
 
