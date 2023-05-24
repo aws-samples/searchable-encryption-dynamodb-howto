@@ -4,24 +4,40 @@ In this section, you will configure the AWS Database Encryption SDK to use searc
 
 ## Background
 
-Your Employee Portal will encrypt items when you `put` them,
-and will decrypt when you `get` them.
+Your Employee Portal will encrypt items locally before you `put` them
+into your table,
+and will decrypt locally when you `get` items back from your table.
+This process is called [client-side encryption](TODO).
 
-But you want to query.
-Just getting a single item from our database
-will not satisfy all the access patterns we need to support.
+This presents us with an interesting problem.
+If your table only ever sees your data in encrypted form,
+how can you ever effectively query on that encrypted data?
 
-BUG BUG -- link to docs on warnings.
+To accomplish this, the AWS Database Encryption SDK for DynamoDb
+includes the [searchable encryption](TODO) feature,
+which allows you to calculate and store
+[beacons](TODO) algonside your data.
+The client then utilizes these beacons whenever you make a query,
+retrieving the correct encrypted data for your query.
 
-To accomplish this you need configure Searchable Encryption.
-This means we need another kind of key, a beacon key.
+Before you use [searchable encryption](TODO)
+for your own use case, please read our [AWS documentation](TODO)
+and ensure that [beacons are right for you](TODO).
 
-A beacon key is just different data key from AWS KMS.
-But it is stored in a new DynamoDB table.
-It is called a beacon key so that we can distinguish this key
-from any other AWS KMS data key.
+To use [searchable encryption](TODO),
+you need another kind of key, a beacon key.
+This beacon key will be used during both write and query
+in order to calculate the truncated HMACs that comprise beacons.
 
-This beacon key will be used both to write and query.
+You will generate a new data key using AWS KMS
+and store that data key, encrypted, in a new DynamoDB table.
+This data key is called the beacon key
+in order to distinguish this key from any other
+AWS KMS data keys.
+The beacon key is encrypted by
+KMS Key that you set up in [Getting Started](./getting-started.md)
+before being stored in DynamoDB.
+
 Here you will explore one access pattern in detail,
 as well as set the beacon key.
 
