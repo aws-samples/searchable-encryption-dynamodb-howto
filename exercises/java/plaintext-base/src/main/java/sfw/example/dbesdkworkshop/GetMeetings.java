@@ -9,7 +9,7 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Emeeting;
 
-// I would like one get-meetings command
+// There is one get-meetings command
 // for all of the "get meetings by" searches
 // the exact query is selected by which options are provided
 @Command(name = "get-meetings", description = "get meetings.")
