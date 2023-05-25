@@ -21,10 +21,28 @@ public class Api {
 
   protected static final String GSI1_NAME =
     Config.contents.ddb_table.gsi1_name;
-    protected static final String GSI2_NAME =
+  protected static final String GSI2_NAME =
     Config.contents.ddb_table.gsi2_name;
-    protected static final String GSI3_NAME =
+  protected static final String GSI3_NAME =
     Config.contents.ddb_table.gsi3_name;
+
+  protected static final String PARTITION_KEY_NAME =
+    Config.contents.ddb_table.partition_key;
+  protected static final String SORT_KEY_NAME =
+    Config.contents.ddb_table.sort_key;
+
+  protected static final String GSI1_PARTITION_KEY_NAME =
+    Config.contents.ddb_table.gsi1_partition_key;
+  protected static final String GSI1_SORT_KEY_NAME =
+    Config.contents.ddb_table.gsi1_sort_key;
+
+  protected static final String GSI2_PARTITION_KEY_NAME =
+    Config.contents.ddb_table.gsi2_partition_key;
+
+  protected static final String GSI3_PARTITION_KEY_NAME =
+    Config.contents.ddb_table.gsi3_partition_key;
+  protected static final String GSI3_SORT_KEY_NAME =
+    Config.contents.ddb_table.gsi3_sort_key;
 
   /**
    * Construct a Document Bucket {@code Api} using the provided configuration.
@@ -73,12 +91,12 @@ public class Api {
 
     final KeySchemaElement pkSchema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.partition_key)
+      .attributeName(PARTITION_KEY_NAME)
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement skSchema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.sort_key)
+      .attributeName(SORT_KEY_NAME)
       .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
@@ -87,19 +105,19 @@ public class Api {
 
     final KeySchemaElement pk1Schema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.gsi1_partition_key)
+      .attributeName(GSI1_PARTITION_KEY_NAME)
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk1Schema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.gsi1_sort_key)
+      .attributeName(GSI1_SORT_KEY_NAME)
       .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
     gsi1Schema.add(pk1Schema);
     gsi1Schema.add(sk1Schema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName(Config.contents.ddb_table.gsi1_name)
+      .indexName(GSI1_NAME)
       .keySchema(gsi1Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
@@ -107,14 +125,14 @@ public class Api {
 
     final KeySchemaElement pk2Schema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.gsi2_partition_key)
+      .attributeName(GSI2_PARTITION_KEY_NAME)
       .keyType(KeyType.HASH)
       .build();
     final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
     gsi2Schema.add(pk2Schema);
     gsi2Schema.add(skSchema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName(Config.contents.ddb_table.gsi2_name)
+      .indexName(GSI2_NAME)
       .keySchema(gsi2Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
@@ -122,19 +140,19 @@ public class Api {
 
     final KeySchemaElement pk3Schema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.gsi3_partition_key)
+      .attributeName(GSI3_PARTITION_KEY_NAME)
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk3Schema = KeySchemaElement
       .builder()
-      .attributeName(Config.contents.ddb_table.gsi3_sort_key)
+      .attributeName(GSI3_SORT_KEY_NAME)
       .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi3Schema = new ArrayList<KeySchemaElement>();
     gsi3Schema.add(pk3Schema);
     gsi3Schema.add(sk3Schema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName(Config.contents.ddb_table.gsi3_name)
+      .indexName(GSI3_NAME)
       .keySchema(gsi3Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
@@ -142,25 +160,25 @@ public class Api {
 
     final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.partition_key)
+      .attributeName(PARTITION_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.sort_key)
+      .attributeName(SORT_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.gsi1_partition_key)
+      .attributeName(GSI1_PARTITION_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.gsi1_sort_key)
+      .attributeName(GSI1_SORT_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.gsi2_partition_key)
+      .attributeName(GSI2_PARTITION_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.gsi3_partition_key)
+      .attributeName(GSI3_PARTITION_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(Config.contents.ddb_table.gsi3_sort_key)
+      .attributeName(GSI3_SORT_KEY_NAME)
       .attributeType(ScalarAttributeType.S).build());
     final CreateTableRequest request =
         CreateTableRequest.builder()
@@ -239,12 +257,12 @@ public class Api {
     attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", "SK");
+    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", SORT_KEY_NAME);
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
       .indexName(GSI1_NAME)
-      .keyConditionExpression("PK1 = :email")
+      .keyConditionExpression(GSI1_PARTITION_KEY_NAME + " = :email")
       .expressionAttributeValues(attrValues);
     if (filterExpr != null) builder = builder.filterExpression(filterExpr);
     return MeetingFromResp(ddbClient.query(builder.build()));
@@ -266,11 +284,11 @@ public class Api {
     attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", "SK");
+    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", SORT_KEY_NAME);
     
     QueryRequest.Builder builder = QueryRequest.builder()
     .tableName(tableName)
-    .keyConditionExpression("PK = :id")
+    .keyConditionExpression(PARTITION_KEY_NAME + " = :id")
     .expressionAttributeValues(attrValues);
     if (filterExpr != null) builder = builder.filterExpression(filterExpr);
     return MeetingFromResp(ddbClient.query(builder.build()));
@@ -312,7 +330,7 @@ public class Api {
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .keyConditionExpression("PK = :id and SK = :id")
+    .keyConditionExpression(PARTITION_KEY_NAME + " = :id and SK = :id")
     .expressionAttributeValues(attrValues)
     .build();
 
@@ -326,7 +344,7 @@ public class Api {
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .keyConditionExpression("PK = :name and SK = :name")
+    .keyConditionExpression(PARTITION_KEY_NAME + " = :name and SK = :name")
     .expressionAttributeValues(attrValues)
     .build();
 
@@ -341,13 +359,13 @@ public class Api {
     AddValue(attrValues, ":endDate", endDate, "S-");
     AddValue(attrValues, ":startTarget", startTarget, "");
     AddValue(attrValues, ":endTarget", endTarget, "");
-    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK1");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, GSI1_SORT_KEY_NAME);
     String filterExpr = GetFilterForRange(startTarget, endTarget, ":startTarget", ":endTarget", "targetDate");
 
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
-      .indexName("GSI1")
-      .keyConditionExpression("PK1 = :status" + dateExpr)
+      .indexName(GSI1_NAME)
+      .keyConditionExpression(GSI1_PARTITION_KEY_NAME + " = :status" + dateExpr)
       .expressionAttributeValues(attrValues);
     if (filterExpr != null) builder = builder.filterExpression(filterExpr);
     return ProjectFromResp(ddbClient.query(builder.build()));
@@ -361,8 +379,8 @@ public class Api {
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .indexName("GSI1")
-    .keyConditionExpression("PK1 = :email and begins_with(SK1, :e)")
+    .indexName(GSI1_NAME)
+    .keyConditionExpression(GSI1_PARTITION_KEY_NAME + " = :email and begins_with(" + GSI1_SORT_KEY_NAME + ", :e)")
     .expressionAttributeValues(attrValues)
     .build();
 
@@ -377,8 +395,8 @@ public class Api {
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .indexName("GSI2")
-    .keyConditionExpression("PK2 = :email and begins_with(SK, :e)")
+    .indexName(GSI2_NAME)
+    .keyConditionExpression(GSI2_PARTITION_KEY_NAME + " = :email and begins_with(SK, :e)")
     .expressionAttributeValues(attrValues)
     .build();
 
@@ -405,15 +423,15 @@ public class Api {
     
     String keyExpr;
     if (locTag.isEmpty()) {
-      keyExpr = "PK3 = :city";
+      keyExpr = GSI3_PARTITION_KEY_NAME + " = :city";
     } else {
-      keyExpr = "PK3 = :city and begins_with(SK3, :loc)";
+      keyExpr = GSI3_PARTITION_KEY_NAME + " = :city and begins_with(SK3, :loc)";
       attrValues.put(":loc", AttributeValue.builder().s(locTag).build());
     }
 
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .indexName("GSI3")
+    .indexName(GSI3_NAME)
     .keyConditionExpression(keyExpr)
     .expressionAttributeValues(attrValues)
     .build();
@@ -427,11 +445,11 @@ public class Api {
     attrValues.put(":ticket", AttributeValue.builder().s("T-" + ticket).build());
     AddValue(attrValues, ":startDate", startDate, "M-");
     AddValue(attrValues, ":endDate", endDate, "M-");
-    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, SORT_KEY_NAME);
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
-      .keyConditionExpression("PK = :ticket" + dateExpr)
+      .keyConditionExpression(PARTITION_KEY_NAME + " = :ticket" + dateExpr)
       .expressionAttributeValues(attrValues);
     return TicketFromResp(ddbClient.query(builder.build()));
   }
@@ -443,14 +461,14 @@ public class Api {
     AddValue(attrValues, ":startDate", startDate, "M-");
     AddValue(attrValues, ":endDate", endDate, "M-");
     AddValue(attrValues, ":ticket", ticket, "T-");
-    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK1");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, GSI1_SORT_KEY_NAME);
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
-      .indexName("GSI1")
-      .keyConditionExpression("PK1 = :author" + dateExpr)
+      .indexName(GSI1_NAME)
+      .keyConditionExpression(GSI1_PARTITION_KEY_NAME + " = :author" + dateExpr)
       .expressionAttributeValues(attrValues);
-    if (ticket != null) builder = builder.filterExpression("PK = :ticket");
+    if (ticket != null) builder = builder.filterExpression(PARTITION_KEY_NAME + " = :ticket");
     return TicketFromResp(ddbClient.query(builder.build()));
   }
 
@@ -461,14 +479,14 @@ public class Api {
     AddValue(attrValues, ":startDate", startDate, "M-");
     AddValue(attrValues, ":endDate", endDate, "M-");
     AddValue(attrValues, ":ticket", ticket, "T-");
-    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, SORT_KEY_NAME);
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
-      .indexName("GSI2")
-      .keyConditionExpression("PK2 = :assignee" + dateExpr)
+      .indexName(GSI2_NAME)
+      .keyConditionExpression(GSI2_PARTITION_KEY_NAME + " = :assignee" + dateExpr)
       .expressionAttributeValues(attrValues);
-    if (ticket != null) builder = builder.filterExpression("PK = :ticket");
+    if (ticket != null) builder = builder.filterExpression(PARTITION_KEY_NAME + " = :ticket");
     return TicketFromResp(ddbClient.query(builder.build()));
   }
 }
