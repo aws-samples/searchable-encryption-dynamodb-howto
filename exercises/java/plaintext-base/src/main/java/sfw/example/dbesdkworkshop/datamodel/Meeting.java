@@ -42,11 +42,11 @@ public class Meeting extends BaseItem {
     String room = location.get("room");
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    // TODO, I think we can unique on just start time
-    // This moves all sensitive information out of the PK/SK
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime ));
+
     item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + employeeEmail));
     item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));

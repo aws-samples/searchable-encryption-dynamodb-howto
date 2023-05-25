@@ -33,6 +33,7 @@ public class Timecard extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS("P-" + projectName));
     item.put(SORT_KEY_NAME, AttributeValue.fromS("S-" + startDate + ".N-" + employeeNumber ));
+
     item.put("startDate", AttributeValue.fromS(startDate));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));

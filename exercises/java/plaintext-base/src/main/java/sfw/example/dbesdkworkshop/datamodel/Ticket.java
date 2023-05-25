@@ -35,11 +35,15 @@ public class Ticket extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS("T-" + ticketNumber));
     item.put(SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+
     item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("CE-" + authorEmail));
     item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+
     item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("AE-" + assigneeEmail));
+
     item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("V-" + severity));
     item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+
     item.put("ticketNumber", AttributeValue.fromS(ticketNumber));
     item.put("modifiedDate", AttributeValue.fromS(modifiedDate));
     item.put("authorEmail", AttributeValue.fromS(authorEmail));
