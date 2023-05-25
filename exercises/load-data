@@ -1,0 +1,41 @@
+
+#!/bin/bash
+
+# This will delete the existing table data
+./employee-portal create-table
+
+# Put employees
+./employee-portal put-employee -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"     -T SDE9
+./employee-portal put-employee -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"   -T SDE8
+./employee-portal put-employee -n 3456 -e charlie@gmail.com -g zorro@gmail.com -c SEA -b 44 -f 4  -r 2 -d 5 -N "Charlie Jones" -T SDE7
+./employee-portal put-employee -n 4567 -e david@gmail.com   -g zorro@gmail.com -c NYC -b 22 -f 1  -r 2 -d 3 -N "David Jones"   -T SDE6
+
+# Put meetings
+./employee-portal put-meeting -n 1234 -s 2022-07-04T13:00 -f 12 -r 403 -e able@gmail.com    -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting -n 2345 -s 2022-07-04T13:00 -f 12 -r 403 -e barney@gmail.com  -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting -n 3456 -s 2022-07-04T13:00 -f 12 -r 403 -e charlie@gmail.com -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting -n 4567 -s 2022-07-04T13:00 -f 12 -r 403 -e david@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting -n 2345 -s 2022-07-04T14:00 -f 12 -r 407 -e barney@gmail.com  -D 30 -a SomeList -j "Gazelle"
+./employee-portal put-meeting -n 3456 -s 2022-07-04T14:00 -f 12 -r 407 -e charlie@gmail.com -D 30 -a SomeList -j "Gazelle"
+
+# Put projects
+./employee-portal put-project -N 1 -S Pending -s 2022-11-01 -P "Turbo Crypto" -t 2024-01-01
+./employee-portal put-project -N 2 -S Active  -s 2022-07-04 -P "Scan Beacons" -t 2023-02-27
+./employee-portal put-project -N 3 -S Active  -s 2022-08-05 -P "Gazelle"      -t 2023-02-27
+./employee-portal put-project -N 4 -S Done    -s 2020-03-03 -P "S3EC"         -t 2021-09-05
+
+# Put reservations
+./employee-portal put-reservation -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-reservation -b 44 -s 2022-07-04T14:00 -f 12 -r 407 -o barney@gmail.com -D 30 -a SomeList -j "Gazelle"
+
+# Put tickets
+./employee-portal put-ticket -k 1 -M 2022-10-07T14:32:25 -A zorro@gmail.com   -g able@gmail.com    -v 3 -j "Bad Bug"  -m "This bug looks pretty bad"
+./employee-portal put-ticket -k 1 -M 2022-10-07T15:32:25 -A able@gmail.com    -g charlie@gmail.com -v 3 -j "Bad Bug"  -m "Charlie should handle this"
+./employee-portal put-ticket -k 2 -M 2022-10-06T14:32:25 -A zorro@gmail.com   -g charlie@gmail.com -v 3 -j "Easy Bug" -m "This seems simple enough"
+./employee-portal put-ticket -k 2 -M 2022-10-08T14:32:25 -A charlie@gmail.com -g able@gmail.com    -v 3 -j "Easy Bug" -m "that's in able's code"
+
+# Put timecards
+./employee-portal put-timecard -p 2 -s 2022-09-12 -e able@gmail.com    -h 40 -R SDE3
+./employee-portal put-timecard -p 2 -s 2022-09-12 -e barney@gmail.com  -h 20 -R PM
+./employee-portal put-timecard -p 3 -s 2022-09-12 -e charlie@gmail.com -h 40 -R SDE3
+./employee-portal put-timecard -p 3 -s 2022-09-12 -e barney@gmail.com  -h 20 -R PM
