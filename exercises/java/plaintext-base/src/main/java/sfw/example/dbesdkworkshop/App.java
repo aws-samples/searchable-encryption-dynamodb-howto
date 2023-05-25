@@ -16,7 +16,7 @@ import java.net.URI;
  */
 
 @Command(
-  name = "Employee Portal",
+  name = "employee-portal",
   description = "Entrypoint for interacting with the employee portal",
   subcommands = {
     CreateTable.class,
@@ -29,7 +29,8 @@ import java.net.URI;
     PutReservation.class,
     PutTicket.class,
     PutTimecard.class,
-    CommandLine.HelpCommand.class
+    CommandLine.HelpCommand.class,
+    picocli.AutoComplete.GenerateCompletion.class
   }
 )
 public class App {
