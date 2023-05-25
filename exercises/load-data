@@ -35,7 +35,7 @@
 ./employee-portal put-ticket -k 2 -M 2022-10-08T14:32:25 -A charlie@gmail.com -g able@gmail.com    -v 3 -j "Easy Bug" -m "that's in able's code"
 
 # Put timecards
-./employee-portal put-timecard -p 2 -s 2022-09-12 -e able@gmail.com    -h 40 -R SDE3
-./employee-portal put-timecard -p 2 -s 2022-09-12 -e barney@gmail.com  -h 20 -R PM
-./employee-portal put-timecard -p 3 -s 2022-09-12 -e charlie@gmail.com -h 40 -R SDE3
-./employee-portal put-timecard -p 3 -s 2022-09-12 -e barney@gmail.com  -h 20 -R PM
+./employee-portal put-timecard -p 2 -s 2022-09-12 -e able@gmail.com    -n 1234 -h 40 -R SDE3
+./employee-portal put-timecard -p 2 -s 2022-09-12 -e barney@gmail.com  -n 2345 -h 20 -R PM
+./employee-portal put-timecard -p 3 -s 2022-09-12 -e charlie@gmail.com -n 3456 -h 40 -R SDE3
+./employee-portal put-timecard -p 3 -s 2022-09-12 -e barney@gmail.com  -n 2345 -h 20 -R PM

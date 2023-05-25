@@ -60,13 +60,13 @@ public class Employee extends BaseItem {
     locTag = AppendStrWithPrefix(locTag, location.get("desk"), "D-");
 
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put("PK", AttributeValue.fromS("E-" + employeeNumber));
-    item.put("SK", AttributeValue.fromS("E-" + employeeNumber));
-    item.put("PK1", AttributeValue.fromS("EE-" + email));
-    item.put("SK1", AttributeValue.fromS("E-" + employeeNumber));
-    item.put("PK2", AttributeValue.fromS("ME-" + managerEmail));
-    item.put("PK3", AttributeValue.fromS("C-" + location.get("city")));
-    item.put("SK3", AttributeValue.fromS(locTag));
+    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + email));
+    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("ME-" + managerEmail));
+    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("C-" + location.get("city")));
+    item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS(locTag));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("email", AttributeValue.fromS(email));
     item.put("managerEmail", AttributeValue.fromS(managerEmail));

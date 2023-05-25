@@ -29,8 +29,6 @@ public abstract class BaseItem {
 
   protected static final String GSI2_PARTITION_KEY_NAME =
       Config.contents.ddb_table.gsi2_partition_key;
-  protected static final String GSI2_SORT_KEY_NAME =
-      Config.contents.ddb_table.sort_key;
 
   protected static final String GSI3_PARTITION_KEY_NAME =
       Config.contents.ddb_table.gsi3_partition_key;

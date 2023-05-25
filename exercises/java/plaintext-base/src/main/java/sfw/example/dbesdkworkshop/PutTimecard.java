@@ -16,6 +16,8 @@ public class PutTimecard implements Runnable {
   String projectName;
   @Option( names = {"-s", "--start"}, required = true, description = "set startDate")
   String startDate;
+  @Option( names = {"-n", "--employee-number"}, required = true, description = "set employeeNumber")
+  String employeeNumber;
   @Option( names = {"-e", "--email"}, required = true, description = "set employeeEmail")
   String employeeEmail;
   @Option( names = {"-h", "--hours"}, required = true, description = "set hours")
@@ -29,6 +31,7 @@ public class PutTimecard implements Runnable {
     api.putItem(new Timecard(
       projectName,
       startDate,
+      employeeNumber,
       employeeEmail,
       hours,
       role

@@ -33,13 +33,13 @@ public class Ticket extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put("PK", AttributeValue.fromS("T-" + ticketNumber));
-    item.put("SK", AttributeValue.fromS("M-" + modifiedDate));
-    item.put("PK1", AttributeValue.fromS("CE-" + authorEmail));
-    item.put("SK1", AttributeValue.fromS("M-" + modifiedDate));
-    item.put("PK2", AttributeValue.fromS("AE-" + assigneeEmail));
-    item.put("PK3", AttributeValue.fromS("V-" + severity));
-    item.put("SK3", AttributeValue.fromS("M-" + modifiedDate));
+    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("T-" + ticketNumber));
+    item.put(SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("CE-" + authorEmail));
+    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("AE-" + assigneeEmail));
+    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("V-" + severity));
+    item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
     item.put("ticketNumber", AttributeValue.fromS(ticketNumber));
     item.put("modifiedDate", AttributeValue.fromS(modifiedDate));
     item.put("authorEmail", AttributeValue.fromS(authorEmail));

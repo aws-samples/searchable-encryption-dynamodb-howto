@@ -22,7 +22,8 @@ public class Project extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS(name));
+    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("P-" + name));
+    item.put(SORT_KEY_NAME, AttributeValue.fromS("P-" + name));
     item.put("status", AttributeValue.fromS(status));
     item.put("startDate", AttributeValue.fromS(startDate));
     item.put("description", AttributeValue.fromS(description));
