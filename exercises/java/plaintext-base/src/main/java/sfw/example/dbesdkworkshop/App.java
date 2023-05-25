@@ -22,6 +22,7 @@ import java.net.URI;
     CreateTable.class,
     GetEmployees.class,
     GetMeetings.class,
+    GetProjects.class,
     GetTickets.class,
     PutMeeting.class,
     PutEmployee.class,

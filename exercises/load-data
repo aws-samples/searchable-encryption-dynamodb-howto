@@ -19,10 +19,10 @@
 ./employee-portal put-meeting -n 3456 -s 2022-07-04T14:00 -f 12 -r 407 -e charlie@gmail.com -D 30 -a SomeList -j "Gazelle"
 
 # Put projects
-./employee-portal put-project -N 1 -S Pending -s 2022-11-01 -P "Turbo Crypto" -t 2024-01-01
-./employee-portal put-project -N 2 -S Active  -s 2022-07-04 -P "Scan Beacons" -t 2023-02-27
-./employee-portal put-project -N 3 -S Active  -s 2022-08-05 -P "Gazelle"      -t 2023-02-27
-./employee-portal put-project -N 4 -S Done    -s 2020-03-03 -P "S3EC"         -t 2021-09-05
+./employee-portal put-project -N 1 -s Pending -S 2022-11-01 -P "Turbo Crypto" -t 2024-01-01
+./employee-portal put-project -N 2 -s Active  -S 2022-07-04 -P "Scan Beacons" -t 2023-02-27
+./employee-portal put-project -N 3 -s Active  -S 2022-08-05 -P "Gazelle"      -t 2023-03-27
+./employee-portal put-project -N 4 -s Done    -S 2020-03-03 -P "S3EC"         -t 2021-09-05
 
 # Put reservations
 ./employee-portal put-reservation -i 0d404088-908d-48ff-bea5-4c356ebb46d0 -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons"

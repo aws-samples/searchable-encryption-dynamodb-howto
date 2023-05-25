@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import sfw.example.dbesdkworkshop.datamodel.*;
+import sfw.example.dbesdkworkshop.Config;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
 
@@ -17,6 +18,13 @@ import software.amazon.awssdk.services.dynamodb.model.*;
 public class Api {
   private final DynamoDbClient ddbClient;
   private final String tableName;
+
+  protected static final String GSI1_NAME =
+    Config.contents.ddb_table.gsi1_name;
+    protected static final String GSI2_NAME =
+    Config.contents.ddb_table.gsi2_name;
+    protected static final String GSI3_NAME =
+    Config.contents.ddb_table.gsi3_name;
 
   /**
    * Construct a Document Bucket {@code Api} using the provided configuration.
@@ -198,14 +206,14 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
-  public String GetFilterForRange(String startDate, String endDate, String sk)
+  public String GetFilterForRange(String startDate, String endDate, String startVar, String endVar, String sk)
   {
     if (startDate != null && endDate != null) {
-      return sk + " between :startDate and :endDate";
+      return sk + " between " + startVar + " and " + endVar;
     } else if (startDate != null) {
-      return sk + " >= :startDate";
+      return sk + " >= " + startVar;
     } else if (endDate != null) {
-      return sk + " <= :endDate";
+      return sk + " <= " + endVar;
     } else {
       return null;
     }
@@ -231,11 +239,11 @@ public class Api {
     attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-    String filterExpr = GetFilterForRange(startDate, endDate, "SK");
+    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", "SK");
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
-      .indexName("GSI1")
+      .indexName(GSI1_NAME)
       .keyConditionExpression("PK1 = :email")
       .expressionAttributeValues(attrValues);
     if (filterExpr != null) builder = builder.filterExpression(filterExpr);
@@ -258,7 +266,7 @@ public class Api {
     attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
     AddValue(attrValues, ":startDate", startDate, "S-");
     AddValue(attrValues, ":endDate", endDate, "S-");
-    String filterExpr = GetFilterForRange(startDate, endDate, "SK");
+    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", "SK");
     
     QueryRequest.Builder builder = QueryRequest.builder()
     .tableName(tableName)
@@ -289,6 +297,13 @@ public class Api {
     }
     return results;
   }
+  protected List<Project> ProjectFromResp(QueryResponse resp) {
+    final ArrayList<Project> results = new ArrayList<Project>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Project.fromItem(item));
+    }
+    return results;
+  }
 
   public List<Employee> getEmployeeById(String id)
   {
@@ -302,6 +317,40 @@ public class Api {
     .build();
 
     return EmployeeFromResp(ddbClient.query(request));
+  }
+
+  public List<Project> getProjectByName(String name)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":name", AttributeValue.builder().s("P-" + name).build());
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression("PK = :name and SK = :name")
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return ProjectFromResp(ddbClient.query(request));
+  }
+
+  public List<Project> getProjectsByStatus(String status, String startDate, String endDate, String startTarget, String endTarget)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":status", AttributeValue.builder().s("U-" + status).build());
+    AddValue(attrValues, ":startDate", startDate, "S-");
+    AddValue(attrValues, ":endDate", endDate, "S-");
+    AddValue(attrValues, ":startTarget", startTarget, "");
+    AddValue(attrValues, ":endTarget", endTarget, "");
+    String dateExpr = GetKeyExprForRange(startDate, endDate, "SK1");
+    String filterExpr = GetFilterForRange(startTarget, endTarget, ":startTarget", ":endTarget", "targetDate");
+
+    QueryRequest.Builder builder = QueryRequest.builder()
+      .tableName(tableName)
+      .indexName("GSI1")
+      .keyConditionExpression("PK1 = :status" + dateExpr)
+      .expressionAttributeValues(attrValues);
+    if (filterExpr != null) builder = builder.filterExpression(filterExpr);
+    return ProjectFromResp(ddbClient.query(builder.build()));
   }
 
   public List<Employee> getEmployeeByEmail(String email)
@@ -422,24 +471,4 @@ public class Api {
     if (ticket != null) builder = builder.filterExpression("PK = :ticket");
     return TicketFromResp(ddbClient.query(builder.build()));
   }
-
-  //  public List<Project> getProjectsByStatusStartAndTargetDate(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Project> getProjectsByName(){throw new IllegalArgumentException("not yet");}
-  //  public List<Project> getProjectHistoryByDateRange(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Project> getProjectHistoryByRole(){throw new IllegalArgumentException("not yet");}
-  //
-  //  public List<Reservation> getReservationsByBuildingId(){throw new IllegalArgumentException("not
-  // yet");}
-  //  public List<Reservation> getReservationsByBuildingIdAndTimeRange(){throw new
-  // IllegalArgumentException("not yet");}
-  //  public List<Reservation> getReservationsByEmail(){throw new IllegalArgumentException("not
-  // yet");}
-  //
-  //  public List<Ticket> getTicketsLastTouchedInThePast_24Hours(){throw new
-  // IllegalArgumentException("not yet");}
-  //
-  //  public List<Timecard> getTimeCardsByEmail(){throw new IllegalArgumentException("not yet");}
-
 }

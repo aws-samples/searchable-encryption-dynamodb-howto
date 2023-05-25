@@ -135,8 +135,8 @@ one record per meeting
 1. Get Tickets last touched in the past 24 hours
 1. Get Projects by status, start and target date
 1. Get Projects by name
-1. Get Project History by date range
-1. Get Project History by role
+1. Get time cards by date range
+1. Get time cards by role
 1. Get Reservations by BuildingID
 1. Get Reservations by BuildingID and time range
 
@@ -192,8 +192,8 @@ one record per meeting
 |17| Get Tickets last touched in the past 24 hours | GSI-3 | PK3=Priority SK3>yesterday |    |
 |18| Get Projects by status, start and target date | GSI-1 | PK1=Status SK1 > StartDate |targetDelivery < targetDate|
 |19| Get Projects by name | Table | PK=ProjectName SK=ProjectName |    |
-|20| Get Project History by date range | Table | PK=ProjectName SK between(date1, date2) |    |
-|21| Get Project History by role | Table |PK=ProjectName|role=roleName|
+|20| Get time cards by date range | Table | PK=ProjectName SK between(date1, date2) |    |
+|21| Get time cards by role | Table |PK=ProjectName|role=roleName|
 |22| Get Reservations by BuildingID | Table |PK=BuildingID|    |
 |23| Get Reservations by BuildingID and time range | Table |PK=BuildingID SK between(date1, date2)|duration>0|
 

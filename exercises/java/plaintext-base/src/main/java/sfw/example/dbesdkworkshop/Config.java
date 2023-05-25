@@ -11,11 +11,6 @@ public class Config {
   private static final File DEFAULT_CONFIG = new File("../../config.toml");
   public static final ConfigContents contents = new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
-//    new ConfigContents(
-//      new Base("MyStateFile"),
-//      new DocumentBucket(new DocumentTable("MyTestTable", "PartKey", "SortKey", "4", "5"), new Bucket("", "", "")));
-      // new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
-
   private Config() { // Do not instantiate
   }
 

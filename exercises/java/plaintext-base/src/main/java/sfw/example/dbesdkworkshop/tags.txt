@@ -28,6 +28,7 @@ Command Line Args - Names and Short Options
 -t target
 -T title
 -v Severity
+-w window
 
 Compound Beacon Prefixes
   * indicates NOT a separate attribute
@@ -48,6 +49,7 @@ P- projectName
 R- Room*
 S- startTime
 T- ticketNumber
+U- status
 V- reservtion
 Y- severity
 
@@ -62,7 +64,16 @@ location
 message
 name
 role
-status
 subject
 targetDate
 title
+
+Attributes that must not be encrypted
+
+employeeNumber
+startTime
+projectName
+reservation
+targetDate
+ticketNumber
+modifiedDate

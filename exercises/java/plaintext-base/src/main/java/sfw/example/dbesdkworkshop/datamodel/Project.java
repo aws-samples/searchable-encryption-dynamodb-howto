@@ -12,7 +12,7 @@ public class Project extends BaseItem {
   private String targetDate;
 
   public Project(
-      String name, String status, String startTime, String description, String targetDate) {
+      String projectName, String status, String startTime, String description, String targetDate) {
     this.projectName = projectName;
     this.status = status;
     this.startTime = startTime;
@@ -22,8 +22,12 @@ public class Project extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
+
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS("P-" + projectName));
     item.put(SORT_KEY_NAME, AttributeValue.fromS("P-" + projectName));
+    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("U-" + status));
+    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime));
+
     item.put("projectName", AttributeValue.fromS(projectName));
     item.put("status", AttributeValue.fromS(status));
     item.put("startTime", AttributeValue.fromS(startTime));
