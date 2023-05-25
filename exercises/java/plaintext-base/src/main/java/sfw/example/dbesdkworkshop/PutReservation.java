@@ -9,9 +9,13 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Reservation;
 
+import java.util.UUID;
+
 @Command(name = "put-reservation", description = "Adds a record to the database.")
 public class PutReservation implements Runnable {
 
+  @Option( names = {"-i", "--id"}, required = true, description = "set id")
+  UUID id;
   @Option( names = {"-b", "--building"}, required = true, description = "set building")
   String building;
   @Option( names = {"-s", "--start"}, required = true, description = "set startTime")
@@ -33,6 +37,7 @@ public class PutReservation implements Runnable {
   public void run() {
     final Api api = App.initializeEmployeePortal();
     api.putItem(new Reservation(
+      id.toString(),
       building,
       startTime,
       floor,

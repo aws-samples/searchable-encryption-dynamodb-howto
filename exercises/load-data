@@ -5,8 +5,8 @@
 ./employee-portal create-table
 
 # Put employees
-./employee-portal put-employee -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"     -T SDE9
-./employee-portal put-employee -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"   -T SDE8
+./employee-portal put-employee -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"    -T SDE9
+./employee-portal put-employee -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"  -T SDE8
 ./employee-portal put-employee -n 3456 -e charlie@gmail.com -g zorro@gmail.com -c SEA -b 44 -f 4  -r 2 -d 5 -N "Charlie Jones" -T SDE7
 ./employee-portal put-employee -n 4567 -e david@gmail.com   -g zorro@gmail.com -c NYC -b 22 -f 1  -r 2 -d 3 -N "David Jones"   -T SDE6
 
@@ -25,8 +25,8 @@
 ./employee-portal put-project -N 4 -S Done    -s 2020-03-03 -P "S3EC"         -t 2021-09-05
 
 # Put reservations
-./employee-portal put-reservation -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
-./employee-portal put-reservation -b 44 -s 2022-07-04T14:00 -f 12 -r 407 -o barney@gmail.com -D 30 -a SomeList -j "Gazelle"
+./employee-portal put-reservation -i 0d404088-908d-48ff-bea5-4c356ebb46d0 -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-reservation -i f7c947f9-1454-4eb8-afd3-0097d5bdc012 -b 44 -s 2022-07-04T14:00 -f 12 -r 407 -o barney@gmail.com -D 30 -a SomeList -j "Gazelle"
 
 # Put tickets
 ./employee-portal put-ticket -k 1 -M 2022-10-07T14:32:25 -A zorro@gmail.com   -g able@gmail.com    -v 3 -j "Bad Bug"  -m "This bug looks pretty bad"
