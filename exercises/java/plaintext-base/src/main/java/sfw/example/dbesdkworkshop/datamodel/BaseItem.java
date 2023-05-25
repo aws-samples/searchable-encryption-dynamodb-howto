@@ -9,8 +9,8 @@ import sfw.example.dbesdkworkshop.Config;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 /**
- * Parent class for modeling items for the Employee Portal DynamoDB table. See {@link Emeeting} for
- * items corresponding to E Meetings. See {@link Employee} for items corresponding to Employees. See
+ * Parent class for modeling items for the Employee Portal DynamoDB table. See {@link Meeting} for
+ * items corresponding to Meetings. See {@link Employee} for items corresponding to Employees. See
  * {@link Project} for items corresponding to Projects. See {@link Reservation} for items
  * corresponding to Reservations. See {@link Ticket} for items corresponding to Tickets. See {@link
  * Timecard} for items corresponding to Time-cards.
