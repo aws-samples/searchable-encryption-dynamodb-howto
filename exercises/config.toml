@@ -1,0 +1,15 @@
+[base]
+state_file = "~/.busy_engineers_state.toml"
+
+[ddb_table]
+name = "MyTestTable"
+partition_key = "PK"
+sort_key = "SK"
+gsi1_name = "GSI1"
+gsi1_partition_key = "PK1"
+gsi1_sort_key = "SK1"
+gsi2_name = "GSI2"
+gsi2_partition_key = "PK2"
+gsi3_name = "GSI3"
+gsi3_partition_key = "PK3"
+gsi3_sort_key = "SK3"
