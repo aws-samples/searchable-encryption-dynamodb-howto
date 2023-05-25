@@ -32,15 +32,17 @@ public class Timecard extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS("P-" + projectName));
-    item.put(SORT_KEY, AttributeValue.fromS("S-" + startTime + ".E-" + employeeNumber ));
+    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
 
     item.put("projectName", AttributeValue.fromS(projectName));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("hours", AttributeValue.fromS(hours));
-    item.put("role", AttributeValue.fromS(role));
+    item.put(ROLE_NAME, AttributeValue.fromS(role));
     return item;
   }
 
@@ -51,6 +53,17 @@ public class Timecard extends BaseItem {
         item.get("employeeNumber").s(),
         item.get("employeeEmail").s(),
         item.get("hours").s(),
-        item.get("role").s());
+        item.get(ROLE_NAME).s());
   }
+
+  @Override
+  public String toString() {
+    return projectName.toString() +
+    "\t" + startTime.toString() +
+    "\t" + employeeNumber.toString() +
+    "\t" + employeeEmail.toString() +
+    "\t" + hours.toString() +
+    "\t" + role.toString();
+  }
+
 }

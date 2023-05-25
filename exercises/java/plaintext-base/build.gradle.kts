@@ -28,6 +28,7 @@ dependencies {
     api("io.quarkus:quarkus-picocli:3.0.3.Final")
     api("software.amazon.cryptools:AmazonCorrettoCryptoProvider:1.2.0")
     api("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.3.1")
     testImplementation("org.mockito:mockito-core:3.1.0")

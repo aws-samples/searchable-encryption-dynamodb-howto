@@ -12,6 +12,7 @@ Command Line Args - Names and Short Options
 -g assignee-email
 -G manager-email
 -h hours
+-i reservation-id
 -j subject
 -k ticket-number
 -m message

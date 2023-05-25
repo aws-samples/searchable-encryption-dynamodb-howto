@@ -15,7 +15,7 @@ import java.util.UUID;
 @Command(name = "put-reservation", description = "Adds a record to the database.")
 public class PutReservation implements Runnable {
 
-  @Option( names = {"-i", "--id"}, required = true, description = "set id")
+  @Option( names = {"-i", "--reservation-id"}, required = true, description = "set id")
   UUID id;
   @Option( names = {"-b", "--building"}, required = true, description = "set building")
   String building;

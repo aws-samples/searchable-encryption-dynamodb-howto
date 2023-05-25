@@ -200,6 +200,14 @@ public class Api {
     return response.items().stream().collect(Collectors.toSet());
   }
 
+  public String IncrString(String s)
+  {
+    if (s == null || s.isEmpty()) return s;
+    final int len = s.length();
+    final char last = s.charAt(len-1);
+    return s.substring(0,len-1) + (last+1);
+  }
+
   public String GetFilterForRange(String startDate, String endDate, String startVar, String endVar, String sk)
   {
     if (startDate != null && endDate != null) {
@@ -226,6 +234,14 @@ public class Api {
     }
   }
 
+  public String GetKeyExprForRangeWithFallback(String startDate, String endDate, String sk)
+  {
+    if (endDate != null) {
+      return " AND " + sk + " between :startDate and :endDate";
+    } else {
+      return " AND " + sk + " >= :startDate"; // FIXME - not constrained to prefix
+    }
+  }
 
   public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate)
   {
@@ -250,6 +266,20 @@ public class Api {
       attrValues.put(name,
       AttributeValue.builder()
       .s(prefix + value) 
+      .build());
+    }
+  }
+  void AddValueWithFallback(HashMap<String, AttributeValue> attrValues, String name, String value, String prefix, String fallback)
+  {
+    if (value != null) {
+      attrValues.put(name,
+      AttributeValue.builder()
+      .s(prefix + value) 
+      .build());
+    } else {
+      attrValues.put(name,
+      AttributeValue.builder()
+      .s(fallback) 
       .build());
     }
   }
@@ -298,6 +328,81 @@ public class Api {
     }
     return results;
   }
+  protected List<Timecard> TimecardFromResp(QueryResponse resp) {
+    final ArrayList<Timecard> results = new ArrayList<Timecard>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Timecard.fromItem(item));
+    }
+    return results;
+  }
+  protected List<Reservation> ReservationFromResp(QueryResponse resp) {
+    final ArrayList<Reservation> results = new ArrayList<Reservation>();
+    for (Map<String,AttributeValue> item : resp.items()) {
+      results.add(Reservation.fromItem(item));
+    }
+    return results;
+  }
+
+  static String MakeFilter(String pkStr)
+  {
+    return "begins_with(" + PARTITION_KEY + "," + pkStr + ")";
+  }
+  static String MakeFilter(String pkStr, String skStr)
+  {
+    return "begins_with(" + PARTITION_KEY + "," + pkStr + ") and begins_with(" + SORT_KEY + "," + skStr + ")";
+  }
+  
+  protected List<Map<String,AttributeValue>> scanTable() {
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).build();
+    final ScanResponse response = ddbClient.scan(request);
+    return response.items();
+  }
+  protected List<Employee> ScanEmployees() {
+      HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":e", ":e"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Employee> results = new ArrayList<Employee>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Employee.fromItem(item));
+    }
+    return results;
+  }
+
+  protected List<Reservation> ScanReservations() {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":p", AttributeValue.builder().s(RESERVATION_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":p"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Reservation> results = new ArrayList<Reservation>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Reservation.fromItem(item));
+    }
+    return results;
+  }
+
+  protected List<Timecard> ScanTimecards() {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
+    attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":p", ":s"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Timecard> results = new ArrayList<Timecard>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Timecard.fromItem(item));
+    }
+    return results;
+  }
+
 
   public List<Employee> getEmployeeById(String id)
   {
@@ -313,6 +418,121 @@ public class Api {
     return EmployeeFromResp(ddbClient.query(request));
   }
 
+  public List<Reservation> getReservationsById(String id)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":name", AttributeValue.builder().s(RESERVATION_PREFIX + id).build());
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression(PARTITION_KEY + " = :name and " + SORT_KEY + " = :name")
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return ReservationFromResp(ddbClient.query(request));
+  }
+
+  public List<Reservation> getReservationsByEmail(String email, String startDate, String endDate, String floor, String room)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":name", AttributeValue.builder().s(ORGANIZER_EMAIL_PREFIX + email).build());
+    String sortExpr = null;
+    if (floor != null || room != null) {
+      String val = START_TIME_PREFIX + startDate;
+      if (floor != null) val += "." + FLOOR_PREFIX + floor;
+      if (room != null) val += "." + ROOM_PREFIX + room;
+      attrValues.put(":val", AttributeValue.builder().s(val).build());
+      sortExpr = "begins_with(" + GSI1_SORT_KEY + ", :val)";
+    } else {
+      AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+      AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+      sortExpr = GSI1_SORT_KEY + " between :startDate and :endDate";
+    }
+    
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName(GSI1_NAME)
+    .keyConditionExpression(GSI1_PARTITION_KEY + " = :name and " + sortExpr)
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return ReservationFromResp(ddbClient.query(request));
+  }
+
+  public List<Reservation> getReservationsByBuilding(String building, String startDate, String endDate, String floor, String room)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":name", AttributeValue.builder().s(BUILDING_PREFIX + building).build());
+    String sortExpr = null;
+    if (floor != null || room != null) {
+      String val = START_TIME_PREFIX + startDate;
+      if (floor != null) val += "." + FLOOR_PREFIX + floor;
+      if (room != null) val += "." + ROOM_PREFIX + room;
+      attrValues.put(":val", AttributeValue.builder().s(val).build());
+      sortExpr = "begins_with(" + GSI3_SORT_KEY + ", :val)";
+      System.out.println(val);
+    } else {
+      AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+      AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+      sortExpr = GSI3_SORT_KEY + " between :startDate and :endDate";
+    }
+
+    System.out.println(sortExpr);
+
+    final QueryRequest request = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName(GSI3_NAME)
+    .keyConditionExpression(GSI3_PARTITION_KEY + " = :name and " + sortExpr)
+    .expressionAttributeValues(attrValues)
+    .build();
+
+    return ReservationFromResp(ddbClient.query(request));
+  }
+
+  public List<Timecard> getTimecardsByEmail(String email, String startDate, String endDate, String role)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":email", AttributeValue.builder().s(EMPLOYEE_EMAIL_PREFIX + email).build());
+    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+    String filterExpr = null;
+    attrValues.put(":tag", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
+    if (role != null) {
+      attrValues.put(":role", AttributeValue.builder().s(role).build());
+      filterExpr = ROLE_NAME + " = :role and begins_with(" + PARTITION_KEY + ", :tag)";
+    } else {
+      filterExpr = "begins_with(" + PARTITION_KEY + ", :tag)";
+    }
+
+    QueryRequest.Builder builder = QueryRequest.builder()
+    .tableName(tableName)
+    .indexName(GSI1_NAME)
+    .keyConditionExpression(GSI1_PARTITION_KEY + " = :email and " + GSI1_SORT_KEY + " between :startDate and :endDate")
+    .expressionAttributeValues(attrValues)
+    .filterExpression(filterExpr);
+    return TimecardFromResp(ddbClient.query(builder.build()));
+  }
+
+  public List<Timecard> getTimecardsByName(String name, String startDate, String endDate, String role)
+  {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":name", AttributeValue.builder().s(PROJECT_NAME_PREFIX + name).build());
+    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+    String filterExpr = null;
+    if (role != null) {
+      attrValues.put(":role", AttributeValue.builder().s(role).build());
+      filterExpr = ROLE_NAME + " = :role";
+    }
+
+    QueryRequest.Builder builder = QueryRequest.builder()
+    .tableName(tableName)
+    .keyConditionExpression(PARTITION_KEY + " = :name and " + SORT_KEY + " between :startDate and :endDate")
+    .expressionAttributeValues(attrValues);
+    if (filterExpr != null) builder = builder.filterExpression(filterExpr);
+    return TimecardFromResp(ddbClient.query(builder.build()));
+  }
+
   public List<Project> getProjectByName(String name)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
@@ -320,7 +540,7 @@ public class Api {
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
-    .keyConditionExpression(PARTITION_KEY + " = :name and SK = :name")
+    .keyConditionExpression(PARTITION_KEY + " = :name and " + SORT_KEY + " = :name")
     .expressionAttributeValues(attrValues)
     .build();
 

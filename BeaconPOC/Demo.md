@@ -90,8 +90,9 @@ one record for every (employee, meeting) pair
 one record per employee per project per week
 
 * PK - project name
-* SK - date for start of period + employee email
+* SK - date for start of period
 * PK1 - employee email
+* SK1 - date for start of period
 * ProjectName^
 * EmployeeEmail^
 * TimeCardStart^

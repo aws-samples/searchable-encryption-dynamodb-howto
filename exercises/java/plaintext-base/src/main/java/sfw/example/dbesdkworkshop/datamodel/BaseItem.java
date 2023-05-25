@@ -54,8 +54,8 @@ public abstract class BaseItem {
   }
 
 
-  @Override
-  public String toString() {
-    return this.toItem().toString();
-  }
+  // @Override
+  // public String toString() {
+  //   return this.toItem().toString();
+  // }
 }

@@ -18,39 +18,38 @@ public class GetEmployees implements Runnable {
 
   @Option( names = {"-e", "--employee-email"}, required = false, description = "by email")
   String email;
-  @Option( names = {"-n", "--employee-number"}, required = false, description = "by id")
+  @Option( names = {"-n", "--employee-number"}, required = false, description = "by employee number")
   String id;
-  @Option( names = {"-G", "--manager-email"}, required = false, description = "by id")
+  @Option( names = {"-G", "--manager-email"}, required = false, description = "by manager email")
   String manager;
 
-  @Option( names = {"-c", "--city"}, required = false, description = "by id")
+  @Option( names = {"-c", "--city"}, required = false, description = "by city")
   String city;
-  @Option( names = {"-b", "--building"}, required = false, description = "by id")
+  @Option( names = {"-b", "--building"}, required = false, description = "by building")
   String building;
-  @Option( names = {"-f", "--floor"}, required = false, description = "by id")
+  @Option( names = {"-f", "--floor"}, required = false, description = "by floor")
   String floor;
-  @Option( names = {"-r", "--room"}, required = false, description = "by id")
+  @Option( names = {"-r", "--room"}, required = false, description = "by room")
   String room;
-  @Option( names = {"-d", "--desk"}, required = false, description = "by id")
+  @Option( names = {"-d", "--desk"}, required = false, description = "by desk")
   String desk;
 
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
-    if (email != null) {
-      final List<Employee> results = api.getEmployeeByEmail(email);
-      System.out.println(results);
-    } else if (id != null) {
-      final List<Employee> results = api.getEmployeeById(id);
-      System.out.println(results);
-    } else if (manager != null) {
-      final List<Employee> results = api.getEmployeeByManager(manager);
-      System.out.println(results);
-    } else if (city != null) {
-      final List<Employee> results = api.getEmployeeByCity(city, building, floor, room, desk);
-      System.out.println(results);
-    } else {
-      throw new IllegalArgumentException("get-employees must specify city, email, manager-email or employee-number");
-    }
+    List<Employee> results;
+    if (email != null)
+      results = api.getEmployeeByEmail(email);
+    else if (id != null)
+      results = api.getEmployeeById(id);
+    else if (manager != null)
+      results = api.getEmployeeByManager(manager);
+    else if (city != null)
+      results = api.getEmployeeByCity(city, building, floor, room, desk);
+    else
+      results = api.ScanEmployees();
+
+    for (Employee item : results)
+      System.out.println(item);
   }
 }

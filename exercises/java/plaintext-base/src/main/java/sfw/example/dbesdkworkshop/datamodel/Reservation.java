@@ -38,8 +38,8 @@ public class Reservation extends BaseItem {
     // Having a unique value that involves sensitive values
     // is an interesting problem.
     // How might you ensure uniqueness in such cases?
-    item.put(PARTITION_KEY, AttributeValue.fromS("V-" + reservation));
-    item.put(SORT_KEY, AttributeValue.fromS("V-" + reservation));
+    item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
+    item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
     String floor = location.get("floor");
     String room = location.get("room");
@@ -49,7 +49,7 @@ public class Reservation extends BaseItem {
 
     item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("B-" + building));
     item.put(GSI3_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
-    item.put("reservation", AttributeValue.fromS(reservation));
+    item.put(RESERVATION_NAME, AttributeValue.fromS(reservation));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
     item.put("organizerEmail", AttributeValue.fromS(organizerEmail));
@@ -69,4 +69,16 @@ public class Reservation extends BaseItem {
         item.get("attendees").s(),
         item.get("subject").s());
   }
+
+  @Override
+  public String toString() {
+    return reservation.toString() +
+    "\t" + startTime.toString() +
+    "\t" + organizerEmail.toString() +
+    "\t" + duration.toString() +
+    "\t" + attendees.toString() +
+    "\t" + subject.toString() +
+    "\t" + location.toString();
+  }
 }
+

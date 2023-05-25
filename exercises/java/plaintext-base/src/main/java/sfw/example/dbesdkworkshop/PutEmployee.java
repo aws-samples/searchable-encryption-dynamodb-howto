@@ -1,6 +1,6 @@
 package sfw.example.dbesdkworkshop;
 
-
+import java.util.HashMap;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Model.CommandSpec;
@@ -36,15 +36,18 @@ public class PutEmployee implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
+    HashMap<String, String> location = new HashMap<String, String>();
+    location.put("city", city);
+    location.put("building", building);
+    location.put("floor", floor);
+    location.put("room", room);
+    location.put("desk", desk);
+
     api.putItem(new Employee(
       employeeNumber,
       email,
       assigneeEmail,
-      city,
-      building,
-      floor,
-      room,
-      desk,
+      location,
       name,
       title
     ));

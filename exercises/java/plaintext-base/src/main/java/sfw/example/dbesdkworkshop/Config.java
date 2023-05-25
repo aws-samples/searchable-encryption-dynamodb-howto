@@ -36,28 +36,28 @@ public class Config {
 
     public static final String assigneeEmail_NAME = "assigneeEmail";
     public static final String assigneeEmail_PREFIX = "AE-";
-    public static final String AUTHOREMAIL_NAME = "authorEmail";
-    public static final String AUTHOREMAIL_PREFIX = "ce-";
-    public static final String EMPLOYEEEMAIL_NAME = "employeeEmail";
-    public static final String EMPLOYEEEMAIL_PREFIX = "EE-";
-    public static final String EMPLOYEENUMBER_NAME = "employeeNumber";
-    public static final String EMPLOYEENUMBER_PREFIX = "E-";
-    public static final String MODIFIEDDATE_NAME = "modifiedDate";
-    public static final String MODIFIEDDATE_PREFIX = "M-";
-    public static final String MANAGEREMAIL_NAME = "managerEmail";
-    public static final String MANAGEREMAIL_PREFIX = "ME-";
-    public static final String ORGANIZEREMAIL_NAME = "organizerEmail";
-    public static final String ORGANIZEREMAIL_PREFIX = "OE-";
-    public static final String PROJECTNAME_NAME = "projectName";
-    public static final String PROJECTNAME_PREFIX = "P-";
-    public static final String STARTTIME_NAME = "startTime";
-    public static final String STARTTIME_PREFIX = "S-";
-    public static final String TICKETNUMBER_NAME = "ticketNumber";
-    public static final String TICKETNUMBER_PREFIX = "T-";
+    public static final String AUTHOR_EMAIL_NAME = "authorEmail";
+    public static final String AUTHOR_EMAIL_PREFIX = "ce-";
+    public static final String EMPLOYEE_EMAIL_NAME = "employeeEmail";
+    public static final String EMPLOYEE_EMAIL_PREFIX = "EE-";
+    public static final String EMPLOYEE_NUMBER_NAME = "employeeNumber";
+    public static final String EMPLOYEE_NUMBER_PREFIX = "E-";
+    public static final String MODIFIED_DATE_NAME = "modifiedDate";
+    public static final String MODIFIED_DATE_PREFIX = "M-";
+    public static final String MANAGER_EMAIL_NAME = "managerEmail";
+    public static final String MANAGER_EMAIL_PREFIX = "ME-";
+    public static final String ORGANIZER_EMAIL_NAME = "organizerEmail";
+    public static final String ORGANIZER_EMAIL_PREFIX = "OE-";
+    public static final String PROJECT_NAME_NAME = "projectName";
+    public static final String PROJECT_NAME_PREFIX = "P-";
+    public static final String START_TIME_NAME = "startTime";
+    public static final String START_TIME_PREFIX = "S-";
+    public static final String TICKET_NUMBER_NAME = "ticketNumber";
+    public static final String TICKET_NUMBER_PREFIX = "T-";
     public static final String STATUS_NAME = "status";
     public static final String STATUS_PREFIX = "U-";
-    public static final String RESERVTION_NAME = "reservtion";
-    public static final String RESERVTION_PREFIX = "V-";
+    public static final String RESERVATION_NAME = "reservation";
+    public static final String RESERVATION_PREFIX = "V-";
     public static final String SEVERITY_NAME = "severity";
     public static final String SEVERITY_PREFIX = "Y-";
     
@@ -65,6 +65,9 @@ public class Config {
     public static final String BUILDING_PREFIX = "B-";
     public static final String DESK_PREFIX = "D-";
     public static final String FLOOR_PREFIX = "F-";
+    public static final String ROOM_PREFIX = "R-";
+
+    public static final String ROLE_NAME = "empRole";
 }
 
   /** The top-level contents of the configuration file. */

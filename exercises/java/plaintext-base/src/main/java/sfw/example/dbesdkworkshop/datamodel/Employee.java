@@ -17,25 +17,14 @@ public class Employee extends BaseItem {
       String employeeNumber,
       String employeeEmail,
       String managerEmail,
-      String city,
-      String building,
-      String floor,
-      String room,
-      String desk,
+      Map<String, String> location,
       String name,
       String title
   ) {
-    Map<String, String> loc = new HashMap<>();
-    if (city != null) loc.put("city", city);
-    if (building != null) loc.put("building", building);
-    if (floor != null) loc.put("floor", floor);
-    if (room != null) loc.put("room", room);
-    if (desk != null) loc.put("desk", desk);
-
     this.employeeNumber = employeeNumber;
     this.employeeEmail = employeeEmail;
     this.managerEmail = managerEmail;
-    this.location = loc;
+    this.location = location;
     this.name = name;
     this.title = title;
   }
@@ -83,12 +72,18 @@ public class Employee extends BaseItem {
         item.get("employeeNumber").s(),
         item.get("employeeEmail").s(),
         item.get("managerEmail").s(),
-        StringOrNull(loc, "city"),
-        StringOrNull(loc, "building"),
-        StringOrNull(loc, "floor"),
-        StringOrNull(loc, "room"),
-        StringOrNull(loc, "desk"),
+        AttrToStringMap(item.get("location").m()),
         item.get("name").s(),
         item.get("title").s());
+  }
+
+  @Override
+  public String toString() {
+    return employeeNumber.toString() +
+    "\t" + employeeEmail.toString() +
+    "\t" + managerEmail.toString() +
+    "\t" + name.toString() +
+    "\t" + title.toString() +
+    "\t" + location.toString();
   }
 }
