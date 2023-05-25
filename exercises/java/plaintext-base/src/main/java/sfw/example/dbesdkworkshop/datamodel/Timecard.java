@@ -3,6 +3,7 @@ package sfw.example.dbesdkworkshop.datamodel;
 import java.util.HashMap;
 import java.util.Map;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class Timecard extends BaseItem {
 
@@ -31,8 +32,8 @@ public class Timecard extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("P-" + projectName));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".E-" + employeeNumber ));
+    item.put(PARTITION_KEY, AttributeValue.fromS("P-" + projectName));
+    item.put(SORT_KEY, AttributeValue.fromS("S-" + startTime + ".E-" + employeeNumber ));
 
     item.put("projectName", AttributeValue.fromS(projectName));
     item.put("startTime", AttributeValue.fromS(startTime));

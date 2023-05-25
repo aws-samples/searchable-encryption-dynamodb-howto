@@ -3,6 +3,7 @@ package sfw.example.dbesdkworkshop.datamodel;
 import java.util.HashMap;
 import java.util.Map;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class Employee extends BaseItem {
   private String employeeNumber;
@@ -60,13 +61,13 @@ public class Employee extends BaseItem {
     locTag = AppendStrWithPrefix(locTag, location.get("desk"), "D-");
 
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + employeeEmail));
-    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("ME-" + managerEmail));
-    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("C-" + location.get("city")));
-    item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS(locTag));
+    item.put(PARTITION_KEY, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("EE-" + employeeEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS("ME-" + managerEmail));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("C-" + location.get("city")));
+    item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("managerEmail", AttributeValue.fromS(managerEmail));

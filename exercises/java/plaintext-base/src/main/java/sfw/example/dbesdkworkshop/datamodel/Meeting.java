@@ -3,6 +3,7 @@ package sfw.example.dbesdkworkshop.datamodel;
 import java.util.HashMap;
 import java.util.Map;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class Meeting extends BaseItem {
 
@@ -41,11 +42,11 @@ public class Meeting extends BaseItem {
     String floor = location.get("floor");
     String room = location.get("room");
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime ));
+    item.put(PARTITION_KEY, AttributeValue.fromS("E-" + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS("S-" + startTime ));
 
-    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + employeeEmail));
-    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("EE-" + employeeEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
 
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
     item.put("startTime", AttributeValue.fromS(startTime));

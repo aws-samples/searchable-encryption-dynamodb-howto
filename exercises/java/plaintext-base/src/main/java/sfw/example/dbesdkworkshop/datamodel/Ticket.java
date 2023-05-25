@@ -3,6 +3,7 @@ package sfw.example.dbesdkworkshop.datamodel;
 import java.util.HashMap;
 import java.util.Map;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class Ticket extends BaseItem {
 
@@ -33,16 +34,16 @@ public class Ticket extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("T-" + ticketNumber));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(PARTITION_KEY, AttributeValue.fromS("T-" + ticketNumber));
+    item.put(SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
 
-    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("CE-" + authorEmail));
-    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("CE-" + authorEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
 
-    item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("AE-" + assigneeEmail));
+    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS("AE-" + assigneeEmail));
 
-    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("Y-" + severity));
-    item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("Y-" + severity));
+    item.put(GSI3_SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
 
     item.put("ticketNumber", AttributeValue.fromS(ticketNumber));
     item.put("modifiedDate", AttributeValue.fromS(modifiedDate));

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import sfw.example.dbesdkworkshop.Config;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 /**
  * Parent class for modeling items for the Employee Portal DynamoDB table. See {@link Meeting} for
@@ -17,23 +18,6 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
  */
 public abstract class BaseItem {
 
-  protected static final String PARTITION_KEY_NAME =
-      Config.contents.ddb_table.partition_key;
-  protected static final String SORT_KEY_NAME =
-      Config.contents.ddb_table.sort_key;
-
-  protected static final String GSI1_PARTITION_KEY_NAME =
-      Config.contents.ddb_table.gsi1_partition_key;
-  protected static final String GSI1_SORT_KEY_NAME =
-      Config.contents.ddb_table.gsi1_sort_key;
-
-  protected static final String GSI2_PARTITION_KEY_NAME =
-      Config.contents.ddb_table.gsi2_partition_key;
-
-  protected static final String GSI3_PARTITION_KEY_NAME =
-      Config.contents.ddb_table.gsi3_partition_key;
-  protected static final String GSI3_SORT_KEY_NAME =
-      Config.contents.ddb_table.gsi3_sort_key;
 
   /**
    * Transform this modeled item into a DynamoDB item ready to write to the table.
@@ -46,8 +30,8 @@ public abstract class BaseItem {
   public static Map<String, AttributeValue> getEmployeeKey(
       final String employeeNumber, final String employeeTag) {
     Map<String, AttributeValue> key = new HashMap<>();
-    key.put(PARTITION_KEY_NAME, AttributeValue.fromS(employeeNumber));
-    key.put(SORT_KEY_NAME, AttributeValue.fromS(employeeTag));
+    key.put(PARTITION_KEY, AttributeValue.fromS(employeeNumber));
+    key.put(SORT_KEY, AttributeValue.fromS(employeeTag));
     return key;
   }
 

@@ -14,9 +14,58 @@ public class Config {
   private Config() { // Do not instantiate
   }
 
-  // For automatic mpaping, these classes all have names dictated by the TOML file.
+  // For automatic mapping, these classes all have names dictated by the TOML file.
   // CHECKSTYLE:OFF MemberName
   // CHECKSTYLE:OFF ParameterName
+
+  public static class Constants {
+    public static final String TABLE_NAME = "MyTestTable";
+
+    public static final String GSI1_NAME = "GSI1";
+    public static final String GSI2_NAME = "GSI2";
+    public static final String GSI3_NAME = "GSI3";
+
+    public static final String PARTITION_KEY = "PK";
+    public static final String SORT_KEY = "SK";
+
+    public static final String GSI1_PARTITION_KEY = "PK1";
+    public static final String GSI1_SORT_KEY = "SK1";
+    public static final String GSI2_PARTITION_KEY = "PK2";
+    public static final String GSI3_PARTITION_KEY = "PK3";
+    public static final String GSI3_SORT_KEY = "SK3";
+
+    public static final String assigneeEmail_NAME = "assigneeEmail";
+    public static final String assigneeEmail_PREFIX = "AE-";
+    public static final String AUTHOREMAIL_NAME = "authorEmail";
+    public static final String AUTHOREMAIL_PREFIX = "ce-";
+    public static final String EMPLOYEEEMAIL_NAME = "employeeEmail";
+    public static final String EMPLOYEEEMAIL_PREFIX = "EE-";
+    public static final String EMPLOYEENUMBER_NAME = "employeeNumber";
+    public static final String EMPLOYEENUMBER_PREFIX = "E-";
+    public static final String MODIFIEDDATE_NAME = "modifiedDate";
+    public static final String MODIFIEDDATE_PREFIX = "M-";
+    public static final String MANAGEREMAIL_NAME = "managerEmail";
+    public static final String MANAGEREMAIL_PREFIX = "ME-";
+    public static final String ORGANIZEREMAIL_NAME = "organizerEmail";
+    public static final String ORGANIZEREMAIL_PREFIX = "OE-";
+    public static final String PROJECTNAME_NAME = "projectName";
+    public static final String PROJECTNAME_PREFIX = "P-";
+    public static final String STARTTIME_NAME = "startTime";
+    public static final String STARTTIME_PREFIX = "S-";
+    public static final String TICKETNUMBER_NAME = "ticketNumber";
+    public static final String TICKETNUMBER_PREFIX = "T-";
+    public static final String STATUS_NAME = "status";
+    public static final String STATUS_PREFIX = "U-";
+    public static final String RESERVTION_NAME = "reservtion";
+    public static final String RESERVTION_PREFIX = "V-";
+    public static final String SEVERITY_NAME = "severity";
+    public static final String SEVERITY_PREFIX = "Y-";
+    
+    public static final String CITY_PREFIX = "C-";
+    public static final String BUILDING_PREFIX = "B-";
+    public static final String DESK_PREFIX = "D-";
+    public static final String FLOOR_PREFIX = "F-";
+}
 
   /** The top-level contents of the configuration file. */
   public static class ConfigContents {

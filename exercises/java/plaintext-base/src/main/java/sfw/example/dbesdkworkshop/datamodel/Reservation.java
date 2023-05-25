@@ -3,6 +3,7 @@ package sfw.example.dbesdkworkshop.datamodel;
 import java.util.HashMap;
 import java.util.Map;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class Reservation extends BaseItem {
 
@@ -37,17 +38,17 @@ public class Reservation extends BaseItem {
     // Having a unique value that involves sensitive values
     // is an interesting problem.
     // How might you ensure uniqueness in such cases?
-    item.put(PARTITION_KEY_NAME, AttributeValue.fromS("V-" + reservation));
-    item.put(SORT_KEY_NAME, AttributeValue.fromS("V-" + reservation));
+    item.put(PARTITION_KEY, AttributeValue.fromS("V-" + reservation));
+    item.put(SORT_KEY, AttributeValue.fromS("V-" + reservation));
 
     String floor = location.get("floor");
     String room = location.get("room");
     String building = location.get("building");
-    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("OE-" + organizerEmail));
-    item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("OE-" + organizerEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
 
-    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("B-" + building));
-    item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("B-" + building));
+    item.put(GSI3_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
     item.put("reservation", AttributeValue.fromS(reservation));
     item.put("startTime", AttributeValue.fromS(startTime));
     item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
