@@ -16,7 +16,7 @@ import sfw.example.dbesdkworkshop.datamodel.Employee;
 @Command(name = "get-employees", description = "get employees.")
 public class GetEmployees implements Runnable {
 
-  @Option( names = {"-e", "--email"}, required = false, description = "by email")
+  @Option( names = {"-e", "--employee-email"}, required = false, description = "by email")
   String email;
   @Option( names = {"-n", "--employee-number"}, required = false, description = "by id")
   String id;

@@ -16,7 +16,7 @@ public class PutMeeting implements Runnable {
   String employeeNumber;
   @Option( names = {"-s", "--start"}, required = true, description = "set startTime")
   String startTime;
-  @Option( names = {"-e", "--email"}, required = true, description = "set employeeEmail")
+  @Option( names = {"-e", "--employee-email"}, required = true, description = "set employeeEmail")
   String employeeEmail;
   @Option( names = {"-f", "--floor"}, required = true, description = "set floor")
   String floor;

@@ -19,7 +19,7 @@ public class GetMeetings implements Runnable {
   String startDate;
   @Option( names = {"-E", "--end"}, required = false, description = "by end date")
   String endDate;
-  @Option( names = {"-e", "--email"}, required = false, description = "by email")
+  @Option( names = {"-e", "--employee-email"}, required = false, description = "by email")
   String email;
   @Option( names = {"-n", "--employee-number"}, required = false, description = "by id")
   String id;

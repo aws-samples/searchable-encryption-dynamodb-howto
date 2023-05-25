@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class Employee extends BaseItem {
   private String employeeNumber;
-  private String email;
+  private String employeeEmail;
   private String managerEmail;
   private Map<String, String> location;
   private String name;
@@ -14,7 +14,7 @@ public class Employee extends BaseItem {
 
   public Employee(
       String employeeNumber,
-      String email,
+      String employeeEmail,
       String managerEmail,
       String city,
       String building,
@@ -32,7 +32,7 @@ public class Employee extends BaseItem {
     if (desk != null) loc.put("desk", desk);
 
     this.employeeNumber = employeeNumber;
-    this.email = email;
+    this.employeeEmail = employeeEmail;
     this.managerEmail = managerEmail;
     this.location = loc;
     this.name = name;
@@ -62,13 +62,13 @@ public class Employee extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
     item.put(SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + email));
+    item.put(GSI1_PARTITION_KEY_NAME, AttributeValue.fromS("EE-" + employeeEmail));
     item.put(GSI1_SORT_KEY_NAME, AttributeValue.fromS("E-" + employeeNumber));
     item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("ME-" + managerEmail));
     item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("C-" + location.get("city")));
     item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS(locTag));
     item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
-    item.put("email", AttributeValue.fromS(email));
+    item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
     item.put("managerEmail", AttributeValue.fromS(managerEmail));
     item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
     item.put("name", AttributeValue.fromS(name));
@@ -80,7 +80,7 @@ public class Employee extends BaseItem {
     Map<String, AttributeValue> loc = item.get("location").m();
     return new Employee(
         item.get("employeeNumber").s(),
-        item.get("email").s(),
+        item.get("employeeEmail").s(),
         item.get("managerEmail").s(),
         StringOrNull(loc, "city"),
         StringOrNull(loc, "building"),

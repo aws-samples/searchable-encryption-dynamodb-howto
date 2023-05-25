@@ -41,7 +41,7 @@ public class Ticket extends BaseItem {
 
     item.put(GSI2_PARTITION_KEY_NAME, AttributeValue.fromS("AE-" + assigneeEmail));
 
-    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("V-" + severity));
+    item.put(GSI3_PARTITION_KEY_NAME, AttributeValue.fromS("Y-" + severity));
     item.put(GSI3_SORT_KEY_NAME, AttributeValue.fromS("M-" + modifiedDate));
 
     item.put("ticketNumber", AttributeValue.fromS(ticketNumber));

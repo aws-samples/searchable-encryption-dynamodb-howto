@@ -14,7 +14,7 @@ public class PutEmployee implements Runnable {
 
   @Option( names = {"-n", "--employee-number"}, required = true, description = "set employeeNumber")
   String employeeNumber;
-  @Option( names = {"-e", "--email"}, required = true, description = "set email")
+  @Option( names = {"-e", "--employee-email"}, required = true, description = "set email")
   String email;
   @Option( names = {"-g", "--manager-email"}, required = true, description = "set manager email")
   String assigneeEmail;

@@ -18,7 +18,7 @@ public class PutTimecard implements Runnable {
   String startDate;
   @Option( names = {"-n", "--employee-number"}, required = true, description = "set employeeNumber")
   String employeeNumber;
-  @Option( names = {"-e", "--email"}, required = true, description = "set employeeEmail")
+  @Option( names = {"-e", "--employee-email"}, required = true, description = "set employeeEmail")
   String employeeEmail;
   @Option( names = {"-h", "--hours"}, required = true, description = "set hours")
   String hours;

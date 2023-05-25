@@ -6,7 +6,7 @@ Command Line Args - Names and Short Options
 -c city
 -d desk
 -D duration
--e email
+-e employee-email
 -E end
 -f floor
 -g assignee-email
@@ -30,23 +30,39 @@ Command Line Args - Names and Short Options
 -v Severity
 
 Compound Beacon Prefixes
+  * indicates NOT a separate attribute
+  i.e. only 12 of these need to be configured
 
-AssigneeEmail AE-
-Building B-
-City C- Location.City ****
-CreatorEmail CE-
-Desk D- 
-EmployeeEmail EE-
-EmployeeNumber E-
-Floor F-
-ManagerEmail ME-
-MeetingStart S-
-OrganizerEmail OE-
-ProjectName P-
-ProjectStart PS-
-ProjectStatus S-
-Room R-
-Severity V-
-TicketModTime M-
-TicketNumber T-
-TimeCardStart TS-
+AE- assigneeEmail
+B- Building*
+C- City*
+CE- authorEmail
+D- Desk*
+EE- employeeEmail
+E- employeeNumber
+F- Floor*
+M- modifiedDate
+ME- managerEmail
+OE- organizerEmail
+P- projectName
+R- Room*
+S- startTime
+T- ticketNumber
+V- reservtion
+Y- severity
+
+
+Attributes not part of compound beacons
+
+attendees
+description
+duration
+hours
+location
+message
+name
+role
+status
+subject
+targetDate
+title
