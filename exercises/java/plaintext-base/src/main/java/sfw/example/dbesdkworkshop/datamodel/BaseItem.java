@@ -18,24 +18,24 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 public abstract class BaseItem {
 
   protected static final String PARTITION_KEY_NAME =
-      Config.contents.document_bucket.document_table.partition_key;
+      Config.contents.ddb_table.partition_key;
   protected static final String SORT_KEY_NAME =
-      Config.contents.document_bucket.document_table.sort_key;
+      Config.contents.ddb_table.sort_key;
 
   protected static final String GSI1_PARTITION_KEY_NAME =
-      Config.contents.document_bucket.document_table.partition_key;
+      Config.contents.ddb_table.gsi1_partition_key;
   protected static final String GSI1_SORT_KEY_NAME =
-      Config.contents.document_bucket.document_table.sort_key;
+      Config.contents.ddb_table.gsi1_sort_key;
 
   protected static final String GSI2_PARTITION_KEY_NAME =
-      Config.contents.document_bucket.document_table.partition_key;
+      Config.contents.ddb_table.gsi2_partition_key;
   protected static final String GSI2_SORT_KEY_NAME =
-      Config.contents.document_bucket.document_table.sort_key;
+      Config.contents.ddb_table.sort_key;
 
   protected static final String GSI3_PARTITION_KEY_NAME =
-      Config.contents.document_bucket.document_table.partition_key;
+      Config.contents.ddb_table.gsi3_partition_key;
   protected static final String GSI3_SORT_KEY_NAME =
-      Config.contents.document_bucket.document_table.sort_key;
+      Config.contents.ddb_table.gsi3_sort_key;
 
   /**
    * Transform this modeled item into a DynamoDB item ready to write to the table.

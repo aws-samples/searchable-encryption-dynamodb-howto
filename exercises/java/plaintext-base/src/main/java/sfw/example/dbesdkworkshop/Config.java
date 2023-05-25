@@ -9,9 +9,11 @@ import java.io.File;
 /** Helper to pull required Document Bucket configuration keys out of the configuration system. */
 public class Config {
   private static final File DEFAULT_CONFIG = new File("../../config.toml");
-  public static final ConfigContents contents = new ConfigContents(
-      new Base("MyStateFile"),
-      new DocumentBucket(new DocumentTable("MyTestTable", "PartKey", "SortKey", "4", "5"), new Bucket("", "", "")));
+  public static final ConfigContents contents = new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
+
+//    new ConfigContents(
+//      new Base("MyStateFile"),
+//      new DocumentBucket(new DocumentTable("MyTestTable", "PartKey", "SortKey", "4", "5"), new Bucket("", "", "")));
       // new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
   private Config() { // Do not instantiate
@@ -26,11 +28,11 @@ public class Config {
     /** The [base] section of the configuration file. */
     public final Base base;
     /** The [document_bucket] section of the configuration file. */
-    public final DocumentBucket document_bucket;
+    public final DDBTable ddb_table;
 
-    ConfigContents(Base base, DocumentBucket document_bucket) {
+    ConfigContents(Base base, DDBTable ddb_table) {
       this.base = base;
-      this.document_bucket = document_bucket;
+      this.ddb_table = ddb_table;
     }
   }
 
@@ -44,68 +46,64 @@ public class Config {
     }
   }
 
-  /** The [document_bucket] section of the configuration file. */
-  public static class DocumentBucket {
-    /** The [document_bucket.document_table] section of the configuration file. */
-    public final DocumentTable document_table;
-    /** The [document_bucket.bucket] section of the configuration file. */
-    public final Bucket bucket;
-
-    DocumentBucket(DocumentTable document_table, Bucket bucket) {
-      this.document_table = document_table;
-      this.bucket = bucket;
-    }
-  }
-
-  /** The [document_bucket.document_table] section of the configuration file. */
-  public static class DocumentTable {
+  /** The [ddb_table] section of the configuration file. */
+  public static class DDBTable {
     /** Table name. */
     public final String name;
 
-    /** Table partition key name on items. */
+    /** Table partition key name. */
     public final String partition_key;
 
-    /** Item sort key name on items. */
+    /** Table sort key name. */
     public final String sort_key;
 
-    /** The identifier for pointer records indicating that this record is for an S3 object. */
-    public final String object_target;
+    /** Table GSI1 name. */
+    public final String gsi1_name;
+    /** Table GSI1 partition key name. */
+    public final String gsi1_partition_key;
+    /** Table GSI1 sort key name. */
+    public final String gsi1_sort_key;
 
-    /**
-     * The prefix for context records to indicate that this record is for a list of documents
-     * matching a context key.
-     */
-    public final String ctx_prefix;
+    /** Table GSI2 name. */
+    public final String gsi2_name;
+    /** Table GSI2 partition key name. */
+    public final String gsi2_partition_key;
+    /** Table GSI2 sort key is the primary sort key. */
 
-    DocumentTable(
+    /** Table GSI3 name. */
+    public final String gsi3_name;
+    /** Table GSI3 partition key name. */
+    public final String gsi3_partition_key;
+    /** Table GSI3 sort key name. */
+    public final String gsi3_sort_key;
+
+    DDBTable(
         String name,
         String partition_key,
         String sort_key,
-        String object_target,
-        String ctx_prefix) {
+        String gsi1_name,
+        String gsi1_partition_key,
+        String gsi1_sort_key,
+        String gsi2_name,
+        String gsi2_partition_key,
+        String gsi3_name,
+        String gsi3_partition_key,
+        String gsi3_sort_key
+    ) {
       this.name = name;
       this.partition_key = partition_key;
       this.sort_key = sort_key;
-      this.object_target = object_target;
-      this.ctx_prefix = ctx_prefix;
+      this.gsi1_name = gsi1_name;
+      this.gsi1_partition_key = gsi1_partition_key;
+      this.gsi1_sort_key = gsi1_sort_key;
+      this.gsi2_name = gsi2_name;
+      this.gsi2_partition_key = gsi2_partition_key;
+      this.gsi3_name = gsi3_name;
+      this.gsi3_partition_key = gsi3_partition_key;
+      this.gsi3_sort_key = gsi3_sort_key;
     }
   }
 
-  /** The [document_bucket.bucket] section of the configuration file. */
-  public static class Bucket {
-    /** Bucket name. */
-    public final String name;
-    /** The identifier of the CloudFormation output. */
-    public final String output;
-    /** The identifier of the CloudFormation export. */
-    public final String export;
-
-    Bucket(String name, String output, String export) {
-      this.name = name;
-      this.output = output;
-      this.export = export;
-    }
-  }
   // CHECKSTYLE:ON MemberName
   // CHECKSTYLE:ON ParameterName
 }

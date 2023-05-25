@@ -50,7 +50,7 @@ public class App {
 
     // Configure DynamoDB client
     // String tableName = stateConfig.contents.state.DocumentTable;
-    String tableName = "MyTestTable";
+    String tableName = Config.contents.ddb_table.name;
     final DynamoDbClient ddbClient = DynamoDbClient
       .builder()
       .endpointOverride(URI.create("http://localhost:8000"))

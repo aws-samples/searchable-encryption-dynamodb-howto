@@ -63,55 +63,97 @@ public class Api {
     final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();
     final ArrayList<GlobalSecondaryIndex> gsi = new ArrayList<GlobalSecondaryIndex>();
 
-    final KeySchemaElement pkSchema = KeySchemaElement.builder().attributeName("PK").keyType(KeyType.HASH).build();
-    final KeySchemaElement skSchema = KeySchemaElement.builder().attributeName("SK").keyType(KeyType.RANGE).build();
+    final KeySchemaElement pkSchema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.partition_key)
+      .keyType(KeyType.HASH)
+      .build();
+    final KeySchemaElement skSchema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.sort_key)
+      .keyType(KeyType.RANGE)
+      .build();
     final ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
     keySchema.add(pkSchema);
     keySchema.add(skSchema);
 
-    final KeySchemaElement pk1Schema = KeySchemaElement.builder().attributeName("PK1").keyType(KeyType.HASH).build();
-    final KeySchemaElement sk1Schema = KeySchemaElement.builder().attributeName("SK1").keyType(KeyType.RANGE).build();
+    final KeySchemaElement pk1Schema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.gsi1_partition_key)
+      .keyType(KeyType.HASH)
+      .build();
+    final KeySchemaElement sk1Schema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.gsi1_sort_key)
+      .keyType(KeyType.RANGE)
+      .build();
     final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
     gsi1Schema.add(pk1Schema);
     gsi1Schema.add(sk1Schema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName("GSI1")
+      .indexName(Config.contents.ddb_table.gsi1_name)
       .keySchema(gsi1Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
       .build());
 
-    final KeySchemaElement pk2Schema = KeySchemaElement.builder().attributeName("PK2").keyType(KeyType.HASH).build();
+    final KeySchemaElement pk2Schema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.gsi2_partition_key)
+      .keyType(KeyType.HASH)
+      .build();
     final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
     gsi2Schema.add(pk2Schema);
     gsi2Schema.add(skSchema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName("GSI2")
+      .indexName(Config.contents.ddb_table.gsi2_name)
       .keySchema(gsi2Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
       .build());
 
-    final KeySchemaElement pk3Schema = KeySchemaElement.builder().attributeName("PK3").keyType(KeyType.HASH).build();
-    final KeySchemaElement sk3Schema = KeySchemaElement.builder().attributeName("SK3").keyType(KeyType.RANGE).build();
+    final KeySchemaElement pk3Schema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.gsi3_partition_key)
+      .keyType(KeyType.HASH)
+      .build();
+    final KeySchemaElement sk3Schema = KeySchemaElement
+      .builder()
+      .attributeName(Config.contents.ddb_table.gsi3_sort_key)
+      .keyType(KeyType.RANGE)
+      .build();
     final ArrayList<KeySchemaElement> gsi3Schema = new ArrayList<KeySchemaElement>();
     gsi3Schema.add(pk3Schema);
     gsi3Schema.add(sk3Schema);
     gsi.add(GlobalSecondaryIndex.builder()
-      .indexName("GSI3")
+      .indexName(Config.contents.ddb_table.gsi3_name)
       .keySchema(gsi3Schema)
       .provisionedThroughput(throughPut)
       .projection(proj)
       .build());
 
     final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
-    attrs.add(AttributeDefinition.builder().attributeName("PK").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("SK").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("PK1").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("SK1").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("PK2").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("PK3").attributeType(ScalarAttributeType.S).build());
-    attrs.add(AttributeDefinition.builder().attributeName("SK3").attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.partition_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.sort_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.gsi1_partition_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.gsi1_sort_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.gsi2_partition_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.gsi3_partition_key)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(Config.contents.ddb_table.gsi3_sort_key)
+      .attributeType(ScalarAttributeType.S).build());
     final CreateTableRequest request =
         CreateTableRequest.builder()
         .tableName(tableName)
