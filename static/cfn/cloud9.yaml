@@ -504,6 +504,9 @@ Resources:
       AutomaticStopTimeMinutes: !Ref AutomaticStopTimeMinutes
       InstanceType: !Ref InstanceType
       Name: !Ref InstanceName
+      Repositories:
+        - RepositoryUrl: !Sub https://git-codecommit.${AWS::Region}.amazonaws.com/v1/repos/the-busy-engineers-database-encryption-featuring-amazon-dynamodb
+          PathComponent: !Sub employee_portal
       OwnerArn: 
         Fn::If:
           - AssignCloud9Owner
