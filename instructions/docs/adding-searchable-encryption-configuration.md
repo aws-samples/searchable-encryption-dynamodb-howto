@@ -16,7 +16,7 @@ how can you ever effectively query on that encrypted data?
 To accomplish this, the AWS Database Encryption SDK for DynamoDb
 includes the [searchable encryption](TODO) feature,
 which allows you to calculate and store
-[beacons](TODO) algonside your data.
+[beacons](TODO) alongside your data.
 The client then utilizes these beacons whenever you make a query,
 retrieving the correct encrypted data for your query.
 
@@ -141,15 +141,11 @@ Now that you have updated the code
 to support this access pattern on encrypted data
 you need to write the beacons to the database.
 
-If you'd like to try a finished example,
-use your language's `-complete` directory as described above.
+Before we get started, let's first reset the data in your table.
 
-Update the test data into your portal!
-
-=== "Java"
-
-    ```{.java hl_lines="5 8"}
-    ```
+```bash
+./load_data
+```
 
 
 Experiment using the API as much as you like. 

@@ -141,55 +141,26 @@ There is a `-complete` folder for each language.
 
 ## Try it Out
 
-Now that you pass encryption context all the way through to KMS and validate it on return, what assertions do you want to make about your data?
+Now that you have completed configuring searchable configuration for each of your access
+patterns, you should now be able to perform any query that was possible in your plaintext
+Employee Portal Service in your client-side encrypted Employee Portal Service.
 
-Here's some ideas for things to test:
+For example, we can now [TODO]:
 
-* Expecting exact match of key-value pairs for keys like `stage`, `shard`, and `source-fleet`
-* Expecting a set of keys to be present like `submit-date` and `category`
-* Expecting an exact match of a subset of the supplied key-value pairs (e.g. only `stage` and `shard`, not `source-fleet`)
-* Doing the same for expected keys with any value
-* Adding a constraint of a new key that you didn't supply at encryption time
-* Adding a constraint with a different value, like `stage=production`
-* Changing capitalization
-* Using sorted versus unsorted mappings, such as `java.util.SortedMap<K, V>` in Java or `collections.OrderedDict` in Python
+```bash
+TODO compare
+```
 
-There's a few simple suggestions to get you started in the snippets below.
+If you take a look at your DynamoDB table, you will now see
+a new attribute for every new beacon you configured.
+[TODO describe a couple in more detail]
 
-=== "Java"
-
-    ```bash 
-    // Compile your code
-    mvn compile
-
-    // To use the API programmatically, use this target to launch jshell
-    mvn jshell:run
-    /open startup.jsh
-    import java.util.HashMap;
-    Api documentBucket = App.initializeDocumentBucket();
-    HashMap<String, String> context = new HashMap<String, String>();
-    context.put("shard", "test");
-    context.put("app", "document-bucket");
-    context.put("origin", "development");
-    documentBucket.list();
-    PointerItem item = documentBucket.store("Store me in the Document Bucket!".getBytes(), context);
-    DocumentBundle document = documentBucket.retrieve(item.partitionKey().getS(), context);
-    System.out.println(document.getPointer().partitionKey().getS() + " : " + new String(document.getData(), java.nio.charset.StandardCharsets.UTF_8));
-    // Ctrl+D to exit jshell
-
-    // Or, to run logic that you write in App.java, use this target after compile
-    mvn exec:java
-    ```
+Try out each of these access patterns yourself:
+- TODO
 
 ## Explore Further
 
-Encryption context can provide different types of features and guardrails in your application logic. Consider these ideas for further exploration:
-
-* **Detecting Drift** - `context` contents are stored on the DynamoDB item. S3 has object metadata that could also use the `context` pairs. How would you use the validated encryption context to validate and guardrail those two data sources? What could that feature add to your application?
-* **Meta-operations on Encryption Context** - the encryption context is stored on the <a href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/message-format.html" target="_blank">open-specification AWS Encryption SDK Message Format</a>. Would it help your system to write tools to process the metadata -- such as the encryption context -- on the message format?
-* **DynamoDB Keys and Indexes** - the Document Bucket adds composite indexes by `context` key. What about adding composite keys by key-value pairs? If you know a particular key should always be present in well-formed encrypted data, perhaps that should also be a <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html" target="_blank">Secondary Index</a>?
-* **Enforing EC Keys** - If you know that there is a key that should always be present, and that you want to index on in DynamoDB, do you want to enforce that it's always present? You can extend the <a href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#crypt-materials-manager" target="_blank">Cryptographic Materials Manager</a> component in the AWS Encryption SDK to enforce this during cryptographic operations.
-* **Alarms and Monitoring** - How can you leverage encryption context and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html" target="_blank">CloudWatch Alarms for CloudTrail</a> to monitor and protect your application?
+- TODO something more about beacon length
 
 # Next exercise
 

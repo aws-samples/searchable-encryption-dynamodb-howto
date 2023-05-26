@@ -43,15 +43,96 @@ If you are using your own AWS Account for this workshop, make sure:
 
 If you are working through these exercises in an AWS classroom environment, AWS accounts have been created for you.
 
-### Procedure
+### Set up the Employee Portal Service
 
 TODO
 
 1. Sign in to your AWS Account for the workshop
 
-**Your environment is ready!** 
+TODO: load data into DynamoDB
 
+## What's next?
+
+At this point, you should have an environment set up with a DynamoDB table
+for the Employee Portal Service that you can interact with via a CLI.
+Right now, the Employee Portal Service does not use any client-side encryption.
+[TODO link to DDB table to see that data is not encrypted]
+This plaintext version of the Employee Portal Service will be used as a reference
+as we build a version with client-side encryption in later steps.
+
+Let's get familiar with how you can use this CLI to interact with data in your table.
+
+To start, see what options are available:
+
+```bash
+./employee-portal help
+```
+
+This CLI contains commands to put new records in the database,
+get records by various indexes, as well as scan the whole table.
+
+### Getting records from the table
+
+Let's try one of these commands out. Take a look at all of our current employees:
+
+```bash
+./employee-portal get-employees
+```
+
+This command should display all of the employee records currently in your table.
+Can you think of any particular ways in which you might want to index on these employees?
+Let's see what our options are for getting a particular set of employees:
+
+```bash
+./employee-portal get-employees help
+```
+
+This should display the additional argument you can use to specify which employees to return.
+For example, to get all employees in Seattle, do:
+
+```bash
+./employee-portal get-employees --city=SEA
+```
+
+Now try to see if you can index the data in a different way.
+Alternatively, explore the other data in our table.
+What are our current meetings, projects, reservations, tickets, or timecards?
+
+### Putting records into the table
+
+You are now familiar with how to use the CLI to retrieve various data from
+the Employee Portal Service.
+Now let's see how to put data into the table.
+Take a look at all the `put` commands available in the CLI:
+
+```bash
+./employee-portal help
+```
+
+Let's try to add a new meeting into our table.
+To see what data we need to specify, do:
+
+```bash
+./employee-portal put-meeting help (TODO this is not really the _right_ way to do this, similar for other uses of help)
+```
+
+Now try specifying the required data so a new meeting can be added to your table.
+For example, TODO
+
+```bash
+put-meeting --employee-number=<employeeNumber> --start=<startTime> --employee-email=<employeeEmail> --floor=<floor> --room=<room> --duration=<duration> --attendees=<attendees> --subject=<subject>
+```
+
+You should see the printed statement "Meeting Added" if the meeting was successfully added to your table.
+
+Now, use the CLI's `get-meetings` to confirm that the meeting was actually added to your table.
+See if you can get your newly added meeting by specifying `get-meetings` with a `--employee-email`.
 
 # Start the workshop!
 
-Now that you have your environment and language selected, you can start [Adding the Database Encryption SDK](./adding-the-database-encryption-sdk.md).
+Now you should have a plaintext version of the Employee Portal Service
+set up in your environment, and understand you to use the CLI
+to get and put records into your DynamoDB table.
+
+You can now start the first exercise:
+[Adding the Database Encryption SDK](./adding-the-database-encryption-sdk.md).

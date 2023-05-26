@@ -8,10 +8,16 @@ and [AWS Key Management Service](TODO).
 ## Background
 
 In [Getting Started](./getting-started.md),
-you set up your Employee Portal Service environment
-and selected a workshop language. 
+you set up a plaintext version of the
+Employee Portal Service
+and learned how to get and put items
+into your DynamoDB table.
 
-Now you will add the [AWS Database Encryption SDK](#TODO)
+Now we are going to build a new version of this
+Employee Portal Service that includes client-side encryption
+with the [AWS Database Encryption SDK](#TODO).
+
+We will use the AWS Database Encryption SDK
 to encrypt items on the client,
 before they are transmitted off of the host machine to DynamoDB.
 When you encrypt items client-side, you choose which attributes
@@ -126,48 +132,100 @@ Check out the code in one of the `-complete` folders to compare.
 
 ## Try it Out
 
-Now that you have written the code code,
-load it up and try it out.
-
-If you'd like to try a finished example,
-use your language's `-complete` directory as described above.
-
-Load up some test data into your portal!
-
-=== "Java"
-
-    ```{.java hl_lines="5 8"}
-    ```
-
-Experiment using the API as much as you like. 
-
-To get started, here are some things to try:
-
-* Check the <a href="https://us-east-2.console.aws.amazon.com/cloudtrail/home?region=us-east-2#/events?EventSource=kms.amazonaws.com" target="_blank">CloudTrail Logs for usages of Faythe</a> when you encrypt the sample data
-    * Note: Cloudtrail logs may take a couple minutes to appear in the console
-* Take a look at the <a href="https://us-west-1.console.aws.amazon.com/dynamodbv2/home?region=us-west-1#service" target="_blank">contents of your DynamoDB table</a> to inspect the raw object
-
-For more things to try, check out [Explore Further](#explore-further), below.
-
-=== "Java"
-
-    ```java
-
-        // Example of adding employee records
+Now that you have written the code,
+let's try it out and see what it does.
 
 
-    ```
+First, load up some test data into your portal!
 
+```bash
+./load-data
+```
+
+Similar to how we got and put records into the plaintext Employee Portal Service,
+you can use the CLI to retrieve and put records into our Employee Portal Service
+with client-side encryption.
+
+### Retrieve items from your encrypted table
+
+To start, let's retrieve all of our employees again:
+
+[TODO do with "compare" command?]
+
+```bash
+./employee-portal get-employees
+```
+
+The data that the CLI prints will appear as plaintext
+because you have set up the CLI to locally decrypt items as soon as they are retrieved from DynamoDB.
+
+Let's verify that the data is actually encrypted in DynamoDB.
+[TODO link to DynamoDB table].
+You should see that [TODO what attrs are being encrypted]
+now appear in DynamoDB as the `Bytes` DynamoDB type,
+in an encrypted form.
+You should also notice that there are two extra attributes written to our items.
+`aws_dbe_head` contains our [material descrption](TODO),
+which contains the metadata necessary for the AWS Database Encryption SDK
+to understand how to decrypt the item.
+`aws_dbe_foot` contains the signature calculated over our item.
+[TODO describe the fields in the signature]
+
+Your data is encrypted in dynamodb, but you've built the Employee Portal Service
+such that this encryption and decryption happens transparently.
+
+### Can we query?
+
+In the previous step we just ran `get-employees` to get
+all of our employees.
+Under the hood, this [TODO].
+
+We can verify that we are able to get a particular employee by primary key:
+
+```bash
+./employee-portal get-employees --employee-number=1234
+```
+
+However, what happens when we try to index on a different attribute?
+Let's compare what our plaintext version of the Employee Portal Service
+does with what you've just built
+
+```bash
+TODO
+```
+
+As you can see, because we did not set up GSIs on our new table yet,
+our CLI is currently unable to retrieve employees by anything
+other than their primary key value.
+
+### Put items into your encrypted table
+
+Let's double check putting new items into our table
+via the CLI still behaves as expected.
+
+Put a new ticket into our table:
+
+```bash
+./employee-portal put-ticket --ticket-number=<ticketNumber> --modified-date=<modifiedDate> --author-email=<authorEmail> --assignee-email=<assigneeEmail> --severity=<severity> --subject=<subject> --message=<message>
+```
+
+Now verify that this ticket appears in our table:
+
+```bash
+./employee-portal get-tickets
+```
+
+You may additionally want to verify that this item is encrypted as expected
+in DynamoDB. [TODO link to DynamoDB table]
 
 ## Explore Further  --- BUG BUG
 
 * **AWS Cloud Development Kit** - Check out the `~/environment/workshop/cdk` directory to see how the workshop resources are described using CDK.
 * **Alice, Bob, and Friends** - <a href="https://en.wikipedia.org/wiki/Alice_and_Bob#Cast_of_characters" target="_blank">Who are Faythe and Walter?</a>
-* **Leveraging the Message Format** - The <a href="https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/message-format.html" target="_blank">AWS Encryption SDK Message Format</a> is an open standard. Can you write something to detect whether an entry in the Document Bucket has been encrypted in this format or not, and retrieve or decrypt appropriately?
-* **More Test Content** - Small test strings are enough to get started, but you might be curious to see what the behavior and performance looks like with larger documents. What if you add support for loading files to and from disk to the Document Bucket?
-* **Configuration Glue** - If you are curious how the Document Bucket is configured, take a peek at `~/environment/workshop/cdk/Makefile` and the `make state` target, as well as `config.toml` in the exercises root `~/environment/workshop/exercises/config.toml`. The Busy Engineer's Document Bucket uses a base <a href="https://github.com/toml-lang/toml" target="_blank">TOML</a> file to set standard names for all CloudFormation resources and a common place to discover the real deployed set. Then it uses the AWS Cloud Development Kit (CDK) to deploy the resources and write out their identifiers to the state file. Applications use the base TOML file `config.toml` to locate the state file and pull the expected resource names. And that's how the system bootstraps all the resources it needs!
 
 # Next exercise
 
-Now that you are encrypting and decrypting,
-how about [adding a searchable encryption configuration](./adding-searchable-encryption-configuration.md)?
+Now that you are encrypting and decrypting items in the Employee Portal Service,
+let's move onto adding back in those GSIs which enable all of our interesting access patterns.
+Move onto the next exercise:
+[Adding a searchable encryption configuration](./adding-searchable-encryption-configuration.md)?
