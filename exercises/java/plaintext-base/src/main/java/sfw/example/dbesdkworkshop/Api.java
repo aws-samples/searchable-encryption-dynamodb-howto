@@ -58,9 +58,6 @@ public class Api {
   }
 
   protected void createTable() {
-    try {deleteTable();}
-    catch (Exception e) {}
-
     final Projection proj = Projection.builder().projectionType(ProjectionType.ALL).build();
     final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();
     final ArrayList<GlobalSecondaryIndex> gsi = new ArrayList<GlobalSecondaryIndex>();

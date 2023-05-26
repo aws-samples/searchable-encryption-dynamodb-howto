@@ -73,7 +73,7 @@ public class Config {
     public static final String FLOOR_NAME = "floor";
     public static final String ROOM_NAME = "room";
 
-    // the token "role" is special in DynamoDB
+    // the token "role" is special in DynamoDB, hence "empRole"
     public static final String ROLE_NAME = "empRole";
     public static final String LOCATION_NAME = "location";
     public static final String EMPLOYEE_NAME_NAME = "name";

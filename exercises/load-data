@@ -1,9 +1,6 @@
 
 #!/bin/bash
 
-# This will delete the existing table data
-./employee-portal create-table
-
 # Put employees
 ./employee-portal put-employee -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"    -T SDE9
 ./employee-portal put-employee -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"  -T SDE8

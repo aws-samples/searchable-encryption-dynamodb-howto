@@ -9,8 +9,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import java.net.URI;
-import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
-import software.amazon.cryptography.dbencryptionsdk.dynamodb.model.*;
 
 /**
  * Entry point for writing logic to work with the Employee Portal,
@@ -22,6 +20,7 @@ import software.amazon.cryptography.dbencryptionsdk.dynamodb.model.*;
   description = "Entrypoint for interacting with the employee portal",
   subcommands = {
     CreateTable.class,
+    DeleteTable.class,
     GetEmployees.class,
     GetMeetings.class,
     GetProjects.class,
@@ -54,11 +53,6 @@ public class App {
   public static Api initializeEmployeePortal() {
     // Load the TOML State file with the information about launched CloudFormation resources
     // StateConfig stateConfig = new StateConfig(Config.contents.base.state_file);
-
-    // DynamoDbTablesEncryptionConfig nativeConfig = null;
-    // DynamoDbEncryptionInterceptor encryptionInterceptor = DynamoDbEncryptionInterceptor.builder()
-    //   .config(nativeConfig)
-    //   .build();
 
     // Configure DynamoDB client
     // String tableName = stateConfig.contents.state.DocumentTable;
