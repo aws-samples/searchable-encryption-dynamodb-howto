@@ -44,37 +44,37 @@ public class Employee extends BaseItem {
   
   public Map<String, AttributeValue> toItem() {
     String locTag = "";
-    locTag = AppendStrWithPrefix(locTag, location.get("building"), "B-");
-    locTag = AppendStrWithPrefix(locTag, location.get("floor"), "F-");
-    locTag = AppendStrWithPrefix(locTag, location.get("room"), "R-");
-    locTag = AppendStrWithPrefix(locTag, location.get("desk"), "D-");
+    locTag = AppendStrWithPrefix(locTag, location.get(BUILDING_NAME), BUILDING_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(FLOOR_NAME), FLOOR_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(ROOM_NAME), ROOM_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(DESK_NAME), DESK_PREFIX);
 
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(SORT_KEY, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("EE-" + employeeEmail));
-    item.put(GSI1_SORT_KEY, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS("ME-" + managerEmail));
-    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("C-" + location.get("city")));
+    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-    item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
-    item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
-    item.put("managerEmail", AttributeValue.fromS(managerEmail));
-    item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
-    item.put("name", AttributeValue.fromS(name));
-    item.put("title", AttributeValue.fromS(title));
+    item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
+    item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));
+    item.put(MANAGER_EMAIL_NAME, AttributeValue.fromS(managerEmail));
+    item.put(LOCATION_NAME, AttributeValue.fromM(StringMapToAttr(location)));
+    item.put(EMPLOYEE_NAME_NAME, AttributeValue.fromS(name));
+    item.put(TITLE_NAME, AttributeValue.fromS(title));
     return item;
   }
 
   public static Employee fromItem(Map<String, AttributeValue> item) {
-    Map<String, AttributeValue> loc = item.get("location").m();
+    Map<String, AttributeValue> loc = item.get(LOCATION_NAME).m();
     return new Employee(
-        item.get("employeeNumber").s(),
-        item.get("employeeEmail").s(),
-        item.get("managerEmail").s(),
-        AttrToStringMap(item.get("location").m()),
-        item.get("name").s(),
-        item.get("title").s());
+        item.get(EMPLOYEE_NUMBER_NAME).s(),
+        item.get(EMPLOYEE_EMAIL_NAME).s(),
+        item.get(MANAGER_EMAIL_NAME).s(),
+        AttrToStringMap(item.get(LOCATION_NAME).m()),
+        item.get(EMPLOYEE_NAME_NAME).s(),
+        item.get(TITLE_NAME).s());
   }
 
   @Override

@@ -67,7 +67,17 @@ public class Config {
     public static final String FLOOR_PREFIX = "F-";
     public static final String ROOM_PREFIX = "R-";
 
+    public static final String CITY_NAME = "city";
+    public static final String BUILDING_NAME = "building";
+    public static final String DESK_NAME = "desk";
+    public static final String FLOOR_NAME = "floor";
+    public static final String ROOM_NAME = "room";
+
+    // the token "role" is special in DynamoDB
     public static final String ROLE_NAME = "empRole";
+    public static final String LOCATION_NAME = "location";
+    public static final String EMPLOYEE_NAME_NAME = "name";
+    public static final String TITLE_NAME = "title";
 }
 
   /** The top-level contents of the configuration file. */
