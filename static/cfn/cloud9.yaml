@@ -33,6 +33,10 @@ Parameters:
     Description: How long Cloud9 can be inactive (no user input) before auto-hibernating. This helps prevent unnecessary charges.
     Type: Number
     Default: 30
+  RepoUrl:
+    Description: Git repository URL Cloud9 to check out with RepositoryUrl
+    Type: String
+    Default: ""
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -64,6 +68,7 @@ Metadata:
         default: Timeout
 Conditions: 
   AssignCloud9Owner: !Not [!Equals [!Ref InstanceOwner, ""]]
+  AssignCloud9Repo: !Not [!Equals [!Ref RepoUrl, ""]]
 Resources:
   ################## PERMISSIONS AND ROLES #################
   Cloud9Role:
@@ -505,8 +510,11 @@ Resources:
       InstanceType: !Ref InstanceType
       Name: !Ref InstanceName
       Repositories:
-        - RepositoryUrl: !Sub https://git-codecommit.${AWS::Region}.amazonaws.com/v1/repos/the-busy-engineers-database-encryption-featuring-amazon-dynamodb
-          PathComponent: !Sub employee_portal
+        - !If
+          - AssignCloud9Repo
+          - - PathComponent: !Sub code
+              RepositoryUrl: !Ref RepoUrl
+          - Ref: AWS::NoValue
       OwnerArn: 
         Fn::If:
           - AssignCloud9Owner

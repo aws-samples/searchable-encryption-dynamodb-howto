@@ -2,6 +2,15 @@ version: 2.0
 defaultLocaleCode: en-US
 localeCodes:
   - en-US
+
+additionalLinks:
+  - title: AWS DynamoDB
+    link: https://console.aws.amazon.com/dynamodbv2
+  - title: AWS Key Management Service
+    link: https://console.aws.amazon.com/kms
+  - title: AWS CloudTrail
+    link: https://console.aws.amazon.com/cloudtrail
+
 awsAccountConfig:
   accountSources:
     - WorkshopStudio
@@ -10,6 +19,8 @@ awsAccountConfig:
   participantRole:
     managedPolicies:
       - arn:aws:iam::aws:policy/AWSCloud9User
+      - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      - arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser
     trustedPrincipals:
       service:
         - lambda.amazonaws.com
@@ -37,7 +48,7 @@ awsAccountConfig:
 infrastructure:
   cloudformationTemplates:
     - templateLocation: static/cfn/cloud9.yaml
-      label: Amplify-cloud9-stack
+      label: Busy-cloud9-stack
       parameters:
         - templateParameter: EnvironmentName
           defaultValue: workshop
@@ -51,3 +62,5 @@ infrastructure:
           defaultValue: '{{.ParticipantRoleName}}/Participant'
         - templateParameter: AutomaticStopTimeMinutes
           defaultValue: 120
+      participantVisibleStackOutputs:
+        - Cloud9IdeUrl
