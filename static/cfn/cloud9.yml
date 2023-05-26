@@ -1,0 +1,526 @@
+Description: Provides a Cloud9 instance, resizes the instance volume size, and installs required components.
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that is tagged to the resource.
+    Type: String
+    Default: workshop
+  InstanceName:
+    Description: Cloud9 instance name.
+    Type: String
+    Default: workshop
+  InstanceType:
+    Description: The memory and CPU of the EC2 instance that will be created for Cloud9 to run on.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t2.medium
+      - m5.large
+    ConstraintDescription: Must be a valid Cloud9 instance type
+  InstanceVolumeSize:
+    Description: The size in GB of the Cloud9 instance volume
+    Type: Number
+    Default: 8
+  InstanceOwner:
+    Type: String
+    Description: Assumed role username of Cloud9 owner, in the format 'Role/username'. Leave blank to assign leave the instance assigned to the role running the CloudFormation template.
+    Default: ""
+  AutomaticStopTimeMinutes:
+    Description: How long Cloud9 can be inactive (no user input) before auto-hibernating. This helps prevent unnecessary charges.
+    Type: Number
+    Default: 30
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: General configuration
+        Parameters:
+          - EnvironmentName
+      - Label:
+          default: Cloud9 configuration
+        Parameters:
+          - InstanceName
+          - InstanceType
+          - InstanceVolumeSize
+          - InstanceOwner
+          - AutomaticStopTimeMinutes
+    ParameterLabels:
+      EnvironmentName:
+        default: Environment name
+      InstanceName:
+        default: Name
+      InstanceType:
+        default: Instance type
+      InstanceVolumeSize:
+        default: Attached volume size
+      InstanceOwner:
+        default: Role and username
+      AutomaticStopTimeMinutes:
+        default: Timeout
+Conditions: 
+  AssignCloud9Owner: !Not [!Equals [!Ref InstanceOwner, ""]]
+Resources:
+  ################## PERMISSIONS AND ROLES #################
+  Cloud9Role:
+    Type: AWS::IAM::Role
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: !Sub ${EnvironmentName}
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - ssm.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AdministratorAccess
+      Path: '/'
+      Policies:
+        - PolicyName: !Sub Cloud9InstanceDenyPolicy-${AWS::Region}
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Deny
+                Action:
+                  - cloud9:UpdateEnvironment
+                Resource: '*'
+
+  Cloud9LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: Describe Action doesn't support any resource condition
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: '/'
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: !Sub Cloud9LambdaPolicy-${AWS::Region}
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DescribeStackEvents
+                  - cloudformation:DescribeStackResource
+                  - cloudformation:DescribeStackResources
+                Resource:
+                  - !Sub arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*
+              - Effect: Allow
+                Action:
+                  - ec2:AssociateIamInstanceProfile
+                  - ec2:ModifyInstanceAttribute
+                  - ec2:ReplaceIamInstanceProfileAssociation
+                Resource:
+                  - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
+              - Effect: Allow
+                Action:
+                  - ec2:DescribeInstances
+                  - ec2:DescribeIamInstanceProfileAssociations
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - iam:ListInstanceProfiles
+                Resource:
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/*
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                  - s3:DeleteObject
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::${Cloud9LogBucket}
+                  - !Sub arn:${AWS::Partition}:s3:::${Cloud9LogBucket}/*
+              - Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  Fn::GetAtt:
+                    - Cloud9Role
+                    - Arn
+
+  ################## LAMBDA BOOTSTRAP FUNCTION ################
+  Cloud9BootstrapInstanceLambda:
+    Type: Custom::Cloud9BootstrapInstanceLambda
+    DependsOn:
+      - Cloud9LambdaExecutionRole
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: !Sub ${EnvironmentName}
+        - Key: auto-delete
+          Value: never
+      ServiceToken:
+        Fn::GetAtt:
+          - Cloud9BootstrapInstanceLambdaFunction
+          - Arn
+      Region:
+        Ref: AWS::Region
+      StackName:
+        Ref: AWS::StackName
+      EnvironmentId:
+        Ref: Cloud9Instance
+      LabIdeInstanceProfileName:
+        Ref: Cloud9InstanceProfile
+      LabIdeInstanceProfileArn:
+        Fn::GetAtt:
+          - Cloud9InstanceProfile
+          - Arn
+      LogBucket:
+        Ref: Cloud9LogBucket
+  Cloud9BootstrapInstanceLambdaFunction:
+    Type: AWS::Lambda::Function
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Cloud9LambdaExecutionRole has the AWSLambdaBasicExecutionRole managed policy attached, allowing writing to CloudWatch logs
+          - id: W89
+            reason: Bootstrap function does not need the scaffolding of a VPC or provisioned concurrency
+          - id: W92
+            reason: Bootstrap function does not need provisioned concurrency   
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: AWS Example
+      Handler: index.lambda_handler
+      Role:
+        Fn::GetAtt:
+          - Cloud9LambdaExecutionRole
+          - Arn
+      Runtime: python3.9
+      MemorySize: 1024
+      Timeout: 400
+      Code:
+        ZipFile: |
+          from __future__ import print_function
+          import boto3
+          import json
+          import os
+          import time
+          import traceback
+          import cfnresponse
+          import logging
+
+          logger = logging.getLogger(__name__)
+          logger.setLevel(logging.INFO)
+
+          def lambda_handler(event, context):
+              logger.info("event: {}".format(event))
+              logger.info("context: {}".format(context))
+              responseData = {}
+
+              if event["RequestType"] == "Create":
+                  try:
+                      # Open AWS clients
+                      ec2 = boto3.client("ec2")
+
+                      # Get the InstanceId of the Cloud9 IDE
+                      instance = ec2.describe_instances(
+                          Filters=[
+                              {
+                                  "Name": "tag:aws:cloud9:environment",
+                                  "Values": [event["ResourceProperties"]["EnvironmentId"]],
+                              }
+                          ]
+                      )["Reservations"][0]["Instances"][0]
+                      logger.info("instance: {}".format(instance))
+
+                      # Create the IamInstanceProfile request object
+                      iam_instance_profile = {
+                          "Arn": event["ResourceProperties"]["LabIdeInstanceProfileArn"],
+                          "Name": event["ResourceProperties"]["LabIdeInstanceProfileName"],
+                      }
+                      logger.info("iam_instance_profile: {}".format(iam_instance_profile))
+
+                      # Wait for Instance to become ready before adding Role
+                      instance_state = instance["State"]["Name"]
+                      logger.info("instance_state: {}".format(instance_state))
+                      while instance_state != "running":
+                          time.sleep(5)
+                          instance_state = ec2.describe_instances(
+                              InstanceIds=[instance["InstanceId"]]
+                          )
+                          logger.info("instance_state: {}".format(instance_state))
+
+                      # attach instance profile
+                      response = ec2.associate_iam_instance_profile(
+                          IamInstanceProfile=iam_instance_profile,
+                          InstanceId=instance["InstanceId"],
+                      )
+                      logger.info(
+                          "response - associate_iam_instance_profile: {}".format(response)
+                      )
+                      # r_ec2 = boto3.resource('ec2')
+
+                      responseData = {
+                          "Success": "Started bootstrapping for instance: "
+                          + instance["InstanceId"]
+                      }
+                      cfnresponse.send(
+                          event,
+                          context,
+                          cfnresponse.SUCCESS,
+                          responseData,
+                          "CustomResourcePhysicalID",
+                      )
+
+                  except Exception as e:
+                      logger.error(e, exc_info=True)
+                      # responseData = {'Error': traceback.format_exc(e)}
+                      responseData = {
+                          "Error": "There was a problem associating IAM profile to the Cloud9 Instance"
+                      }
+                      cfnresponse.send(
+                          event,
+                          context,
+                          cfnresponse.FAILED,
+                          responseData,
+                          "CustomResourcePhysicalID",
+                      )
+              elif event["RequestType"] == "Update":
+                  responseData["Message"] = {"Success": "Update event"}
+                  cfnresponse.send(
+                      event,
+                      context,
+                      cfnresponse.SUCCESS,
+                      responseData,
+                      "CustomResourcePhysicalID",
+                  )
+              elif event["RequestType"] == "Delete":
+                  try:
+                      # Need to empty the S3 bucket before it is deleted
+                      AssetsBucketName = (event["ResourceProperties"]["LogBucket"])
+                      s3 = boto3.resource("s3")
+                      bucket = s3.Bucket(AssetsBucketName)
+                      bucket.objects.all().delete()
+                      responseData = {
+                          "Success": "S3 Log bucket emptied for S3 Log Bucket: " + AssetsBucketName
+                      }
+                      cfnresponse.send(
+                          event,
+                          context,
+                          cfnresponse.SUCCESS,
+                          responseData,
+                          "CustomResourcePhysicalID",
+                      )
+                  except Exception as e:
+                      logger.error(e, exc_info=True)
+                      # responseData = {'Error': traceback.format_exc(e)}
+                      responseData = {"Error": "There was a problem emptying the S3 bucket"}
+                      cfnresponse.send(
+                          event,
+                          context,
+                          cfnresponse.FAILED,
+                          responseData,
+                          "CustomResourcePhysicalID",
+                      )
+              else:
+                  responseData = {"Success": "Other event"}
+                  cfnresponse.send(
+                      event,
+                      context,
+                      cfnresponse.SUCCESS,
+                      responseData,
+                      "CustomResourcePhysicalID",
+                  )
+
+  ################## SSM BOOTSTRAP HANDLER ###############
+  Cloud9LogBucket:
+    Type: AWS::S3::Bucket
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W35
+            reason: Access logs aren't needed for this bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  Cloud9LogBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Cloud9LogBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:PutObjectAcl
+            Effect: Allow
+            Resource:
+              - !Sub arn:${AWS::Partition}:s3:::${Cloud9LogBucket}
+              - !Sub arn:${AWS::Partition}:s3:::${Cloud9LogBucket}/*
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - Cloud9LambdaExecutionRole
+                  - Arn
+
+  Cloud9BootStrapSSMDocument:
+    Type: AWS::SSM::Document
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: !Sub ${EnvironmentName}
+      DocumentType: Command
+      Content:
+        schemaVersion: '2.2'
+        description: Bootstrap Cloud9 Instance
+        mainSteps:
+          - action: aws:runShellScript
+            name: Cloud9bootstrap
+            inputs:
+              runCommand:
+                - '#!/bin/bash'
+                - date
+                - !Sub export AWS_REGION=${AWS::Region}
+                - !Sub export AWS_ACCOUNTID=${AWS::AccountId}
+                - echo LANG=en_US.utf-8 >> /etc/environment
+                - echo LC_ALL=en_US.UTF-8 >> /etc/environment
+                - . /home/ec2-user/.bashrc
+                - yum -y remove aws-cli; yum -y install sqlite telnet jq strace tree gcc glibc-static python3 python3-pip gettext bash-completion
+                - echo '=== CONFIGURE default python version ==='
+                - PATH=$PATH:/usr/bin
+                - alternatives --set python /usr/bin/python3.9
+                - echo '=== INSTALL and CONFIGURE default software components ==='
+                - sudo -H -u ec2-user bash -c "pip install --user -U boto boto3 botocore awscli aws-sam-cli"
+                - echo '=== Resizing the Instance volume'
+                - !Sub SIZE=${InstanceVolumeSize}
+                - !Sub REGION=${AWS::Region}
+                - |
+                  INSTANCEID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+                  VOLUMEID=$(aws ec2 describe-instances \
+                    --instance-id $INSTANCEID \
+                    --query "Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId" \
+                    --output text --region $REGION)
+                  aws ec2 modify-volume --volume-id $VOLUMEID --size $SIZE --region $REGION
+                  while [ \
+                    "$(aws ec2 describe-volumes-modifications \
+                      --volume-id $VOLUMEID \
+                      --filters Name=modification-state,Values="optimizing","completed" \
+                      --query "length(VolumesModifications)"\
+                      --output text --region $REGION)" != "1" ]; do
+                  sleep 1
+                  done
+                  if [ $(readlink -f /dev/xvda) = "/dev/xvda" ]
+                  then
+                    sudo growpart /dev/xvda 1
+                    STR=$(cat /etc/os-release)
+                    SUB="VERSION_ID=\"2\""
+                    if [[ "$STR" == *"$SUB"* ]]
+                    then
+                      sudo xfs_growfs -d /
+                    else
+                      sudo resize2fs /dev/xvda1
+                    fi
+                  else
+                    sudo growpart /dev/nvme0n1 1
+                    STR=$(cat /etc/os-release)
+                    SUB="VERSION_ID=\"2\""
+                    if [[ "$STR" == *"$SUB"* ]]
+                    then
+                      sudo xfs_growfs -d /
+                    else
+                      sudo resize2fs /dev/nvme0n1p1
+                    fi
+                  fi
+                - echo '=== INSTALL and CONFIGURE amplify and setting ENVIRONMENT VARS ==='
+                - sudo -H -u ec2-user bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash" && sudo -H -u ec2-user bash -c ". ~/.nvm/nvm.sh && nvm install node" && sudo -H -u ec2-user bash -c ". ~/.nvm/nvm.sh && npm install -g @aws-amplify/cli"
+                - echo '=== CONFIGURE awscli and setting ENVIRONMENT VARS ==='
+                - echo "complete -C '/usr/local/bin/aws_completer' aws" >> /home/ec2-user/.bashrc
+                - mkdir /home/ec2-user/.aws
+                - echo '[default]' > /home/ec2-user/.aws/config
+                - echo 'output = json' >> /home/ec2-user/.aws/config
+                - chmod 600 /home/ec2-user/.aws/config && chmod 600 /home/ec2-user/.aws/credentials
+                - echo 'PATH=$PATH:/usr/local/bin' >> /home/ec2-user/.bashrc
+                - echo 'export PATH' >> /home/ec2-user/.bashrc
+                - !Sub echo 'export AWS_REGION=${AWS::Region}' >> /home/ec2-user/.bashrc
+                - !Sub echo 'export AWS_ACCOUNTID=${AWS::AccountId}' >> /home/ec2-user/.bashrc
+                - echo '=== CLEANING /home/ec2-user ==='
+                - for f in cloud9; do rm -rf /home/ec2-user/$f; done
+                - chown -R ec2-user:ec2-user /home/ec2-user/
+                - echo '=== PREPARE REBOOT in 1 minute with at ==='
+                - FILE=$(mktemp) && echo $FILE && echo '#!/bin/bash' > $FILE && echo 'reboot -f --verbose' >> $FILE && at now + 1 minute -f $FILE
+                - echo "Bootstrap completed with return code $?"
+
+  Cloud9BootstrapAssociation:
+    Type: AWS::SSM::Association
+    Properties:
+      Name: !Ref Cloud9BootStrapSSMDocument
+      OutputLocation:
+        S3Location:
+          OutputS3BucketName: !Ref Cloud9LogBucket
+          OutputS3KeyPrefix: bootstrap
+      Targets:
+        - Key: tag:SSMBootstrap
+          Values:
+            - Active
+
+  ################## INSTANCE #####################
+  Cloud9InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: '/'
+      Roles:
+        - Ref: Cloud9Role
+
+  Cloud9Instance:
+    DependsOn: Cloud9BootstrapAssociation
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      Description: !Sub AWS Cloud9 instance for ${EnvironmentName}
+      AutomaticStopTimeMinutes: !Ref AutomaticStopTimeMinutes
+      InstanceType: !Ref InstanceType
+      Name: !Ref InstanceName
+      OwnerArn: 
+        Fn::If:
+          - AssignCloud9Owner
+          - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:assumed-role/${InstanceOwner}
+          - Ref: AWS::NoValue
+      Tags:
+        - Key: SSMBootstrap
+          Value: Active
+        - Key: SSMInstallFiles
+          Value: Active
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: auto-delete
+          Value: never
+
+################## OUTPUTS #####################
+Outputs:
+  Cloud9IdeUrl:
+    Description: URL to launch the Cloud9 IDE
+    Value: !Sub https://${AWS::Region}.console.aws.amazon.com/cloud9/ide/${Cloud9Instance}?region=${AWS::Region}
