@@ -1,10 +1,53 @@
 version: 2.0
-
 defaultLocaleCode: en-US
 localeCodes:
   - en-US
+awsAccountConfig:
+  accountSources:
+    - WorkshopStudio
+    - CustomerProvided
 
-params:
-  hello: world
-  foo:
-    - bar
+  participantRole:
+    managedPolicies:
+      - arn:aws:iam::aws:policy/AWSCloud9User
+    trustedPrincipals:
+      service:
+        - lambda.amazonaws.com
+  regionConfiguration:
+    minAccessibleRegions: 1
+    maxAccessibleRegions: 1
+    deployableRegions:
+      recommended:
+        - us-east-1
+        - us-east-2
+        - us-west-1
+        - us-west-2
+        - ap-south-1
+        - ap-northeast-2
+        - ap-southeast-1
+        - ap-southeast-2
+        - ap-northeast-1
+        - ca-central-1
+        - eu-west-1
+        - eu-west-2
+        - eu-west-3
+        - eu-north-1
+        - sa-east-1
+
+infrastructure:
+  cloudformationTemplates:
+    - templateLocation: static/cfn/cloud9.yaml
+      label: Amplify-cloud9-stack
+      parameters:
+        - templateParameter: EnvironmentName
+          defaultValue: workshop
+        - templateParameter: InstanceName
+          defaultValue: workshop
+        - templateParameter: InstanceType
+          defaultValue: m5.large
+        - templateParameter: InstanceVolumeSize
+          defaultValue: 32
+        - templateParameter: InstanceOwner
+          defaultValue: '{{.ParticipantRoleName}}/Participant'
+        - templateParameter: AutomaticStopTimeMinutes
+          defaultValue: 120
