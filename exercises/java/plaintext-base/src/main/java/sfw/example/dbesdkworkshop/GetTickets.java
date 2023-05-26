@@ -30,17 +30,17 @@ public class GetTickets implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
-    if (assignee != null) {
-      final List<Ticket> results = api.getTicketByAssignee(assignee, ticket, start, end);
-      System.out.println(results);
-    } else if (author != null) {
-      final List<Ticket> results = api.getTicketByAuthor(author, ticket, start, end);
-      System.out.println(results);
-    } else if (ticket != null) {
-      final List<Ticket> results = api.getTicketById(ticket, start, end);
-      System.out.println(results);
-    } else {
-      throw new IllegalArgumentException("get-tickets must specify ticket-number");
-    }
+    List<Ticket> results;
+    if (assignee != null)
+      results = api.getTicketByAssignee(assignee, ticket, start, end);
+    else if (author != null)
+      results = api.getTicketByAuthor(author, ticket, start, end);
+    else if (ticket != null)
+      results = api.getTicketById(ticket, start, end);
+    else
+      results = api.ScanTickets();
+
+    for (Ticket item : results)
+      System.out.println(item);
   }
 }

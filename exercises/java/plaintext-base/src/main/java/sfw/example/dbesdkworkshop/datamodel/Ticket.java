@@ -65,4 +65,16 @@ public class Ticket extends BaseItem {
         item.get("subject").s(),
         item.get("message").s());
   }
+
+  @Override
+  public String toString() {
+    return ticketNumber.toString() +
+    "\t" + modifiedDate.toString() +
+    "\t" + authorEmail.toString() +
+    "\t" + assigneeEmail.toString() +
+    "\t" + severity.toString() +
+    "\t" + subject.toString() +
+    "\t" + message.toString();
+  }
+
 }

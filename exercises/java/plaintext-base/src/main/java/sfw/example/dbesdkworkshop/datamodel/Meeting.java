@@ -19,20 +19,15 @@ public class Meeting extends BaseItem {
       String employeeNumber,
       String startTime,
       String employeeEmail,
-      String floor,
-      String room,
+      Map<String, String> location,
       String duration,
       String attendees,
       String subject)
   {
-    Map<String, String> loc = new HashMap<>();
-    loc.put("room", room);
-    loc.put("floor", floor);
-
     this.employeeNumber = employeeNumber;
     this.startTime = startTime;
     this.employeeEmail = employeeEmail;
-    this.location = loc;
+    this.location = location;
     this.duration = duration;
     this.attendees = attendees;
     this.subject = subject;
@@ -64,10 +59,21 @@ public class Meeting extends BaseItem {
         item.get("employeeNumber").s(),
         item.get("startTime").s(),
         item.get("employeeEmail").s(),
-        loc.get("floor").s(),
-        loc.get("room").s(),
+        AttrToStringMap(item.get("location").m()),
         item.get("duration").s(),
         item.get("attendees").s(),
         item.get("subject").s());
   }
+
+  @Override
+  public String toString() {
+    return employeeNumber +
+    "\t" + employeeEmail +
+    "\t" + startTime +
+    "\t" + subject +
+    "\t" + duration +
+    "\t" + attendees +
+    "\t" + location.toString();
+  }
 }
+

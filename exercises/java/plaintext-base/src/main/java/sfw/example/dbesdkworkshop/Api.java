@@ -387,6 +387,53 @@ public class Api {
     return results;
   }
 
+  protected List<Meeting> ScanMeetings() {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
+    attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":e", ":s"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Meeting> results = new ArrayList<Meeting>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Meeting.fromItem(item));
+    }
+    return results;
+  }
+
+  protected List<Project> ScanProjects() {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":p", ":p"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Project> results = new ArrayList<Project>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Project.fromItem(item));
+    }
+    return results;
+  }
+
+  protected List<Ticket> ScanTickets() {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
+    attrValues.put(":t", AttributeValue.builder().s(TICKET_NUMBER_PREFIX).build());
+    final ScanRequest request = ScanRequest.builder().tableName(tableName).
+      filterExpression(MakeFilter(":t"))
+      .expressionAttributeValues(attrValues)
+      .build();
+    final ScanResponse response = ddbClient.scan(request);
+    final ArrayList<Ticket> results = new ArrayList<Ticket>();
+    for (Map<String,AttributeValue> item : response.items()) {
+      results.add(Ticket.fromItem(item));
+    }
+    return results;
+  }
+
+
   protected List<Timecard> ScanTimecards() {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());

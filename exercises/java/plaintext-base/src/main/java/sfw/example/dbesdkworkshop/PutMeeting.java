@@ -32,12 +32,15 @@ public class PutMeeting implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
+    HashMap<String, String> location = new HashMap<String, String>();
+    location.put("floor", floor);
+    location.put("room", room);
+
     api.putItem(new Meeting(
       employeeNumber,
       startTime,
       employeeEmail,
-      floor,
-      room,
+      location,
       duration,
       attendees,
       subject

@@ -27,16 +27,17 @@ public class GetMeetings implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
-    if (email != null && id != null) {
+    List<Meeting> results;
+    if (email != null && id != null)
       throw new IllegalArgumentException("get-meetings must not specify both email and employee-number");
-    } else if (email != null) {
-      final List<Meeting> results = api.getMeetingsByEmail(email, startDate, endDate);
-      System.out.println(results);
-    } else if (id != null) {
-      final List<Meeting> results = api.getMeetingsById(id, startDate, endDate);
-      System.out.println(results);
-    } else {
-      throw new IllegalArgumentException("get-meetings must specify either email or employee-number");
-    }
+    else if (email != null)
+      results = api.getMeetingsByEmail(email, startDate, endDate);
+    else if (id != null)
+      results = api.getMeetingsById(id, startDate, endDate);
+    else
+      results = api.ScanMeetings();
+
+    for (Meeting item : results)
+      System.out.println(item);
   }
 }

@@ -31,16 +31,16 @@ public class GetProjects implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal();
-    if (project != null && status != null) {
+    List<Project> results;
+    if (project != null && status != null)
       throw new IllegalArgumentException("get-projects must not specify both project-name and status");
-    } else if (project != null) {
-      final List<Project> results = api.getProjectByName(project);
-      System.out.println(results);
-    } else if (status != null) {
-      final List<Project> results = api.getProjectsByStatus(status, startDate, endDate, startTarget, endTarget);
-      System.out.println(results);
-    } else {
-      throw new IllegalArgumentException("get-projects must specify either project-name or status");
-    }
-  }
+    else if (project != null)
+      results = api.getProjectByName(project);
+    else if (status != null)
+      results = api.getProjectsByStatus(status, startDate, endDate, startTarget, endTarget);
+    else
+      results = api.ScanProjects();
+
+    for (Project item : results)
+      System.out.println(item);  }
 }

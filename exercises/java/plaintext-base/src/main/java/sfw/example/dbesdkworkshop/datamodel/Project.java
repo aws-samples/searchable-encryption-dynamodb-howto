@@ -45,4 +45,14 @@ public class Project extends BaseItem {
         item.get("description").s(),
         item.get("targetDate").s());
   }
+
+  @Override
+  public String toString() {
+    return projectName +
+    "\t" + status +
+    "\t" + startTime +
+    "\t" + description +
+    "\t" + targetDate;
+  }
+
 }
