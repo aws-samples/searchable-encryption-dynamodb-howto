@@ -11,6 +11,7 @@ import sfw.example.dbesdkworkshop.datamodel.Reservation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 @Command(name = "put-reservation", description = "Adds a record to the database.")
 public class PutReservation implements Runnable {
@@ -38,9 +39,9 @@ public class PutReservation implements Runnable {
   public void run() {
     final Api api = App.initializeEmployeePortal();
     Map<String, String> location = new HashMap<String, String>();
-    location.put("building", building);
-    location.put("floor", floor);
-    location.put("room", room);
+    location.put(BUILDING_NAME, building);
+    location.put(FLOOR_NAME, floor);
+    location.put(ROOM_NAME, room);
     api.putItem(new Reservation(
       id.toString(),
       startTime,

@@ -8,6 +8,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Ticket;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 @Command(name = "put-ticket", description = "Adds a record to the database.")
 public class PutTicket implements Runnable {

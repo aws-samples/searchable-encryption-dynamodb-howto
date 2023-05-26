@@ -8,6 +8,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Timecard;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 @Command(name = "put-timecard", description = "Adds a record to the database.")
 public class PutTimecard implements Runnable {

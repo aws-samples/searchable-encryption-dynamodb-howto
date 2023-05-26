@@ -246,9 +246,9 @@ public class Api {
   public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
-    AddValue(attrValues, ":startDate", startDate, "S-");
-    AddValue(attrValues, ":endDate", endDate, "S-");
+    attrValues.put(":email", AttributeValue.builder().s(EMPLOYEE_EMAIL_PREFIX + email).build());
+    AddValue(attrValues, ":startDate", startDate, START_TIME_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, START_TIME_PREFIX);
     String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", SORT_KEY);
     
     QueryRequest.Builder builder = QueryRequest.builder()
@@ -287,9 +287,9 @@ public class Api {
   public List<Meeting> getMeetingsById(String id, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
-    AddValue(attrValues, ":startDate", startDate, "S-");
-    AddValue(attrValues, ":endDate", endDate, "S-");
+    attrValues.put(":id", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX + id).build());
+    AddValue(attrValues, ":startDate", startDate, START_TIME_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, START_TIME_PREFIX);
     String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", SORT_KEY);
     
     QueryRequest.Builder builder = QueryRequest.builder()
@@ -454,7 +454,7 @@ public class Api {
   public List<Employee> getEmployeeById(String id)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":id", AttributeValue.builder().s("E-" + id).build());
+    attrValues.put(":id", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX + id).build());
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
@@ -583,7 +583,7 @@ public class Api {
   public List<Project> getProjectByName(String name)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":name", AttributeValue.builder().s("P-" + name).build());
+    attrValues.put(":name", AttributeValue.builder().s(PROJECT_NAME_PREFIX + name).build());
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
@@ -597,13 +597,13 @@ public class Api {
   public List<Project> getProjectsByStatus(String status, String startDate, String endDate, String startTarget, String endTarget)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":status", AttributeValue.builder().s("U-" + status).build());
-    AddValue(attrValues, ":startDate", startDate, "S-");
-    AddValue(attrValues, ":endDate", endDate, "S-");
+    attrValues.put(":status", AttributeValue.builder().s(STATUS_PREFIX + status).build());
+    AddValue(attrValues, ":startDate", startDate, START_TIME_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, START_TIME_PREFIX);
     AddValue(attrValues, ":startTarget", startTarget, "");
     AddValue(attrValues, ":endTarget", endTarget, "");
     String dateExpr = GetKeyExprForRange(startDate, endDate, GSI1_SORT_KEY);
-    String filterExpr = GetFilterForRange(startTarget, endTarget, ":startTarget", ":endTarget", "targetDate");
+    String filterExpr = GetFilterForRange(startTarget, endTarget, ":startTarget", ":endTarget", TARGET_DATE_NAME);
 
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
@@ -617,8 +617,8 @@ public class Api {
   public List<Employee> getEmployeeByEmail(String email)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":email", AttributeValue.builder().s("EE-" + email).build());
-    attrValues.put(":e", AttributeValue.builder().s("E-").build());
+    attrValues.put(":email", AttributeValue.builder().s(EMPLOYEE_EMAIL_PREFIX + email).build());
+    attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
@@ -633,8 +633,8 @@ public class Api {
   public List<Employee> getEmployeeByManager(String email)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":email", AttributeValue.builder().s("ME-" + email).build());
-    attrValues.put(":e", AttributeValue.builder().s("E-").build());
+    attrValues.put(":email", AttributeValue.builder().s(MANAGER_EMAIL_PREFIX + email).build());
+    attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     
     final QueryRequest request = QueryRequest.builder()
     .tableName(tableName)
@@ -656,13 +656,13 @@ public class Api {
   public List<Employee> getEmployeeByCity(String city, String building, String floor, String room, String desk)
   {
     String locTag = "";
-    locTag = AppendStrWithPrefix(locTag, building, "B-");
-    locTag = AppendStrWithPrefix(locTag, floor, "F-");
-    locTag = AppendStrWithPrefix(locTag, room, "R-");
-    locTag = AppendStrWithPrefix(locTag, desk, "D-");
+    locTag = AppendStrWithPrefix(locTag, building, BUILDING_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, floor, FLOOR_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, room, ROOM_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, desk, DESK_PREFIX);
 
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":city", AttributeValue.builder().s("C-" + city).build());
+    attrValues.put(":city", AttributeValue.builder().s(CITY_PREFIX + city).build());
     
     String keyExpr;
     if (locTag.isEmpty()) {
@@ -685,9 +685,9 @@ public class Api {
   public List<Ticket> getTicketById(String ticket, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":ticket", AttributeValue.builder().s("T-" + ticket).build());
-    AddValue(attrValues, ":startDate", startDate, "M-");
-    AddValue(attrValues, ":endDate", endDate, "M-");
+    attrValues.put(":ticket", AttributeValue.builder().s(TICKET_NUMBER_PREFIX + ticket).build());
+    AddValue(attrValues, ":startDate", startDate, MODIFIED_DATE_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, MODIFIED_DATE_PREFIX);
     String dateExpr = GetKeyExprForRange(startDate, endDate, SORT_KEY);
     
     QueryRequest.Builder builder = QueryRequest.builder()
@@ -700,10 +700,10 @@ public class Api {
   public List<Ticket> getTicketByAuthor(String author, String ticket, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":author", AttributeValue.builder().s("CE-" + author).build());
-    AddValue(attrValues, ":startDate", startDate, "M-");
-    AddValue(attrValues, ":endDate", endDate, "M-");
-    AddValue(attrValues, ":ticket", ticket, "T-");
+    attrValues.put(":author", AttributeValue.builder().s(AUTHOR_EMAIL_PREFIX + author).build());
+    AddValue(attrValues, ":startDate", startDate, MODIFIED_DATE_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, MODIFIED_DATE_PREFIX);
+    AddValue(attrValues, ":ticket", ticket, TICKET_NUMBER_PREFIX);
     String dateExpr = GetKeyExprForRange(startDate, endDate, GSI1_SORT_KEY);
     
     QueryRequest.Builder builder = QueryRequest.builder()
@@ -718,10 +718,10 @@ public class Api {
   public List<Ticket> getTicketByAssignee(String assignee, String ticket, String startDate, String endDate)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
-    attrValues.put(":assignee", AttributeValue.builder().s("AE-" + assignee).build());
-    AddValue(attrValues, ":startDate", startDate, "M-");
-    AddValue(attrValues, ":endDate", endDate, "M-");
-    AddValue(attrValues, ":ticket", ticket, "T-");
+    attrValues.put(":assignee", AttributeValue.builder().s(ASSIGNEE_EMIL_PREFIX + assignee).build());
+    AddValue(attrValues, ":startDate", startDate, MODIFIED_DATE_PREFIX);
+    AddValue(attrValues, ":endDate", endDate, MODIFIED_DATE_PREFIX);
+    AddValue(attrValues, ":ticket", ticket, TICKET_NUMBER_PREFIX);
     String dateExpr = GetKeyExprForRange(startDate, endDate, SORT_KEY);
     
     QueryRequest.Builder builder = QueryRequest.builder()

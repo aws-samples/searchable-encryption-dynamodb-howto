@@ -37,22 +37,22 @@ public class Timecard extends BaseItem {
     item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
 
-    item.put("projectName", AttributeValue.fromS(projectName));
-    item.put("startTime", AttributeValue.fromS(startTime));
-    item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
-    item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
-    item.put("hours", AttributeValue.fromS(hours));
+    item.put(PROJECT_NAME_NAME, AttributeValue.fromS(projectName));
+    item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
+    item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
+    item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));
+    item.put(HOURS_NAME, AttributeValue.fromS(hours));
     item.put(ROLE_NAME, AttributeValue.fromS(role));
     return item;
   }
 
   public static Timecard fromItem(Map<String, AttributeValue> item) {
     return new Timecard(
-        item.get("projectName").s(),
-        item.get("startTime").s(),
-        item.get("employeeNumber").s(),
-        item.get("employeeEmail").s(),
-        item.get("hours").s(),
+        item.get(PROJECT_NAME_NAME).s(),
+        item.get(START_TIME_NAME).s(),
+        item.get(EMPLOYEE_NUMBER_NAME).s(),
+        item.get(EMPLOYEE_EMAIL_NAME).s(),
+        item.get(HOURS_NAME).s(),
         item.get(ROLE_NAME).s());
   }
 

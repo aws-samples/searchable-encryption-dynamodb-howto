@@ -34,35 +34,35 @@ public class Meeting extends BaseItem {
   }
 
   public Map<String, AttributeValue> toItem() {
-    String floor = location.get("floor");
-    String room = location.get("room");
+    String floor = location.get(FLOOR_NAME);
+    String room = location.get(ROOM_NAME);
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS("E-" + employeeNumber));
-    item.put(SORT_KEY, AttributeValue.fromS("S-" + startTime ));
+    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
 
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("EE-" + employeeEmail));
-    item.put(GSI1_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
 
-    item.put("employeeNumber", AttributeValue.fromS(employeeNumber));
-    item.put("startTime", AttributeValue.fromS(startTime));
-    item.put("employeeEmail", AttributeValue.fromS(employeeEmail));
-    item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
-    item.put("duration", AttributeValue.fromS(duration));
-    item.put("attendees", AttributeValue.fromS(attendees));
-    item.put("subject", AttributeValue.fromS(subject));
+    item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
+    item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
+    item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));
+    item.put(LOCATION_NAME, AttributeValue.fromM(StringMapToAttr(location)));
+    item.put(DURATION_NAME, AttributeValue.fromS(duration));
+    item.put(ATTENDEES_NAME, AttributeValue.fromS(attendees));
+    item.put(SUBJECT_NAME, AttributeValue.fromS(subject));
     return item;
   }
 
   public static Meeting fromItem(Map<String, AttributeValue> item) {
-    Map<String, AttributeValue> loc = item.get("location").m();
+    Map<String, AttributeValue> loc = item.get(LOCATION_NAME).m();
     return new Meeting(
-        item.get("employeeNumber").s(),
-        item.get("startTime").s(),
-        item.get("employeeEmail").s(),
-        AttrToStringMap(item.get("location").m()),
-        item.get("duration").s(),
-        item.get("attendees").s(),
-        item.get("subject").s());
+        item.get(EMPLOYEE_NUMBER_NAME).s(),
+        item.get(START_TIME_NAME).s(),
+        item.get(EMPLOYEE_EMAIL_NAME).s(),
+        AttrToStringMap(item.get(LOCATION_NAME).m()),
+        item.get(DURATION_NAME).s(),
+        item.get(ATTENDEES_NAME).s(),
+        item.get(SUBJECT_NAME).s());
   }
 
   @Override

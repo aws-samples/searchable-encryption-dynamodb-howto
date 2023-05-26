@@ -24,26 +24,26 @@ public class Project extends BaseItem {
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
 
-    item.put(PARTITION_KEY, AttributeValue.fromS("P-" + projectName));
-    item.put(SORT_KEY, AttributeValue.fromS("P-" + projectName));
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("U-" + status));
-    item.put(GSI1_SORT_KEY, AttributeValue.fromS("S-" + startTime));
+    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+    item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
 
-    item.put("projectName", AttributeValue.fromS(projectName));
-    item.put("status", AttributeValue.fromS(status));
-    item.put("startTime", AttributeValue.fromS(startTime));
-    item.put("description", AttributeValue.fromS(description));
-    item.put("targetDate", AttributeValue.fromS(targetDate));
+    item.put(PROJECT_NAME_NAME, AttributeValue.fromS(projectName));
+    item.put(STATUS_NAME, AttributeValue.fromS(status));
+    item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
+    item.put(DESCRIPTION_NAME, AttributeValue.fromS(description));
+    item.put(TARGET_DATE_NAME, AttributeValue.fromS(targetDate));
     return item;
   }
 
   public static Project fromItem(Map<String, AttributeValue> item) {
     return new Project(
-        item.get("projectName").s(),
-        item.get("status").s(),
-        item.get("startTime").s(),
-        item.get("description").s(),
-        item.get("targetDate").s());
+        item.get(PROJECT_NAME_NAME).s(),
+        item.get(STATUS_NAME).s(),
+        item.get(START_TIME_NAME).s(),
+        item.get(DESCRIPTION_NAME).s(),
+        item.get(TARGET_DATE_NAME).s());
   }
 
   @Override

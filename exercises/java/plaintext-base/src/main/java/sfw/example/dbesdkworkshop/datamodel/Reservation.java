@@ -41,33 +41,33 @@ public class Reservation extends BaseItem {
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-    String floor = location.get("floor");
-    String room = location.get("room");
-    String building = location.get("building");
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("OE-" + organizerEmail));
-    item.put(GSI1_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    String floor = location.get(FLOOR_NAME);
+    String room = location.get(ROOM_NAME);
+    String building = location.get(BUILDING_NAME);
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
 
-    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("B-" + building));
-    item.put(GSI3_SORT_KEY, AttributeValue.fromS("S-" + startTime + ".F-" + floor + ".R-" + room));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
+    item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
     item.put(RESERVATION_NAME, AttributeValue.fromS(reservation));
-    item.put("startTime", AttributeValue.fromS(startTime));
-    item.put("location", AttributeValue.fromM(StringMapToAttr(location)));
-    item.put("organizerEmail", AttributeValue.fromS(organizerEmail));
-    item.put("duration", AttributeValue.fromS(duration));
-    item.put("attendees", AttributeValue.fromS(attendees));
-    item.put("subject", AttributeValue.fromS(subject));
+    item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
+    item.put(LOCATION_NAME, AttributeValue.fromM(StringMapToAttr(location)));
+    item.put(ORGANIZER_EMAIL_NAME, AttributeValue.fromS(organizerEmail));
+    item.put(DURATION_NAME, AttributeValue.fromS(duration));
+    item.put(ATTENDEES_NAME, AttributeValue.fromS(attendees));
+    item.put(SUBJECT_NAME, AttributeValue.fromS(subject));
     return item;
   }
 
   public static Reservation fromItem(Map<String, AttributeValue> item) {
     return new Reservation(
-        item.get("reservation").s(),
-        item.get("startTime").s(),
-        AttrToStringMap(item.get("location").m()),
-        item.get("organizerEmail").s(),
-        item.get("duration").s(),
-        item.get("attendees").s(),
-        item.get("subject").s());
+        item.get(RESERVATION_NAME).s(),
+        item.get(START_TIME_NAME).s(),
+        AttrToStringMap(item.get(LOCATION_NAME).m()),
+        item.get(ORGANIZER_EMAIL_NAME).s(),
+        item.get(DURATION_NAME).s(),
+        item.get(ATTENDEES_NAME).s(),
+        item.get(SUBJECT_NAME).s());
   }
 
   @Override

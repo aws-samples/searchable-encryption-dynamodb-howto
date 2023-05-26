@@ -8,6 +8,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Meeting;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 @Command(name = "put-meeting", description = "Adds a record to the database.")
 public class PutMeeting implements Runnable {
@@ -33,8 +34,8 @@ public class PutMeeting implements Runnable {
   public void run() {
     final Api api = App.initializeEmployeePortal();
     HashMap<String, String> location = new HashMap<String, String>();
-    location.put("floor", floor);
-    location.put("room", room);
+    location.put(FLOOR_NAME, floor);
+    location.put(ROOM_NAME, room);
 
     api.putItem(new Meeting(
       employeeNumber,

@@ -8,6 +8,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import sfw.example.dbesdkworkshop.datamodel.Project;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 @Command(name = "put-project", description = "Adds a record to the database.")
 public class PutProject implements Runnable {

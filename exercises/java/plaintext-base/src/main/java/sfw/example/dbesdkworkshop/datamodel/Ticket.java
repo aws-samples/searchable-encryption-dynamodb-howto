@@ -34,36 +34,36 @@ public class Ticket extends BaseItem {
 
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS("T-" + ticketNumber));
-    item.put(SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS("CE-" + authorEmail));
-    item.put(GSI1_SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
+    item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS("AE-" + assigneeEmail));
+    item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(ASSIGNEE_EMIL_PREFIX + assigneeEmail));
 
-    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS("Y-" + severity));
-    item.put(GSI3_SORT_KEY, AttributeValue.fromS("M-" + modifiedDate));
+    item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
+    item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-    item.put("ticketNumber", AttributeValue.fromS(ticketNumber));
-    item.put("modifiedDate", AttributeValue.fromS(modifiedDate));
-    item.put("authorEmail", AttributeValue.fromS(authorEmail));
-    item.put("assigneeEmail", AttributeValue.fromS(assigneeEmail));
-    item.put("severity", AttributeValue.fromS(severity));
-    item.put("subject", AttributeValue.fromS(subject));
-    item.put("message", AttributeValue.fromS(message));
+    item.put(TICKET_NUMBER_NAME, AttributeValue.fromS(ticketNumber));
+    item.put(MODIFIED_DATE_NAME, AttributeValue.fromS(modifiedDate));
+    item.put(AUTHOR_EMAIL_NAME, AttributeValue.fromS(authorEmail));
+    item.put(ASSIGNEE_EMAIL_NAME, AttributeValue.fromS(assigneeEmail));
+    item.put(SEVERITY_NAME, AttributeValue.fromS(severity));
+    item.put(SUBJECT_NAME, AttributeValue.fromS(subject));
+    item.put(MESSAGE_NAME, AttributeValue.fromS(message));
     return item;
   }
 
   public static Ticket fromItem(Map<String, AttributeValue> item) {
     return new Ticket(
-        item.get("ticketNumber").s(),
-        item.get("modifiedDate").s(),
-        item.get("authorEmail").s(),
-        item.get("assigneeEmail").s(),
-        item.get("severity").s(),
-        item.get("subject").s(),
-        item.get("message").s());
+        item.get(TICKET_NUMBER_NAME).s(),
+        item.get(MODIFIED_DATE_NAME).s(),
+        item.get(AUTHOR_EMAIL_NAME).s(),
+        item.get(ASSIGNEE_EMAIL_NAME).s(),
+        item.get(SEVERITY_NAME).s(),
+        item.get(SUBJECT_NAME).s(),
+        item.get(MESSAGE_NAME).s());
   }
 
   @Override

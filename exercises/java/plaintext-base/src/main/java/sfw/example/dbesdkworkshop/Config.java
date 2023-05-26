@@ -34,10 +34,10 @@ public class Config {
     public static final String GSI3_PARTITION_KEY = "PK3";
     public static final String GSI3_SORT_KEY = "SK3";
 
-    public static final String assigneeEmail_NAME = "assigneeEmail";
-    public static final String assigneeEmail_PREFIX = "AE-";
+    public static final String ASSIGNEE_EMAIL_NAME = "assigneeEmail";
+    public static final String ASSIGNEE_EMIL_PREFIX = "AE-";
     public static final String AUTHOR_EMAIL_NAME = "authorEmail";
-    public static final String AUTHOR_EMAIL_PREFIX = "ce-";
+    public static final String AUTHOR_EMAIL_PREFIX = "CE-";
     public static final String EMPLOYEE_EMAIL_NAME = "employeeEmail";
     public static final String EMPLOYEE_EMAIL_PREFIX = "EE-";
     public static final String EMPLOYEE_NUMBER_NAME = "employeeNumber";
@@ -78,6 +78,14 @@ public class Config {
     public static final String LOCATION_NAME = "location";
     public static final String EMPLOYEE_NAME_NAME = "name";
     public static final String TITLE_NAME = "title";
+    public static final String DURATION_NAME = "duration";
+    public static final String ATTENDEES_NAME = "attendees";
+    public static final String SUBJECT_NAME = "subject";
+    public static final String MESSAGE_NAME = "message";
+    public static final String DESCRIPTION_NAME = "description";
+    public static final String TARGET_DATE_NAME = "targetDate";
+    public static final String HOURS_NAME = "hours";
+
 }
 
   /** The top-level contents of the configuration file. */
