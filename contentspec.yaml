@@ -20,6 +20,7 @@ awsAccountConfig:
     managedPolicies:
       - arn:aws:iam::aws:policy/AWSCloud9User
       - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      - arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser
       - arn:aws:iam::aws:policy/AWSCodeCommitPowerUser
     trustedPrincipals:
