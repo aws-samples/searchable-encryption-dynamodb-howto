@@ -15,9 +15,8 @@ public class Config {
   public static class Constants {
     public static final boolean USE_LOCAL_DDB = true;
 
-    public static final String TABLE_NAME = "Exercise1_Table";
-
     // BEGIN EXERCISE 1 STEP 2
+    public static final String TABLE_NAME = "Exercise1_Table";
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
     public static final String BRANCH_KEY_KMS_ARN = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126";
     public static final String BRANCH_KEY_ID = "008f4ec8-3a66-4278-b2ac-2b4f347b47c9";
