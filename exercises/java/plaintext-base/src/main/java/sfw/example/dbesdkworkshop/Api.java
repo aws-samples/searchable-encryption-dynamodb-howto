@@ -11,9 +11,11 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 import sfw.example.dbesdkworkshop.datamodel.*;
 import sfw.example.dbesdkworkshop.Config;
+import static sfw.example.dbesdkworkshop.AwsSupport.*;
 import static sfw.example.dbesdkworkshop.Config.Constants.*;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
+
 
 /** Defines the public interface to the Document Bucket operations. */
 public class Api {
@@ -27,12 +29,9 @@ public class Api {
    * @param tableName the name of the Document Bucket table.
    */
   public Api(
-      // ADD-ESDK-START: Add the ESDK Dependency
-      // Maybe change this to take a keyring and wrap the client?
-      DynamoDbClient ddbClient, String tableName) {
+    DynamoDbClient ddbClient, String tableName) {
     this.ddbClient = ddbClient;
     this.tableName = tableName;
-    // ADD-ESDK-START: Add the ESDK Dependency
   }
 
   /**
@@ -56,7 +55,7 @@ public class Api {
         .build();
     ddbClient.deleteTable(request);
   }
-
+  
   protected void createTable() {
     final Projection proj = Projection.builder().projectionType(ProjectionType.ALL).build();
     final ProvisionedThroughput throughPut = ProvisionedThroughput.builder().readCapacityUnits(100L).writeCapacityUnits(100L).build();

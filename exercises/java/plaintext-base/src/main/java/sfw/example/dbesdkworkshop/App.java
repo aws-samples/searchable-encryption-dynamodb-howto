@@ -5,10 +5,9 @@ package sfw.example.dbesdkworkshop;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import java.net.URI;
+import static sfw.example.dbesdkworkshop.AwsSupport.*;
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 /**
  * Entry point for writing logic to work with the Employee Portal,
@@ -19,6 +18,7 @@ import java.net.URI;
   name = "employee-portal",
   description = "Entrypoint for interacting with the employee portal",
   subcommands = {
+    CreateBranchKey.class,
     CreateTable.class,
     DeleteTable.class,
     GetEmployees.class,
@@ -51,20 +51,13 @@ public class App {
    * @return a new {@link Api} configured automatically by the bootstrapping system.
    */
   public static Api initializeEmployeePortal() {
-    // Load the TOML State file with the information about launched CloudFormation resources
-    // StateConfig stateConfig = new StateConfig(Config.contents.base.state_file);
-
-    // Configure DynamoDB client
-    // String tableName = stateConfig.contents.state.DocumentTable;
-    String tableName = Config.contents.ddb_table.name;
-    final DynamoDbClient ddbClient = DynamoDbClient
-      .builder()
-      .endpointOverride(URI.create("http://localhost:8000"))
-      .build();
-
-    // ADD-ESDK-START: Configure the Faythe KMS Key in the Encryption SDK
-    return new Api(ddbClient, tableName);
+    return new Api(MakeDynamoDbClient(), TABLE_NAME);
   }
+
+  public static Api initializeEmployeePortalVanilla() {
+    return new Api(MakeDynamoDbClientPlain(), TABLE_NAME);
+  }
+
   // CHECKSTYLE:ON AbbreviationAsWordInName
 
   /**

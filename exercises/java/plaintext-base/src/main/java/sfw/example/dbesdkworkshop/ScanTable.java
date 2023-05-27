@@ -12,10 +12,16 @@ import software.amazon.awssdk.services.dynamodb.model.*;
 
 @Command(name = "scan-table", description = "Scans the table.")
 public class ScanTable implements Runnable {
+  @Option(names = {"-v", "--vanilla"}, description = "use vanilla client")
+  boolean vanilla;
 
   @Override
   public void run() {
-    final Api api = App.initializeEmployeePortal();
+    Api api;
+    if (vanilla) 
+      api = App.initializeEmployeePortalVanilla();
+    else
+      api = App.initializeEmployeePortal();
     List<Map<String,AttributeValue>> results = api.scanTable();
     for (Map<String,AttributeValue> item : results)
       System.out.println(item);
