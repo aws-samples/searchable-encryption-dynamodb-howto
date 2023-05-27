@@ -1,4 +1,6 @@
 /.history
+/.DS_Store
+
 /exercises/java/plaintext-base/build
 /exercises/java/plaintext-base/.gradle
 /exercises/java/plaintext-base/.idea/.name
@@ -6,4 +8,11 @@
 /exercises/java/plaintext-base/.idea/gradle.xml
 /exercises/java/plaintext-base/.idea/jarRepositories.xml
 /exercises/java/plaintext-base/.idea/misc.xml
-/.DS_Store
+
+/exercises/java/exercise-1/build
+/exercises/java/exercise-1/.gradle
+/exercises/java/exercise-1/.idea/.name
+/exercises/java/exercise-1/.idea/compiler.xml
+/exercises/java/exercise-1/.idea/gradle.xml
+/exercises/java/exercise-1/.idea/jarRepositories.xml
+/exercises/java/exercise-1/.idea/misc.xml
