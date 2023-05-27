@@ -62,9 +62,13 @@ infrastructure:
           defaultValue: '{{.ParticipantRoleName}}/Participant'
         - templateParameter: AutomaticStopTimeMinutes
           defaultValue: 120
-       - templateParameter: RepoName
+        - templateParameter: RepoName
           defaultValue: Workshop
         - templateParameter: RepoDescription
-          defaultValue: Code Commit repository for use in the workshop
+          defaultValue: 'Code Commit repository for use in the workshop'
+        - templateParameter: S3CodeBucket
+          defaultValue: '{{.AssetsBucketName}}'
+        - templateParameter: S3CodeKey
+          defaultValue: '{{.AssetsBucketPrefix}}assets/archive.zip'
       participantVisibleStackOutputs:
         - Cloud9IdeUrl
