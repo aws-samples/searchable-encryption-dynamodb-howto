@@ -511,6 +511,7 @@ Resources:
                 - chown -R ec2-user:ec2-user /home/ec2-user/
                 - echo '=== PREPARE REBOOT in 1 minute with at ==='
                 - FILE=$(mktemp) && echo $FILE && echo '#!/bin/bash' > $FILE && echo 'reboot -f --verbose' >> $FILE && at now + 1 minute -f $FILE
+                - curl -s “https://get.sdkman.io" | bash
                 - echo "Bootstrap completed with return code $?"
 
   Cloud9BootstrapAssociation:
