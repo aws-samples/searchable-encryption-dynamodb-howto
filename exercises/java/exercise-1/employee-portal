@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# If the jar is not build, build it!
+[ -f ./build/libs/dbesdkworkshop-1.0-SNAPSHOT-standalone.jar ] || gradle fatJar
+
+# Just a little sugar to forward over all the arguments
+ java -jar build/libs/dbesdkworkshop-1.0-SNAPSHOT-standalone.jar "$@"
