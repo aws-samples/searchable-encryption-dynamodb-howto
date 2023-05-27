@@ -5,6 +5,8 @@ Parameters:
     Description: An environment name that is tagged to the resource.
     Type: String
     Default: workshop
+
+# Parameters for Cloud9
   InstanceName:
     Description: Cloud9 instance name.
     Type: String
@@ -33,8 +35,21 @@ Parameters:
     Description: How long Cloud9 can be inactive (no user input) before auto-hibernating. This helps prevent unnecessary charges.
     Type: Number
     Default: 30
-  RepoUrl:
-    Description: Git repository URL Cloud9 to check out with RepositoryUrl
+# Parameters for CodeCommit
+  RepoName:
+    Description: The name of the CodeCommit Repo
+    Type: String
+    Default: workshop
+  RepoDescription:
+    Description: The description of the CodeCommit Repo
+    Type: String
+    Default: A repository for the workshop
+  S3CodeBucket:
+    Description: The S3 Bucket holding the CodeCommit repo zip file. To leave the repository empty, leave blank.
+    Type: String
+    Default: ""
+  S3CodeKey:
+    Description: The S3 object key of the CodeCommit repo zip file. To leave the repository empty, leave blank.
     Type: String
     Default: ""
 
@@ -53,6 +68,16 @@ Metadata:
           - InstanceVolumeSize
           - InstanceOwner
           - AutomaticStopTimeMinutes
+      - Label:
+          default: Code Commit Configuration
+        Parameters:
+          - RepoName
+          - RepoDescription
+      - Label:
+          default: S3 Configuration
+        Parameters:
+          - S3CodeBucket
+          - S3CodeKey
     ParameterLabels:
       EnvironmentName:
         default: Environment name
@@ -66,9 +91,17 @@ Metadata:
         default: Role and username
       AutomaticStopTimeMinutes:
         default: Timeout
+      RepoName:
+        default: Code Commit repository name
+      RepoDescription:
+        default: Code Commit repository description
+      S3CodeBucket:
+        default: S3 Bucket name
+      S3CodeKey:
+        default: S3 Bucket key
 Conditions: 
   AssignCloud9Owner: !Not [!Equals [!Ref InstanceOwner, ""]]
-  AssignCloud9Repo: !Not [!Equals [!Ref RepoUrl, ""]]
+  LoadCodeCommitZipFile: !Not [!Equals [!Ref S3CodeBucket, ""]]
 Resources:
   ################## PERMISSIONS AND ROLES #################
   Cloud9Role:
@@ -510,11 +543,8 @@ Resources:
       InstanceType: !Ref InstanceType
       Name: !Ref InstanceName
       Repositories:
-        - !If
-          - AssignCloud9Repo
-          - - PathComponent: !Sub code
-              RepositoryUrl: !Ref RepoUrl
-          - Ref: AWS::NoValue
+        - PathComponent: !Sub code
+          RepositoryUrl: !GetAtt CodeCommitRepo.CloneUrlHttp
       OwnerArn: 
         Fn::If:
           - AssignCloud9Owner
@@ -530,8 +560,31 @@ Resources:
         - Key: auto-delete
           Value: never
 
+  ################## CODECOMMIT REPOSITORY ################
+  CodeCommitRepo:
+    Type: AWS::CodeCommit::Repository
+    Properties: 
+      RepositoryName: !Sub ${RepoName}
+      RepositoryDescription: !Sub ${RepoDescription}
+      Code: 
+        Fn::If:
+          - LoadCodeCommitZipFile
+          - S3:
+              Bucket: !Sub ${S3CodeBucket}
+              Key: !Sub ${S3CodeKey}
+          - Ref: AWS::NoValue
+      Tags:
+        - Key: Environment
+          Value: !Sub ${EnvironmentName}
+
 ################## OUTPUTS #####################
 Outputs:
   Cloud9IdeUrl:
     Description: URL to launch the Cloud9 IDE
     Value: !Sub https://${AWS::Region}.console.aws.amazon.com/cloud9/ide/${Cloud9Instance}?region=${AWS::Region}
+  RepoCloneUrlHttp: 
+    Description: URL to use for cloning the repository over HTTPS
+    Value: !GetAtt CodeCommitRepo.CloneUrlHttp
+  RepoCloneUrlSsh:
+    Description: URL to use for cloning the repository over SSH
+    Value: !GetAtt CodeCommitRepo.CloneUrlSsh
