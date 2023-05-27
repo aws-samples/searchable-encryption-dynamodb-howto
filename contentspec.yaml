@@ -69,6 +69,6 @@ infrastructure:
         - templateParameter: S3CodeBucket
           defaultValue: '{{.AssetsBucketName}}'
         - templateParameter: S3CodeKey
-          defaultValue: '{{.AssetsBucketPrefix}}assets/archive.zip'
+          defaultValue: '{{.AssetsBucketPrefix}}archive.zip'
       participantVisibleStackOutputs:
         - Cloud9IdeUrl
