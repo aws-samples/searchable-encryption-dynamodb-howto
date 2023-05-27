@@ -29,10 +29,10 @@ awsAccountConfig:
     maxAccessibleRegions: 1
     deployableRegions:
       recommended:
-        - us-east-1
+        - us-west-2
+        # - us-east-1 ## Disabled because Cloud9 can fail to deploy `m5.large` in a specific AZ
         - us-east-2
         - us-west-1
-        - us-west-2
         - ap-south-1
         - ap-northeast-2
         - ap-southeast-1
