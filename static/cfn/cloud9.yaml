@@ -265,7 +265,7 @@ Resources:
           logger.setLevel(logging.INFO)
 
           def lambda_handler(event, context):
-              logger.info("event: {}".format(event))
+              logger.info("event: {}".format(json.dumps(event)))
               logger.info("context: {}".format(context))
               responseData = {}
 
@@ -290,7 +290,7 @@ Resources:
                           "Arn": event["ResourceProperties"]["LabIdeInstanceProfileArn"],
                           "Name": event["ResourceProperties"]["LabIdeInstanceProfileName"],
                       }
-                      logger.info("iam_instance_profile: {}".format(iam_instance_profile))
+                      logger.info("iam_instance_profile: {}".format(json.dumps(iam_instance_profile)))
 
                       # Wait for Instance to become ready before adding Role
                       instance_state = instance["State"]["Name"]
@@ -308,7 +308,7 @@ Resources:
                           InstanceId=instance["InstanceId"],
                       )
                       logger.info(
-                          "response - associate_iam_instance_profile: {}".format(response)
+                          "response - associate_iam_instance_profile: {}".format(json.dumps(response))
                       )
                       # r_ec2 = boto3.resource('ec2')
 
@@ -448,7 +448,7 @@ Resources:
                 - echo LANG=en_US.utf-8 >> /etc/environment
                 - echo LC_ALL=en_US.UTF-8 >> /etc/environment
                 - . /home/ec2-user/.bashrc
-                - yum -y remove aws-cli; yum -y install sqlite telnet jq strace tree gcc glibc-static python3 python3-pip gettext bash-completion
+                - yum -y remove aws-cli; yum -y install jq tree gcc glibc-static python3 python3-pip gettext bash-completion
                 - echo '=== CONFIGURE default python version ==='
                 - PATH=$PATH:/usr/bin
                 - alternatives --set python /usr/bin/python3.9
@@ -494,8 +494,6 @@ Resources:
                       sudo resize2fs /dev/nvme0n1p1
                     fi
                   fi
-                - echo '=== INSTALL and CONFIGURE amplify and setting ENVIRONMENT VARS ==='
-                - sudo -H -u ec2-user bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash" && sudo -H -u ec2-user bash -c ". ~/.nvm/nvm.sh && nvm install node" && sudo -H -u ec2-user bash -c ". ~/.nvm/nvm.sh && npm install -g @aws-amplify/cli"
                 - echo '=== CONFIGURE awscli and setting ENVIRONMENT VARS ==='
                 - echo "complete -C '/usr/local/bin/aws_completer' aws" >> /home/ec2-user/.bashrc
                 - mkdir /home/ec2-user/.aws
@@ -509,9 +507,42 @@ Resources:
                 - echo '=== CLEANING /home/ec2-user ==='
                 - for f in cloud9; do rm -rf /home/ec2-user/$f; done
                 - chown -R ec2-user:ec2-user /home/ec2-user/
+
+                # Start custom bootstrap for Busy Engineer Workshop
+                # These commands will be run on the Cloud9 instance
+                # as part of its bootstrap.
+
+                - echo '=== CONFIGURE sdk and gradle ==='
+
+                # This is very annoying
+                # For `sdk` to work we need `source`,
+                # but this is a built-in command, not a program.
+                # You can not `sudo -u ec2-user source something`.
+                # So I create a script and execute it as `ec2-user`
+                # sudo is run with --set-home
+                # but take care to if you echo ~
+                - BOOTSTRAP_SCRIPT=/home/ec2-user/bootstrap.sh
+                - echo '#!/bin/bash' > $BOOTSTRAP_SCRIPT
+                - echo 'curl -s "https://get.sdkman.io" | bash' >> $BOOTSTRAP_SCRIPT
+                - echo 'source ~/.bash_profile' >> $BOOTSTRAP_SCRIPT
+                - echo 'sdk install gradle' >> $BOOTSTRAP_SCRIPT
+                # This will clone the codecommit repo
+                - !Sub echo '[ -f ~/environment/code ] || git clone --config credential.helper="!aws codecommit credential-helper $@" --config credential.UseHttpPath=true ${CodeCommitRepo.CloneUrlHttp} ~/environment/code' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/code/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'pushd ~/environment/code/java/plaintext-base/' >> $BOOTSTRAP_SCRIPT
+                - echo './employee-portal create-table' >> $BOOTSTRAP_SCRIPT
+
+                - chmod +x $BOOTSTRAP_SCRIPT
+                - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
+                # The BOOTSTRAP_SCRIPT is not deleted on purpose.
+                # This means that it is available in the workshop if something went wrong
+
+                # TODO add tab complete for both encrypted and plaintext cli
+
+                # End custom bootstrap
+                - echo 'Anything here???'
                 - echo '=== PREPARE REBOOT in 1 minute with at ==='
                 - FILE=$(mktemp) && echo $FILE && echo '#!/bin/bash' > $FILE && echo 'reboot -f --verbose' >> $FILE && at now + 1 minute -f $FILE
-                - curl -s “https://get.sdkman.io" | bash
                 - echo "Bootstrap completed with return code $?"
 
   Cloud9BootstrapAssociation:

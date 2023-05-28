@@ -29,23 +29,13 @@ awsAccountConfig:
   regionConfiguration:
     minAccessibleRegions: 1
     maxAccessibleRegions: 1
+    # This requires us-west-2 at this time
+    # See the note below about `us-east-1` and Cloud9
+    # But also this lets us make static links work
     deployableRegions:
       recommended:
         - us-west-2
         # - us-east-1 ## Disabled because Cloud9 can fail to deploy `m5.large` in a specific AZ
-        - us-east-2
-        - us-west-1
-        - ap-south-1
-        - ap-northeast-2
-        - ap-southeast-1
-        - ap-southeast-2
-        - ap-northeast-1
-        - ca-central-1
-        - eu-west-1
-        - eu-west-2
-        - eu-west-3
-        - eu-north-1
-        - sa-east-1
 
 infrastructure:
   cloudformationTemplates:
