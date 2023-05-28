@@ -58,8 +58,8 @@ public class Employee extends BaseItem {
     // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// BEGIN EXERCISE 1 STEP 11
-item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
+// END EXERCISE 1 STEP 11
+    item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
     item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));
     item.put(MANAGER_EMAIL_NAME, AttributeValue.fromS(managerEmail));
     item.put(LOCATION_NAME, AttributeValue.fromM(StringMapToAttr(location)));

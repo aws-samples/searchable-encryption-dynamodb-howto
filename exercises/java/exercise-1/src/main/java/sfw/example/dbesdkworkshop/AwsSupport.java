@@ -52,7 +52,7 @@ public class AwsSupport {
           .addExecutionInterceptor(MakeInterceptor())
           .build())
 // END EXERCISE 1 STEP 4
-.build();
+      .build();
   }
 
   public static DynamoDbClient MakeDynamoDbClientPlain()
