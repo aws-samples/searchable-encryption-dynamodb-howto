@@ -529,8 +529,7 @@ Resources:
                 # This will clone the codecommit repo
                 - !Sub echo '[ -f ~/environment/code ] || git clone --config credential.helper="!aws codecommit credential-helper $@" --config credential.UseHttpPath=true ${CodeCommitRepo.CloneUrlHttp} ~/environment/code' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/code/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'pushd ~/environment/code/java/plaintext-base/' >> $BOOTSTRAP_SCRIPT
-                - echo './employee-portal create-table' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/code/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
