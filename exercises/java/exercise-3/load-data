@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# This always compile before loading data
+gradle fatJar
+
+# Use the shared load data
+# This will call back
+# to this projects local `employee-portal` script
+# This make sure that all exercises
+# will share the same sample data
+../../load-data "$@"
+

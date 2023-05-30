@@ -1,0 +1,12 @@
+.classpath
+.gradle
+.idea/.name
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
+.metadata/
+.project
+bin/
+build
+target/

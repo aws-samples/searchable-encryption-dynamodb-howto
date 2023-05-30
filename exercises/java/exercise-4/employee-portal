@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCEDIR=$( dirname -- "$0"; )
+# If the jar is not build, build it!
+[ -f $SOURCEDIR/build/libs/dbesdkworkshop-1.0-SNAPSHOT-standalone.jar ] || gradle -p $SOURCEDIR fatJar
+
+# Just a little sugar to forward over all the arguments
+ java -jar $SOURCEDIR/build/libs/dbesdkworkshop-1.0-SNAPSHOT-standalone.jar "$@"

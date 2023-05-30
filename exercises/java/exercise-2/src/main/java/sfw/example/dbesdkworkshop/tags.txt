@@ -1,0 +1,80 @@
+Command Line Args - Names and Short Options
+
+-a attendees
+-A author-email
+-b building
+-c city
+-d desk
+-D duration
+-e employee-email
+-E end
+-f floor
+-g assignee-email
+-G manager-email
+-h hours
+-i reservation-id
+-j subject
+-k ticket-number
+-m message
+-M modified-date
+-n employee-number
+-N name
+-o organizer-email
+-P description
+-p project-name
+-R role
+-r room
+-S start
+-s status
+-t target
+-T title
+-v Severity
+-w window
+
+Compound Beacon Prefixes
+  * indicates NOT a separate attribute
+  i.e. only 12 of these need to be configured
+
+AE- assigneeEmail
+B- Building*
+C- City*
+CE- authorEmail
+D- Desk*
+EE- employeeEmail
+E- employeeNumber
+F- Floor*
+M- modifiedDate
+ME- managerEmail
+OE- organizerEmail
+P- projectName
+R- Room*
+S- startTime
+T- ticketNumber
+U- status
+V- reservtion
+Y- severity
+
+
+Attributes not part of compound beacons
+
+attendees
+description
+duration
+hours
+location
+message
+name
+role
+subject
+targetDate
+title
+
+Attributes that must not be encrypted
+
+employeeNumber
+startTime
+projectName
+reservation
+targetDate
+ticketNumber
+modifiedDate
