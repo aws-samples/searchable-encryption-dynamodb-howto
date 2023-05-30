@@ -46,11 +46,15 @@ using the KMS Key that you set up in [Getting Started](./getting-started.md).
 
 Make sure you are in the `exercises` directory for the language of your choice:
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash
-    cd ~/environment/workshop/exercises/java/add-db-esdk-start
-    ```
+```bash
+cd ~/environment/workshop/exercises/java/add-db-esdk-start
+```
+
+:::
+::::
 
 This workshop will break down each change you have to make into several steps.
 For each step, the workshop will tell you which file to look at.
@@ -62,10 +66,14 @@ This is where you will want to add new code.
 
 First, let's begin by updating our dependencies.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    This project uses [Gradle](https://gradle.org/) to build our application.
-    Take a look at our Gradle build file at `exercise-1/build.gradle.kts`.
+This project uses [Gradle](https://gradle.org/) to build our application.
+Take a look at our Gradle build file at `exercise-1/build.gradle.kts`.
+
+:::
+::::
 
 Add the dependencies for:
 - AWS Key Management Service
@@ -73,18 +81,22 @@ Add the dependencies for:
 - AWS Cryptographic Materials Library
 [TODO the MPL artifact id still needs to be updated]
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-        api("javax.xml.bind:jaxb-api:2.3.1")
-    // BEGIN EXERCISE 1 STEP 1
-        implementation(platform("software.amazon.awssdk:bom:2.19.1"))
-        implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
-        implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
-        implementation("software.amazon.awssdk:kms")
-    // END EXERCISE 1 STEP 1
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
-    ```
+```java
+    api("javax.xml.bind:jaxb-api:2.3.1")
+// BEGIN EXERCISE 1 STEP 1
+    implementation(platform("software.amazon.awssdk:bom:2.19.1"))
+    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
+    implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
+    implementation("software.amazon.awssdk:kms")
+// END EXERCISE 1 STEP 1
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -98,9 +110,13 @@ You will see how we use each of these libraries in later steps.
 
 ### Step 2: Configure your Table Name and Key Ids.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+
+:::
+::::
 
 This file contains constants used by our application, which are specific to this exercise.
 Update this file to specify the following:
@@ -109,19 +125,23 @@ Update this file to specify the following:
 - The KMS Key ARN that was created int [Getting Started](TODO)
 - The branch key ID that [TODO at this point the key has not been created yet. Where are the steps to create the Keystore?]
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    public static class Constants {
-        public static final boolean USE_LOCAL_DDB = true;
+```java
+public static class Constants {
+    public static final boolean USE_LOCAL_DDB = true;
 
-        // BEGIN EXERCISE 1 STEP 2
-        public static final String TABLE_NAME = "Exercise1_Table";
-        public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
-        public static final String BRANCH_KEY_KMS_ARN = "<kms-key-id>";
-        public static final String BRANCH_KEY_ID = "<branch-key-id>";
-        // END EXERCISE 1 STEP 2
-    ```
+    // BEGIN EXERCISE 1 STEP 2
+    public static final String TABLE_NAME = "Exercise1_Table";
+    public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
+    public static final String BRANCH_KEY_KMS_ARN = "<kms-key-id>";
+    public static final String BRANCH_KEY_ID = "<branch-key-id>";
+    // END EXERCISE 1 STEP 2
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -142,9 +162,13 @@ This value is set to the KMS Key that was created for you in [Getting Started](T
 
 ### Step 3: Import what's needed for client-side encryption configuration
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+
+:::
+::::
 
 This file is currently responsible for creating the DynamoDB Client that the
 Employee Portal Services uses to interact with DynamoDB.
@@ -153,29 +177,33 @@ This client needs to be updated to use client-side encryption.
 
 First, let's import everything that is necessary for this configuration.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    // BEGIN EXERCISE 1 STEP 3
-    import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-    import software.amazon.awssdk.services.kms.KmsClient;
-    import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
-    import software.amazon.cryptography.dbencryptionsdk.dynamodb.model.*;
-    import software.amazon.cryptography.dbencryptionsdk.structuredencryption.model.CryptoAction;
-    import software.amazon.cryptography.keystore.KeyStore;
-    import software.amazon.cryptography.keystore.model.CreateKeyOutput;
-    import software.amazon.cryptography.keystore.model.CreateKeyStoreInput;
-    import software.amazon.cryptography.keystore.model.KMSConfiguration;
-    import software.amazon.cryptography.keystore.model.KeyStoreConfig;
-    import software.amazon.cryptography.materialproviders.IKeyring;
-    import software.amazon.cryptography.materialproviders.MaterialProviders;
-    import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
-    import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
-    // END EXERCISE 1 STEP 3
+```java
+// BEGIN EXERCISE 1 STEP 3
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.services.kms.KmsClient;
+import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
+import software.amazon.cryptography.dbencryptionsdk.dynamodb.model.*;
+import software.amazon.cryptography.dbencryptionsdk.structuredencryption.model.CryptoAction;
+import software.amazon.cryptography.keystore.KeyStore;
+import software.amazon.cryptography.keystore.model.CreateKeyOutput;
+import software.amazon.cryptography.keystore.model.CreateKeyStoreInput;
+import software.amazon.cryptography.keystore.model.KMSConfiguration;
+import software.amazon.cryptography.keystore.model.KeyStoreConfig;
+import software.amazon.cryptography.materialproviders.IKeyring;
+import software.amazon.cryptography.materialproviders.MaterialProviders;
+import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
+import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
+// END EXERCISE 1 STEP 3
 
-    /** Helper to pull required Document Bucket configuration keys out of the configuration system. */
-    public class AwsSupport {
-    ```
+/** Helper to pull required Document Bucket configuration keys out of the configuration system. */
+public class AwsSupport {
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -189,21 +217,25 @@ DynamoDB Client.
 In that method, update the configuration to add a new [Interceptor](TODO)
 in the `override Configuration`.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    public static DynamoDbClient MakeDynamoDbClient()
-    {
-        return GetClientBuilder()
-    // BEGIN EXERCISE 1 STEP 4
-        .overrideConfiguration(
-            ClientOverrideConfiguration.builder()
-            .addExecutionInterceptor(MakeInterceptor())
-            .build())
-    // END EXERCISE 1 STEP 4
-        .build();
-    }
-    ```
+```java
+public static DynamoDbClient MakeDynamoDbClient()
+{
+    return GetClientBuilder()
+// BEGIN EXERCISE 1 STEP 4
+    .overrideConfiguration(
+        ClientOverrideConfiguration.builder()
+        .addExecutionInterceptor(MakeInterceptor())
+        .build())
+// END EXERCISE 1 STEP 4
+    .build();
+}
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -232,95 +264,99 @@ This configuration contains several parts:
 1. Create and configure the DynamoDB Encryption Interceptor to encrypt your table with the above
    crypto actions and keyring.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    // BEGIN EXERCISE 1 STEP 5
-    public static KeyStore MakeKeyStore()
-    {
-        return KeyStore.builder().KeyStoreConfig(
-        KeyStoreConfig.builder()
-            .ddbClient(MakeDynamoDbClientPlain())
-            .ddbTableName(BRANCH_KEY_TABLE)
-            .logicalKeyStoreName(BRANCH_KEY_TABLE)
-            .kmsClient(KmsClient.create())
-            .kmsConfiguration(KMSConfiguration.builder()
-            .kmsKeyArn(BRANCH_KEY_KMS_ARN)
-            .build())
-            .build()).build();
-    }
+```java
+// BEGIN EXERCISE 1 STEP 5
+public static KeyStore MakeKeyStore()
+{
+    return KeyStore.builder().KeyStoreConfig(
+    KeyStoreConfig.builder()
+        .ddbClient(MakeDynamoDbClientPlain())
+        .ddbTableName(BRANCH_KEY_TABLE)
+        .logicalKeyStoreName(BRANCH_KEY_TABLE)
+        .kmsClient(KmsClient.create())
+        .kmsConfiguration(KMSConfiguration.builder()
+        .kmsKeyArn(BRANCH_KEY_KMS_ARN)
+        .build())
+        .build()).build();
+}
 
-    public static String CreateBranchKey() {
-        final KeyStore keystore = MakeKeyStore();    
-        keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
-        return keystore.CreateKey().branchKeyIdentifier();
-    }
+public static String CreateBranchKey() {
+    final KeyStore keystore = MakeKeyStore();    
+    keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
+    return keystore.CreateKey().branchKeyIdentifier();
+}
 
-    public static DynamoDbEncryptionInterceptor MakeInterceptor()
-    {
-        final MaterialProviders matProv = MaterialProviders.builder()
-        .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
-        .build();
+public static DynamoDbEncryptionInterceptor MakeInterceptor()
+{
+    final MaterialProviders matProv = MaterialProviders.builder()
+    .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
+    .build();
 
-        final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
-        .branchKeyId(BRANCH_KEY_ID)
-        .keyStore(MakeKeyStore())
-        .ttlSeconds(6000l)
-        .maxCacheSize(100)
-        .build();
-    
-        final IKeyring kmsKeyring = matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
+    final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
+    .branchKeyId(BRANCH_KEY_ID)
+    .keyStore(MakeKeyStore())
+    .ttlSeconds(6000l)
+    .maxCacheSize(100)
+    .build();
 
-        HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
-        actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
-        actions.put(SORT_KEY, CryptoAction.SIGN_ONLY);
+    final IKeyring kmsKeyring = matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
 
-        actions.put(ASSIGNEE_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(ATTENDEES_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(AUTHOR_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(DESCRIPTION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(DURATION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(EMPLOYEE_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(EMPLOYEE_NAME_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(HOURS_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(LOCATION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(MANAGER_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(MESSAGE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(ORGANIZER_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(ROLE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(SEVERITY_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(STATUS_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(SUBJECT_NAME, CryptoAction.ENCRYPT_AND_SIGN);
-        actions.put(TITLE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
+    actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
+    actions.put(SORT_KEY, CryptoAction.SIGN_ONLY);
 
-        // These attributes cannot be encrypted, as they are used in the primary key
-        // or are needed in ranged searches
-        actions.put(EMPLOYEE_NUMBER_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(MODIFIED_DATE_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(PROJECT_NAME_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(RESERVATION_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(START_TIME_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(TARGET_DATE_NAME, CryptoAction.SIGN_ONLY);
-        actions.put(TICKET_NUMBER_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(ASSIGNEE_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(ATTENDEES_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(AUTHOR_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(DESCRIPTION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(DURATION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(EMPLOYEE_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(EMPLOYEE_NAME_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(HOURS_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(LOCATION_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(MANAGER_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(MESSAGE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(ORGANIZER_EMAIL_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(ROLE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(SEVERITY_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(STATUS_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(SUBJECT_NAME, CryptoAction.ENCRYPT_AND_SIGN);
+    actions.put(TITLE_NAME, CryptoAction.ENCRYPT_AND_SIGN);
 
-        DynamoDbTableEncryptionConfig tableConfig = DynamoDbTableEncryptionConfig.builder()
-        .logicalTableName(TABLE_NAME)
-        .partitionKeyName(PARTITION_KEY)
-        .sortKeyName(SORT_KEY)
-        .attributeActionsOnEncrypt(actions)
-        .keyring(kmsKeyring)
-        .build();
+    // These attributes cannot be encrypted, as they are used in the primary key
+    // or are needed in ranged searches
+    actions.put(EMPLOYEE_NUMBER_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(MODIFIED_DATE_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(PROJECT_NAME_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(RESERVATION_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(START_TIME_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(TARGET_DATE_NAME, CryptoAction.SIGN_ONLY);
+    actions.put(TICKET_NUMBER_NAME, CryptoAction.SIGN_ONLY);
 
-        HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();
-        tables.put(TABLE_NAME, tableConfig);
-        DynamoDbTablesEncryptionConfig config = DynamoDbTablesEncryptionConfig.builder()
-        .tableEncryptionConfigs(tables)
-        .build();
+    DynamoDbTableEncryptionConfig tableConfig = DynamoDbTableEncryptionConfig.builder()
+    .logicalTableName(TABLE_NAME)
+    .partitionKeyName(PARTITION_KEY)
+    .sortKeyName(SORT_KEY)
+    .attributeActionsOnEncrypt(actions)
+    .keyring(kmsKeyring)
+    .build();
 
-        return DynamoDbEncryptionInterceptor.builder().config(config).build();
-    }
-    // END EXERCISE 1 STEP 5
-    ```
+    HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();
+    tables.put(TABLE_NAME, tableConfig);
+    DynamoDbTablesEncryptionConfig config = DynamoDbTablesEncryptionConfig.builder()
+    .tableEncryptionConfigs(tables)
+    .build();
+
+    return DynamoDbEncryptionInterceptor.builder().config(config).build();
+}
+// END EXERCISE 1 STEP 5
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -360,9 +396,13 @@ and will decrypt items as configured, locally, after they are gotten from Dynamo
 
 ### Step 6: Remove Projects use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Project.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Project.java`.
+
+:::
+::::
 
 [TODO Logically, it makes sense to put all of the next steps as a single step.]
 
@@ -372,16 +412,20 @@ GSIs that were used for the plaintext Employee Portal Service.
 Go to our model file for `Project` and remove any code that populates
 your old GSIs.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-        item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-        item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-    // BEGIN EXERCISE 1 STEP 6
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-    // BEGIN EXERCISE 1 STEP 6
-    ```
+```java
+    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+    item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+// BEGIN EXERCISE 1 STEP 6
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
+// BEGIN EXERCISE 1 STEP 6
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -389,30 +433,38 @@ You have updated the code so that `Project` items will no longer populate your o
 
 ### Step 7: Remove Reservations use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Reservation.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Reservation.java`.
+
+:::
+::::
 
 Similar to our previous step, update the code so that we no longer populate your
 old GSIs when writing `Reservation` items.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-        item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
-        item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
+```java
+    item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
+    item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-    // BEGIN EXERCISE 1 STEP 7
-        // String floor = location.get(FLOOR_NAME);
-        // String room = location.get(ROOM_NAME);
-        // String building = location.get(BUILDING_NAME);
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
+// BEGIN EXERCISE 1 STEP 7
+    // String floor = location.get(FLOOR_NAME);
+    // String room = location.get(ROOM_NAME);
+    // String building = location.get(BUILDING_NAME);
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
 
-        // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
-        // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-    // BEGIN EXERCISE 1 STEP 7 
-    ```
+    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
+    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
+// BEGIN EXERCISE 1 STEP 7 
+```
+
+:::
+::::s
 
 #### What Happened?
 
@@ -420,31 +472,39 @@ You have updated the code so that `Reservation` items will no longer populate yo
 
 ### Step 8: Remove Ticket use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Ticket.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Ticket.java`.
+
+:::
+::::
 
 Similar to our previous step, update the code so that we no longer populate your
 old GSIs when writing `Ticket` items.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash
-    public Map<String, AttributeValue> toItem() {
-        Map<String, AttributeValue> item = new HashMap<>();
-        item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
-        item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
+```java
+public Map<String, AttributeValue> toItem() {
+    Map<String, AttributeValue> item = new HashMap<>();
+    item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-    // BEGIN EXERCISE 1 STEP 8
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
+// BEGIN EXERCISE 1 STEP 8
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-        // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(ASSIGNEE_EMIL_PREFIX + assigneeEmail));
+    // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(ASSIGNEE_EMIL_PREFIX + assigneeEmail));
 
-        // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
-        // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-    // BEGIN EXERCISE 1 STEP 8
-    ```
+    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
+    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
+// BEGIN EXERCISE 1 STEP 8
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -452,25 +512,33 @@ You have updated the code so that `Ticket` items will no longer populate your ol
 
 ### Step 9: Remove Timecard's use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Timecard.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Timecard.java`.
+
+:::
+::::
 
 Similar to our previous step, update the code so that we no longer populate your
 old GSIs when writing `Timecard` items.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    public Map<String, AttributeValue> toItem() {
-        Map<String, AttributeValue> item = new HashMap<>();
-        item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-        item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-    // BEGIN EXERCISE 1 STEP 9
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-    // BEGIN EXERCISE 1 STEP 9
-    ```
+```java
+public Map<String, AttributeValue> toItem() {
+    Map<String, AttributeValue> item = new HashMap<>();
+    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
+    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
+// BEGIN EXERCISE 1 STEP 9
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
+// BEGIN EXERCISE 1 STEP 9
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -478,28 +546,36 @@ You have updated the code so that `Timecard` items will no longer populate your 
 
 ### Step 10: Remove Meeting's use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Meeting.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Meeting.java`.
+
+:::
+::::
 
 Similar to our previous step, update the code so that we no longer populate your
 old GSIs when writing `Meeting` items.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    public Map<String, AttributeValue> toItem() {
-        String floor = location.get(FLOOR_NAME);
-        String room = location.get(ROOM_NAME);
-        Map<String, AttributeValue> item = new HashMap<>();
-        item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-        item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
+```java
+public Map<String, AttributeValue> toItem() {
+    String floor = location.get(FLOOR_NAME);
+    String room = location.get(ROOM_NAME);
+    Map<String, AttributeValue> item = new HashMap<>();
+    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
 
-    // BEGIN EXERCISE 1 STEP 10
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-    // BEGIN EXERCISE 1 STEP 10
-    ```
+// BEGIN EXERCISE 1 STEP 10
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
+// BEGIN EXERCISE 1 STEP 10
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -507,34 +583,42 @@ You have updated the code so that `Meeting` items will no longer populate your o
 
 ### Step 1: Update Employee's use of GSIs
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Employee.java`.
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Employee.java`.
+
+:::
+::::
 
 Similar to our previous step, update the code so that we no longer populate your
 old GSIs when writing `Employee` items.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-    public Map<String, AttributeValue> toItem() {
-        String locTag = "";
-        locTag = AppendStrWithPrefix(locTag, location.get(BUILDING_NAME), BUILDING_PREFIX);
-        locTag = AppendStrWithPrefix(locTag, location.get(FLOOR_NAME), FLOOR_PREFIX);
-        locTag = AppendStrWithPrefix(locTag, location.get(ROOM_NAME), ROOM_PREFIX);
-        locTag = AppendStrWithPrefix(locTag, location.get(DESK_NAME), DESK_PREFIX);
+```java
+public Map<String, AttributeValue> toItem() {
+    String locTag = "";
+    locTag = AppendStrWithPrefix(locTag, location.get(BUILDING_NAME), BUILDING_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(FLOOR_NAME), FLOOR_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(ROOM_NAME), ROOM_PREFIX);
+    locTag = AppendStrWithPrefix(locTag, location.get(DESK_NAME), DESK_PREFIX);
 
-        Map<String, AttributeValue> item = new HashMap<>();
-        item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-        item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-    // BEGIN EXERCISE 1 STEP 11
-        // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-        // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-        // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
-        // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
-        // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-    // BEGIN EXERCISE 1 STEP 11
-    ```
+    Map<String, AttributeValue> item = new HashMap<>();
+    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+// BEGIN EXERCISE 1 STEP 11
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
+    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
+    // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
+    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
+    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
+// BEGIN EXERCISE 1 STEP 11
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -548,11 +632,15 @@ Want to check your progress, or compare what you've done versus a finished examp
 
 Check out the code in one of the `-complete` folders to compare.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    cd ~/environment/workshop/exercises/java/add-esdk-complete
-    ```
+```bash 
+cd ~/environment/workshop/exercises/java/add-esdk-complete
+```
+
+:::
+::::
 
 ## Try it Out
 

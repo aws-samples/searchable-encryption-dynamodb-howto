@@ -62,11 +62,15 @@ sudo resize2fs /dev/nvme0n1p1
 
 Python and Java have API documentation available for each exercise. You can view the documentation as you work in Cloud9.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    make javadoc
-    ```
+```bash 
+make javadoc
+```
+
+:::
+::::
 
 Now select "Preview -> Preview Running Application" from the Cloud9 menu bar.
 

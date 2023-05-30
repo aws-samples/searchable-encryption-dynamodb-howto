@@ -33,35 +33,42 @@ you are all set.
 If you aren't sure, or want to catch up,
 jump into the `adding-the-remaining-access-patterns-start` directory for the language of your choice.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-start
-    ```
+```bash 
+cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-start
+```
+
+:::
+::::
 
 ### Step 1: Set Encryption Context on Encrypt
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="5 12 13"}
-    // Edit ./src/main/java/sfw/example/esdkworkshop/Api.java
-    ...
+```{.java hl_lines="5 12 13"}
+// Edit ./src/main/java/sfw/example/esdkworkshop/Api.java
+...
 
-    import java.util.Map;
-    import java.util.NoSuchElementException;
-    import java.util.Set;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-    ...
+...
 
-      public PointerItem store(byte[] data, Map<String, String> context) {
-        // ENCRYPTION-CONTEXT-START: Set Encryption Context on Encrypt
-        CryptoResult<byte[], KmsMasterKey> encryptedMessage =
-            awsEncryptionSdk.encryptData(mkp, data, context);
-        DocumentBundle bundle =
-            DocumentBundle.fromDataAndContext(encryptedMessage.getResult(), context);
-    // Save your changes
-    ```
+    public PointerItem store(byte[] data, Map<String, String> context) {
+    // ENCRYPTION-CONTEXT-START: Set Encryption Context on Encrypt
+    CryptoResult<byte[], KmsMasterKey> encryptedMessage =
+        awsEncryptionSdk.encryptData(mkp, data, context);
+    DocumentBundle bundle =
+        DocumentBundle.fromDataAndContext(encryptedMessage.getResult(), context);
+// Save your changes
+```
 
+:::
+::::
 
 #### What Happened?
 
@@ -77,15 +84,19 @@ Next you will update `retrieve` to use the encryption context on decrypt.
 
 ### Step 2: Use Encryption Context on Decrypt
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="3 4"}
-    // Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
-        // ENCRYPTION-CONTEXT-START: Use Encryption Context on Decrypt
-        Map<String, String> actualContext = decryptedMessage.getEncryptionContext();
-        PointerItem pointer = PointerItem.fromKeyAndContext(key, actualContext);
-    // Save your changes
-    ```
+```{.java hl_lines="3 4"}
+// Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
+    // ENCRYPTION-CONTEXT-START: Use Encryption Context on Decrypt
+    Map<String, String> actualContext = decryptedMessage.getEncryptionContext();
+    PointerItem pointer = PointerItem.fromKeyAndContext(key, actualContext);
+// Save your changes
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -95,36 +106,40 @@ Next you will add a mechanism for the application to test assertions made in enc
 
 ### Step 3: Making Assertions
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25"}
-    // Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
-        // ENCRYPTION-CONTEXT-START: Making Assertions
-        boolean allExpectedContextKeysFound = actualContext.keySet().containsAll(expectedContextKeys);
-        if (!allExpectedContextKeysFound) {
-            // Remove all of the keys that were found
-            expectedContextKeys.removeAll(actualContext.keySet());
-            String error =
+```{.java hl_lines="3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25"}
+// Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
+    // ENCRYPTION-CONTEXT-START: Making Assertions
+    boolean allExpectedContextKeysFound = actualContext.keySet().containsAll(expectedContextKeys);
+    if (!allExpectedContextKeysFound) {
+        // Remove all of the keys that were found
+        expectedContextKeys.removeAll(actualContext.keySet());
+        String error =
+        String.format(
+            "Expected context keys were not found in the actual encryption context! "
+            + "Missing keys were: %s",
+            expectedContextKeys.toString());
+        throw new DocumentBucketException(error, new NoSuchElementException());
+    }
+    boolean allExpectedContextFound =
+        actualContext.entrySet().containsAll(expectedContext.entrySet());
+    if (!allExpectedContextFound) {
+        Set<Map.Entry<String, String>> expectedContextEntries = expectedContext.entrySet();
+        expectedContextEntries.removeAll(actualContext.entrySet());
+        String error =
             String.format(
-                "Expected context keys were not found in the actual encryption context! "
-                + "Missing keys were: %s",
-                expectedContextKeys.toString());
-          throw new DocumentBucketException(error, new NoSuchElementException());
-        }
-        boolean allExpectedContextFound =
-            actualContext.entrySet().containsAll(expectedContext.entrySet());
-        if (!allExpectedContextFound) {
-            Set<Map.Entry<String, String>> expectedContextEntries = expectedContext.entrySet();
-            expectedContextEntries.removeAll(actualContext.entrySet());
-            String error =
-                String.format(
-                    "Expected context pairs were not found in the actual encryption context! "
-                    + "Missing pairs were: %s",
-                    expectedContextEntries.toString());
-            throw new DocumentBucketException(error, new NoSuchElementException());
-        }
-    // Save your work
-    ```
+                "Expected context pairs were not found in the actual encryption context! "
+                + "Missing pairs were: %s",
+                expectedContextEntries.toString());
+        throw new DocumentBucketException(error, new NoSuchElementException());
+    }
+// Save your work
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -138,11 +153,15 @@ If you want to check your progress, or compare what you've done versus a finishe
 
 There is a `-complete` folder for each language.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-complete
-    ```
+```bash 
+cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-complete
+```
+
+:::
+::::
 
 ## Try it Out
 

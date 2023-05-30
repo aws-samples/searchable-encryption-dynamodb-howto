@@ -55,18 +55,26 @@ If you just finished [Adding the Database Encryption SDK](./adding-the-database-
 If you aren't sure, or want to catch up,
 jump into the `adding-searchable-encryption-configuration` directory for the language of your choice.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-start
-    ```
+```bash 
+cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-start
+```
+
+:::
+::::
 
 ### Step 1: Create the Keystore Table
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="4"}
-    ```
+```{.java hl_lines="4"}
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -76,10 +84,14 @@ Branch keys are used by the AWS KMS Hierarchy Keyring.
 
 ### Step 2: Add a Branch key to the keystore
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="3"}
-    ```
+```{.java hl_lines="3"}
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -92,10 +104,14 @@ You can only use the beacon key and ignore the branch key if you like.
 
 ### Step 3: Configure Searchable Encryption
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```{.java hl_lines="3"}
-    ```
+```{.java hl_lines="3"}
+```
+
+:::
+::::
 
 #### What Happened?
 
@@ -134,11 +150,15 @@ check out the code in one of the `-complete` folders to compare.
 
 There is a `-complete` folder for each language.
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```bash 
-    cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-complete
-    ```
+```bash 
+cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-complete
+```
+
+:::
+::::
 
 ## Try it Out
 
@@ -156,13 +176,17 @@ Before we get started, let's first reset the data in your table.
 Experiment using the API as much as you like. 
 
 
-=== "Java"
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
-    ```java
-        // Example of getting an employee record
-        // Example of the next access pattern that should fail 
-        // Example of adding a new record that we can find
-    ```
+```java
+    // Example of getting an employee record
+    // Example of the next access pattern that should fail 
+    // Example of adding a new record that we can find
+```
+
+:::
+::::
 
 ## Explore Further
 
