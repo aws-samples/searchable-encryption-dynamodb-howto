@@ -97,7 +97,7 @@ public class Api {
 
     final KeySchemaElement pk2Schema = KeySchemaElement
       .builder()
-      .attributeName(GSI2_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
       .keyType(KeyType.HASH)
       .build();
     final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
@@ -112,12 +112,12 @@ public class Api {
 
     final KeySchemaElement pk3Schema = KeySchemaElement
       .builder()
-      .attributeName(GSI3_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI3_PARTITION_KEY)
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk3Schema = KeySchemaElement
       .builder()
-      .attributeName(GSI3_SORT_KEY)
+      .attributeName(BEACON_PREFIX + GSI3_SORT_KEY)
       .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi3Schema = new ArrayList<KeySchemaElement>();
@@ -144,13 +144,13 @@ public class Api {
       .attributeName(GSI1_SORT_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(GSI2_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(GSI3_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI3_PARTITION_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(GSI3_SORT_KEY)
+      .attributeName(BEACON_PREFIX + GSI3_SORT_KEY)
       .attributeType(ScalarAttributeType.S).build());
     final CreateTableRequest request =
         CreateTableRequest.builder()

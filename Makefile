@@ -9,3 +9,14 @@ put_assets:
 get_assets:
 	aws s3 sync s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 ./assets --delete
 
+
+
+clean_exercises:
+	find "./exercises/java" -type d -name "build" -exec echo rm -rf {} \;
+	git restore --source=HEAD --staged --worktree -- "./exercises/java/"
+
+test_markdown:
+	# find content -name '*.md' | xargs -t -I %  npx txm %
+	npx txm ./content/adding-employee-configuration.en.md
+
+test: clean_exercises | test_markdown
