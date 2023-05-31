@@ -116,76 +116,16 @@ public class AwsSupport {
         .length(8)
         .loc(LOCATION_NAME + "." + DESK_NAME)
         .build());
-// BEGIN EXERCISE 4 STEP 2
-    beacons.add(StandardBeacon.builder()
-        .name(STATUS_NAME)
-        .length(8)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(ORGANIZER_EMAIL_NAME)
-        .length(8)
-        .build());
-        beacons.add(StandardBeacon.builder()
-        .name(ASSIGNEE_EMAIL_NAME)
-        .length(8)
-        .build());
-        beacons.add(StandardBeacon.builder()
-        .name(AUTHOR_EMAIL_NAME)
-        .length(8)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(SEVERITY_NAME)
-        .length(8)
-        .build());
-// END EXERCISE 4 STEP 2
+    // BEGIN EXERCISE 4 STEP 2
+
+    // END EXERCISE 4 STEP 2
 
     return beacons;
   }
 
-// BEGIN EXERCISE 4 STEP 3
-public static Constructor MakeGsi1MeetingSortKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(START_TIME_NAME).required(true).build());
-  parts.add(ConstructorPart.builder().name(FLOOR_NAME).required(true).build());
-  parts.add(ConstructorPart.builder().name(ROOM_NAME).required(false).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi1ProjectPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(STATUS_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi1ReservationPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(ORGANIZER_EMAIL_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi3ReservationPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(BUILDING_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi1TicketPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(AUTHOR_EMAIL_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi1TicketSortKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(MODIFIED_DATE_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi2TicketPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(ASSIGNEE_EMAIL_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-public static Constructor MakeGsi3TicketPartitionKeyConstructor() {
-  ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-  parts.add(ConstructorPart.builder().name(SEVERITY_NAME).required(true).build());
-  return Constructor.builder().parts(parts).build();
-}
-// END EXERCISE 4 STEP 3
+  // BEGIN EXERCISE 4 STEP 3
+
+  // END EXERCISE 4 STEP 3
 
   public static Constructor MakeGsi1TimecardPartitionKeyConstructor() {
     ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
@@ -229,15 +169,15 @@ public static Constructor MakeGsi3TicketPartitionKeyConstructor() {
   public static CompoundBeacon MakeGsi2PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
     encryptedParts.add(EncryptedPart.builder().name(MANAGER_EMAIL_NAME).prefix(MANAGER_EMAIL_PREFIX).build());
-// BEGIN EXERCISE 4 STEP 4a
-encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSIGNEE_EMAIL_PREFIX).build());
-// END EXERCISE 4 STEP 4a
+    // BEGIN EXERCISE 4 STEP 4a
+
+    // END EXERCISE 4 STEP 4a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi2EmployeePartitionKeyConstructor());
-// BEGIN EXERCISE 4 STEP 4b
-    constructors.add(MakeGsi2TicketPartitionKeyConstructor());
-// END EXERCISE 4 STEP 4b
+    // BEGIN EXERCISE 4 STEP 4b
+
+    // END EXERCISE 4 STEP 4b
 
     return CompoundBeacon.builder()
         .name(GSI2_PARTITION_KEY)
@@ -251,17 +191,15 @@ encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSI
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
     encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(CITY_NAME).prefix(CITY_PREFIX).build());
-// BEGIN EXERCISE 4 STEP 5a
-    encryptedParts.add(EncryptedPart.builder().name(BUILDING_NAME).prefix(BUILDING_PREFIX).build());
-    encryptedParts.add(EncryptedPart.builder().name(SEVERITY_NAME).prefix(SEVERITY_PREFIX).build());
-// END EXERCISE 4 STEP 5a
+    // BEGIN EXERCISE 4 STEP 5a
+
+    // END EXERCISE 4 STEP 5a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi3EmployeePartitionKeyConstructor());
-// BEGIN EXERCISE 4 STEP 5b
-    constructors.add(MakeGsi3ReservationPartitionKeyConstructor());
-    constructors.add(MakeGsi3TicketPartitionKeyConstructor());
-// END EXERCISE 4 STEP 5b
+    // BEGIN EXERCISE 4 STEP 5b
+
+    // END EXERCISE 4 STEP 5b
 
     return CompoundBeacon.builder()
         .name(GSI3_PARTITION_KEY)
@@ -277,25 +215,22 @@ encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSI
     encryptedParts.add(EncryptedPart.builder().name(FLOOR_NAME).prefix(FLOOR_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(ROOM_NAME).prefix(ROOM_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(DESK_NAME).prefix(DESK_PREFIX).build());
-// BEGIN EXERCISE 4 STEP 6a
-    ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
-    signedParts.add(SignedPart.builder().name(MODIFIED_DATE_NAME).prefix(MODIFIED_DATE_PREFIX).build());
-    signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
-// END EXERCISE 4 STEP 6a
+    // BEGIN EXERCISE 4 STEP 6a
+
+    // END EXERCISE 4 STEP 6a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi3EmployeeSortKeyConstructor());
-// BEGIN EXERCISE 4 STEP 6b
-    constructors.add(MakeGsi1TicketSortKeyConstructor()); // GSI3 same as GSI1
-    constructors.add(MakeGsi1MeetingSortKeyConstructor()); // reservation GSI3 same as Meeting GSI1
-// END EXERCISE 4 STEP 6b
+    // BEGIN EXERCISE 4 STEP 6b
+
+    // END EXERCISE 4 STEP 6b
     return CompoundBeacon.builder()
         .name(GSI3_SORT_KEY)
         .split(SPLIT)
         .encrypted(encryptedParts)
-// BEGIN EXERCISE 4 STEP 6c
-        .signed(signedParts)
-// END EXERCISE 4 STEP 6c
+    // BEGIN EXERCISE 4 STEP 6c
+
+    // END EXERCISE 4 STEP 6c
         .constructors(constructors)
         .build();
   }
@@ -303,20 +238,20 @@ encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSI
   public static CompoundBeacon MakeGsi1PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
     encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
-// BEGIN EXERCISE 4 STEP 7a
+    // BEGIN EXERCISE 4 STEP 7a
     encryptedParts.add(EncryptedPart.builder().name(STATUS_NAME).prefix(STATUS_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(ORGANIZER_EMAIL_NAME).prefix(ORGANIZER_EMAIL_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(AUTHOR_EMAIL_NAME).prefix(AUTHOR_EMAIL_PREFIX).build());
-// END EXERCISE 4 STEP 7a
+    // END EXERCISE 4 STEP 7a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardPartitionKeyConstructor());
     // Gsi1EmployeePartitionKey is the same as Gsi1TimecardPartitionKey
-// BEGIN EXERCISE 4 STEP 7b
+    // BEGIN EXERCISE 4 STEP 7b
     constructors.add(MakeGsi1ProjectPartitionKeyConstructor());
     constructors.add(MakeGsi1ReservationPartitionKeyConstructor());
     constructors.add(MakeGsi1TicketPartitionKeyConstructor());
-// END EXERCISE 4 STEP 7b
+    // END EXERCISE 4 STEP 7b
 
     return CompoundBeacon.builder()
         .name(GSI1_PARTITION_KEY)
@@ -330,29 +265,29 @@ encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSI
     ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
     signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
     signedParts.add(SignedPart.builder().name(EMPLOYEE_NUMBER_NAME).prefix(EMPLOYEE_NUMBER_PREFIX).build());
-// BEGIN EXERCISE 4 STEP 8a
+    // BEGIN EXERCISE 4 STEP 8a
     signedParts.add(SignedPart.builder().name(MODIFIED_DATE_NAME).prefix(MODIFIED_DATE_PREFIX).build());
 
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
     encryptedParts.add(EncryptedPart.builder().name(FLOOR_NAME).prefix(FLOOR_PREFIX).build());
     encryptedParts.add(EncryptedPart.builder().name(ROOM_NAME).prefix(ROOM_PREFIX).build());
-// END EXERCISE 4 STEP 8a
+    // END EXERCISE 4 STEP 8a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
     constructors.add(MakeGsi1EmployeeSortKeyConstructor());
-// BEGIN EXERCISE 4 STEP 8b
+    // BEGIN EXERCISE 4 STEP 8b
     constructors.add(MakeGsi1MeetingSortKeyConstructor());
     // ReservationSortKeyConstructor is the same as MeetingSortKeyConstructor
     constructors.add(MakeGsi1TicketSortKeyConstructor());
-// END EXERCISE 4 STEP 8b
+    // END EXERCISE 4 STEP 8b
 
     return CompoundBeacon.builder()
         .name(GSI1_SORT_KEY)
         .split(SPLIT)
-// BEGIN EXERCISE 4 STEP 8c
+    // BEGIN EXERCISE 4 STEP 8c
         .signed(signedParts)
-// BEGIN EXERCISE 4 STEP 8c
+    // BEGIN EXERCISE 4 STEP 8c
         .encrypted(encryptedParts)
         .constructors(constructors)
         .build();
