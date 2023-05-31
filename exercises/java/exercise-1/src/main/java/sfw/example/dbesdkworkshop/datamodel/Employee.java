@@ -52,13 +52,13 @@ public class Employee extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// END EXERCISE 1 STEP 5
+// END EXERCISE 1 STEP 6
     item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
     item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));
     item.put(MANAGER_EMAIL_NAME, AttributeValue.fromS(managerEmail));

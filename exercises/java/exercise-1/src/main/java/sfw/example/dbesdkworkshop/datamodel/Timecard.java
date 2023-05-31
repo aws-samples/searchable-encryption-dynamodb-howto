@@ -34,10 +34,10 @@ public class Timecard extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6
 
     item.put(PROJECT_NAME_NAME, AttributeValue.fromS(projectName));
     item.put(START_TIME_NAME, AttributeValue.fromS(startTime));

@@ -26,10 +26,10 @@ public class Project extends BaseItem {
 
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6
 
     item.put(PROJECT_NAME_NAME, AttributeValue.fromS(projectName));
     item.put(STATUS_NAME, AttributeValue.fromS(status));
