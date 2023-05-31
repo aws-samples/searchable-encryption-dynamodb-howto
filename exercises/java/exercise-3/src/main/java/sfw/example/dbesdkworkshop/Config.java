@@ -13,7 +13,7 @@ public class Config {
   // CHECKSTYLE:OFF ParameterName
 
   public static class Constants {
-    public static final boolean USE_LOCAL_DDB = true;
+
     public static final String BEACON_PREFIX = "aws_dbe_b_";
     public static final String SPLIT = "^";
 
