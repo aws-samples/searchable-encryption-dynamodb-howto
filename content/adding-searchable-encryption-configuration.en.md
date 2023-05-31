@@ -22,7 +22,7 @@ This presents us with an interesting problem.
 If your table only ever sees your data in encrypted form,
 how can you ever effectively query on that encrypted data?
 
-To accomplish this, the AWS Database Encryption SDK for DynamoDb
+To accomplish this, the AWS Database Encryption SDK for DynamoDB
 includes the [searchable encryption](TODO) feature,
 which allows you to calculate and store
 [beacons](TODO) alongside your data.

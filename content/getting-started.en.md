@@ -16,13 +16,11 @@ and the [AWS Database Encryption SDK (DB-ESDK)](TODO) in application code.
 You will additionally learn how to leverage [searchable encryption](TODO) using [beacons](TODO)
 to enable you to continue to support the access patterns required by your use case.
 
-TODO What is does the Employee Portal Service do?
-
 By default, when you use DynamoDB your data is already protected with [server-side encryption](TODO).
 However, you may want to have further control over the encryption and decryption of your data
 by using [client-side encryption](TODO).
 
-But introducing client-side encryption to database systems introduces a host of complex problems.
+However, introducing client-side encryption to database systems introduces a host of complex problems.
 How should we encrypt sensitive data in our items in the first place?
 What should we do if we need to create an index over an attribute that contains sensitive data?
 
@@ -61,7 +59,14 @@ TODO: load data into DynamoDB
 At this point, you should have an environment set up with a DynamoDB table
 for the Employee Portal Service that you can interact with via a CLI.
 Right now, the Employee Portal Service does not use any client-side encryption.
-[TODO link to DDB table to see that data is not encrypted]
+
+If you go to [your DynamoDB table](TODO),
+you will see that your data is being served as plaintext.
+While DynamoDB encrypts table data at rest
+and your data is protected in transit via HTTPS,
+you may want to encrypt your data such that its
+plaintext is never available on DynamoDB servers.
+
 This plaintext version of the Employee Portal Service will be used as a reference
 as we build a version with client-side encryption in later steps.
 
@@ -103,6 +108,8 @@ Now try to see if you can index the data in a different way.
 Alternatively, explore the other data in our table.
 What are our current meetings, projects, reservations, tickets, or timecards?
 
+[TODO list out full set of available access patterns via get]
+
 ### Putting records into the table
 
 You are now familiar with how to use the CLI to retrieve various data from
@@ -122,7 +129,9 @@ To see what data we need to specify, do:
 ```
 
 Now try specifying the required data so a new meeting can be added to your table.
-For example, TODO
+For example, create a new meeting in your table:
+
+[TODO fill out command data]
 
 ```bash
 put-meeting --employee-number=<employeeNumber> --start=<startTime> --employee-email=<employeeEmail> --floor=<floor> --room=<room> --duration=<duration> --attendees=<attendees> --subject=<subject>
