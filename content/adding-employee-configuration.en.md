@@ -3,6 +3,10 @@ title : "Exercise 3"
 weight : 300
 ---
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-3 <&0
+ -->
+
 # Exercise 3: 
 
 ## Let's Go!
@@ -29,6 +33,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 1 -->
 ```java
     // BEGIN EXERCISE 3 STEP 1
     public static final String TABLE_NAME = "Exercise3_Table";
@@ -44,6 +49,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 2 -->
 ```java
     // BEGIN EXERCISE 3 STEP 2
     beacons.add(StandardBeacon.builder()
@@ -86,6 +92,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3 -->
 ```java
     // BEGIN EXERCISE 3 STEP 3
     signedParts.add(SignedPart.builder().name(EMPLOYEE_NUMBER_NAME).prefix(EMPLOYEE_NUMBER_PREFIX).build());
@@ -100,6 +107,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4 -->
 ```java
   // BEGIN EXERCISE 3 STEP 4
 
@@ -190,6 +198,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5 -->
 ```java
     // BEGIN EXERCISE 3 STEP 5
     constructors.add(MakeGsi1EmployeeSortKeyConstructor());
@@ -204,6 +213,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6 -->
 ```java
     // BEGIN EXERCISE 3 STEP 6
     beacons.add(MakeGsi2PartitionKey());
