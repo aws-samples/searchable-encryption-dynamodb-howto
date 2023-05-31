@@ -7,7 +7,24 @@ weight : 300
 ./utils/check-block.sh ./exercises/java/exercise-3 <&0
  -->
 
-# Exercise 3: 
+# Exercise 3: Adding The Employee Record access patterns
+
+In this section, you will will configure searchable encryption
+to configure the access patterns for the Employee data type.
+
+## Background
+
+In Exercise 2, you configured [searchable encryption](TODO)
+to enable you to perform some simple searches on Timecard records.
+
+In this exercise, you will add support for Employee records,
+which we will need to search in much more complex ways.
+
+As you configure each new beacon to support a new access pattern,
+consider what [truncation length is appropriate for that beacon](TODO)
+as well as whether [beacons are right for that access pattern in the first place](TODO).
+As you go through the workshop, note that various
+considerations on the tradeoffs being made between security and performance.
 
 ## Let's Go!
 
@@ -25,10 +42,14 @@ jump into the `adding-searchable-encryption-configuration` directory for the lan
 cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-start
 ```
 
+
+
 :::
 ::::
 
 ### Step 1:
+
+Let's begin by making a new name for our table.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -45,6 +66,10 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 
 
 ### Step 2:
+
+We will need several more Standard Beacons
+in order to search Employee Records.
+These Standard Beacons will be referenced by Compound Beacons in later steps.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -87,7 +112,22 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 :::
 ::::
 
+#### What Happened?
+
+Six more Standard Beacons are now available for use with Compound Beacons.
+
+Five of these reach inside of the "locations" map, and make a 
+searchable beacon from a single field of the map.
+
 ### Step 3:
+
+For Employee Records, the HASH Key for GSI1 will be employeeName.
+As Timecard also used employeeName for the HASH key, we need add nothing more here.
+
+For Employee Records, the RANGE Key for GSI1 will be employeeNumber.
+We will not be doing ranged searches on employeeNumber;
+instead, this is just to disambiguate Employee Records from Timecard Records
+that have the same HASH key but a different RANGE key.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -102,14 +142,21 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 :::
 ::::
 
-### Step 4:
+#### What Happened?
+
+employeeNumber is now available as a Part for the GSI1 HASH key compound beacon.
+
+### Step 4a:
+
+In this step we add routines to build the Constructors for the index keys
+for all the indexes for Employee Records.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 4 -->
+<!-- !test check java step 4a -->
 ```java
-  // BEGIN EXERCISE 3 STEP 4
+  // BEGIN EXERCISE 3 STEP 4a
 
   public static Constructor MakeGsi1EmployeeSortKeyConstructor() {
     ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
@@ -137,6 +184,22 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
     parts.add(ConstructorPart.builder().name(DESK_NAME).required(true).build());
     return Constructor.builder().parts(parts).build();
   }
+  // END EXERCISE 3 STEP 4a
+```
+
+#### What Happened?
+
+We now have Compound Beacon Constructors for the partition keys of all three GSIs,
+plus the sort key for GSI3.
+
+### Step 4a:
+
+In this step we write the routines to create the Compound Beacons
+for the keys for GSI2 and GSI3.
+
+<!-- !test check java step 4b -->
+```java
+  // BEGIN EXERCISE 3 STEP 4b
 
   public static CompoundBeacon MakeGsi2PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
@@ -187,13 +250,23 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
         .build();
   }
 
-  // END EXERCISE 3 STEP 4
+  // END EXERCISE 3 STEP 4b
 ```
 
 :::
 ::::
 
+#### What Happened?
+
+We can now build the Compound Beacons for the partition keys of GSI2 and GSI3,
+plus the RANGE key for GSI3.
+
 ### Step 5:
+
+For GSI1's RANGE key, we need to add the new Constructor.
+
+Recall that for Employee Records, the HASH key for GSI1 is the same as for Timecard Records,
+so nothing needs to be added for that.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -208,7 +281,14 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 :::
 ::::
 
+#### What Happened?
+
+GSI1's RANGE Key is now ready to go.
+
+
 ### Step 6:
+
+All that's left is to add our new Compound Beacons to the list.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -225,12 +305,70 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 :::
 ::::
 
+#### What Happened?
+
+We have completed all of the new configuration for Employee Records.
+
+Beyond this, nothing needs to change in the code that reads, writes or queries.
 
 
 ## Try it Out
 
+Now that you have written the code,
+let's try it out and see what it does.
 
+First, let's create the table that will back the Employee Portal Service.
+We have made this easy for you by providing a target within the CLI.
 
+```bash
+./employee-portal create-table
+```
 
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+
+Next, load up some test data into your portal!
+We have provided a script that puts some sample data into your table.
+
+```bash
+./load-data
+```
+
+Similar to how we got and put records into the plaintext Employee Portal Service,
+you can use the CLI to retrieve and put records into our Employee Portal Service
+with client-side encryption.
+
+### Retrieve items from your encrypted table
+
+To start, let's retrieve all of our employees again:
+
+```bash
+./employee-portal get-employees
+```
+
+This shows all of the employee records.
+
+To test GSI1, try
+
+```bash
+./employee-portal get-employees --employee-number=XXX
+```
+
+To test GSI2, try
+
+```bash
+./employee-portal get-employees --manager-email=XXX
+```
+
+To test GSI3, try
+
+```bash
+./employee-portal get-employees --city=XXX
+```
 
 # Next exercise
+
+Now that you have added support for Timecards (simple) and Employees (complex)
+we need to repeat the process for the four remaining record types.
+
+Move onto the next exercise:
+[Adding a searchable encryption configuration](./adding-the-remaining-access-patterns.en.md).

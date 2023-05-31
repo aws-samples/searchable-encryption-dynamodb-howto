@@ -108,9 +108,13 @@ public class AwsSupport {
     return Constructor.builder().parts(parts).build();
   }
 
-  // BEGIN EXERCISE 3 STEP 4
+  // BEGIN EXERCISE 3 STEP 4a
 
-  // END EXERCISE 3 STEP 4
+  // END EXERCISE 3 STEP 4a
+
+  // BEGIN EXERCISE 3 STEP 4b
+
+  // END EXERCISE 3 STEP 4b
 
   public static CompoundBeacon MakeGsi1PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
