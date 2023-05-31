@@ -3,6 +3,10 @@ title : "Exercise 2"
 weight : 200
 ---
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-2 <&0
+ -->
+
 # Exercise 2: Adding Searchable Encryption Configuration
 
 In this section, you will configure the AWS Database Encryption SDK to use searchable encryption.
@@ -18,7 +22,7 @@ This presents us with an interesting problem.
 If your table only ever sees your data in encrypted form,
 how can you ever effectively query on that encrypted data?
 
-To accomplish this, the AWS Database Encryption SDK for DynamoDb
+To accomplish this, the AWS Database Encryption SDK for DynamoDB
 includes the [searchable encryption](TODO) feature,
 which allows you to calculate and store
 [beacons](TODO) alongside your data.
@@ -75,6 +79,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 1 -->
 ```java
     // BEGIN EXERCISE 2 STEP 1
     public static final String TABLE_NAME = "Exercise2_Table";
@@ -90,6 +95,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 2 -->
 ```java
   // BEGIN EXERCISE 2 STEP 2
   public static ArrayList<StandardBeacon> MakeStandardBeacons() {
@@ -181,6 +187,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3 -->
 ```java
         // BEGIN EXERCISE 2 STEP 3
         .search(MakeSearchConfig(ddbLocal))
@@ -195,6 +202,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4 -->
 ```java
       // BEGIN EXERCISE 2 STEP 4
       .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
@@ -209,6 +217,7 @@ cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configurat
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5 -->
 ```java
       // BEGIN EXERCISE 2 STEP 5
       .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)

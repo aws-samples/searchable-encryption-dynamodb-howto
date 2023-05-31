@@ -3,6 +3,10 @@ title : "Exercise 4"
 weight : 400
 ---
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-4 <&0
+ -->
+
 # Exercise 4: Adding The Remaining Access Patterns
 
 In this section, you will will configure searchable encryption
@@ -48,6 +52,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 1 -->
 ```java
     // BEGIN EXERCISE 4 STEP 1
     public static final String TABLE_NAME = "Exercise4_Table";
@@ -63,6 +68,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 2 -->
 ```java
     // BEGIN EXERCISE 4 STEP 2
     beacons.add(StandardBeacon.builder()
@@ -96,6 +102,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3 -->
 ```java
   // BEGIN EXERCISE 4 STEP 3
   public static Constructor MakeGsi1MeetingSortKeyConstructor() {
@@ -151,12 +158,14 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4a -->
 ```java
     // BEGIN EXERCISE 4 STEP 4a
     encryptedParts.add(EncryptedPart.builder().name(ASSIGNEE_EMAIL_NAME).prefix(ASSIGNEE_EMAIL_PREFIX).build());
     // END EXERCISE 4 STEP 4a
 ```
 
+<!-- !test check java step 4b -->
 ```java
     // BEGIN EXERCISE 4 STEP 4b
     constructors.add(MakeGsi2TicketPartitionKeyConstructor());
@@ -171,6 +180,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5a -->
 ```java
     // BEGIN EXERCISE 4 STEP 5a
     encryptedParts.add(EncryptedPart.builder().name(BUILDING_NAME).prefix(BUILDING_PREFIX).build());
@@ -178,6 +188,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 5a
 ```
 
+<!-- !test check java step 5b -->
 ```java
     // BEGIN EXERCISE 4 STEP 5b
     constructors.add(MakeGsi3ReservationPartitionKeyConstructor());
@@ -193,6 +204,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6a -->
 ```java
     // BEGIN EXERCISE 4 STEP 6a
     ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
@@ -201,6 +213,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 6a
 ```
 
+<!-- !test check java step 6b -->
 ```java
     // BEGIN EXERCISE 4 STEP 6b
     constructors.add(MakeGsi1TicketSortKeyConstructor()); // GSI3 same as GSI1
@@ -208,6 +221,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 6b
 ```
 
+<!-- !test check java step 6c -->
 ```java
     // BEGIN EXERCISE 4 STEP 6c
         .signed(signedParts)
@@ -222,6 +236,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 7a -->
 ```java
     // BEGIN EXERCISE 4 STEP 7a
     encryptedParts.add(EncryptedPart.builder().name(STATUS_NAME).prefix(STATUS_PREFIX).build());
@@ -230,6 +245,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 7a
 ```
 
+<!-- !test check java step 7b -->
 ```java
     // BEGIN EXERCISE 4 STEP 7b
     constructors.add(MakeGsi1ProjectPartitionKeyConstructor());
@@ -246,6 +262,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 8a -->
 ```java
     // BEGIN EXERCISE 4 STEP 8a
     signedParts.add(SignedPart.builder().name(MODIFIED_DATE_NAME).prefix(MODIFIED_DATE_PREFIX).build());
@@ -256,6 +273,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 8a
 ```
 
+<!-- !test check java step 8b -->
 ```java
     // BEGIN EXERCISE 4 STEP 8b
     constructors.add(MakeGsi1MeetingSortKeyConstructor());
@@ -264,6 +282,7 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
     // END EXERCISE 4 STEP 8b
 ```
 
+<!-- !test check java step 8c -->
 ```java
     // BEGIN EXERCISE 4 STEP 8c
         .signed(signedParts)
@@ -272,23 +291,6 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 
 :::
 ::::
-
-### Step 1:
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-
-```
-
-:::
-::::
-
-
-
-
-
 
 
 

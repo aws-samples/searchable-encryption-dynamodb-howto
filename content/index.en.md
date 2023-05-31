@@ -7,26 +7,32 @@ weight : 1
 
 Welcome to the Busy Engineer's database encryption workshop.
 In this workshop, you will be guided through adding client-side encryption
-with AWS Key Management Service and the AWS Database Encryption SDK.
+to your usage of Amazon DynamoDB
+using the AWS Database Encryption SDK
+and AWS Key Management Service.
 Each exercise has step-by-step instructions.
 Each exercise also has a `-complete` version available to use as a reference.
 
 ## Background: The Employee Portal Service
 
-This workshop is centered around an example Employee Portal Service,
-which [TODO explain what the Employee Portal Service does].
+This workshop is centered around an example Employee Portal Service.
+This example service needs to keep track of employee data
+and relate that employee data to various projects, meetings, timecards,
+and buildings.
 
-This example originates from [DynamoDb Deep Dive: Advanced Design Patterns](https://youtu.be/xfxBhvGpoa0?t=2293).
+This example originates from [DynamoDB Deep Dive: Advanced Design Patterns](https://youtu.be/xfxBhvGpoa0?t=2293).
 While not required to continue with this workshop,
-we recommend that you watch this talk.
-It highlights the powerful ways you can use DynamoDb
+this talk highlights the powerful ways you can use DynamoDB
 to support a wide array of complex access patterns on a single table.
 We will be using some of these advanced patterns, such as the
 [Adjacency list design pattern](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-adjacency-graphs.html#bp-adjacency-lists),
 in this workshop.
-Refer to the [AWS docs for Amazon DynamoDb if you want to learn more](TODO).
+Refer to the [AWS docs for Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+if you want to learn more.
 
 Here is the entity relationship diagram for the Employee Portal Service.
+
+[TODO render the diagram not the model]
 
 ```plantuml alt="Data Model" title="Data Model"
 @startuml
@@ -54,6 +60,7 @@ this system uses DynamoDB to store records for searching.
 All record are stored in a single DynamoDB table
 with global secondary indexes.
 
+[TODO render the diagram not the model]
 
 ```plantuml alt="Beginning architecture overview" title="Beginning architecture overview"
 @startuml
@@ -94,15 +101,28 @@ DDBItem -> DDBGroup
 @enduml
 ```
 
-After your work in the workshop is complete,
-you will have have created another DynamoDB table
-that contains records client-side encrypted
-with the AWS Database Encryption SDK.
-This new table will support all the access patterns
-from the plaintext version.
-You will be able to execute DynamoDB queries
-on this client-side encrypted as well as a plaintext version.
-You can explore how to build and query data in DynamoDB.
+There are a variety of access patterns that this Employee Portal Service
+will support.
+For example, you may want to get all the meetings booked by a particular employee.
+Or you may want to get all of the tickets created within a certain time range.
+[TODO list out the access patterns]
+
+For this workshop, you will be interacting with this Employee Portal Service
+with a CLI that can retrieve this data via these access patterns.
+
+At the start of this workshop, this Employee Portal Service,
+supporting a wide variety of different access patterns,
+is already built for you.
+
+During the workshop, you will add client-side encryption
+to this Employee Portal Service,
+such that data is encrypted before it is sent to DynamoDB,
+and decrypted locally once it is retrieved from DynamoDB. 
+With client-side encryption, you will configure searchable
+encryption so that you can maintain the original access patterns
+supported by the Employee Portal Service.
+
+[TODO render the diagram not the model]
 
 ```plantuml alt="Final architecture overview" title="Final architecture overview"
 @startuml
@@ -159,9 +179,11 @@ DataKey --> EmployeePortalService
 ## Exercises
 
 In this workshop, you will work through the following exercises:
+[TODO make sure this is correct]
 
 1. Adding the AWS Database Encryption SDK
 1. Adding searchable encryption configuration
+1. Adding support for another access pattern
 1. Adding the remaining access patterns
 
 ## Getting Started
