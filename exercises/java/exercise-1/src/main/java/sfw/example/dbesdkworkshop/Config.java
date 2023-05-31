@@ -27,9 +27,6 @@ public class Config {
     public static final String BRANCH_KEY_ID = "4e0315fc-ef45-4bd1-b8bc-49437c0a1e01";
     // END EXERCISE 1 STEP 3
 
-    // END EXERCISE 1 STEP N
-    // END EXERCISE 1 STEP N
-
     public static final String GSI1_NAME = "GSI1";
     public static final String GSI2_NAME = "GSI2";
     public static final String GSI3_NAME = "GSI3";
