@@ -288,7 +288,7 @@ GSI1's RANGE Key is now ready to go.
 
 ### Step 6:
 
-All that's left is to add our new Compound Beacons to the list.
+Now we add our new Compound Beacons to the list.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -307,9 +307,61 @@ All that's left is to add our new Compound Beacons to the list.
 
 #### What Happened?
 
-We have completed all of the new configuration for Employee Records.
+We have completed all of the beacon configuration for Employee Records.
 
-Beyond this, nothing needs to change in the code that reads, writes or queries.
+### Step 7:
+
+When an index key is a compound beacon with encrypted parts,
+you have to specify "aws_dbe_b_foo" where you might expect to put "foo".
+
+This is because it is legal to have both a regular attribute "foo" and a beacon named "foo",
+and so the beacon is stored under the name "aws_dbe_b_foo".
+
+Thus when we create the table, and therefore the GSIs, we must specify this new name.
+
+<!-- !test check java step 7a -->
+```java
+    // BEGIN EXERCISE 3 STEP 7a
+      .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
+    // END EXERCISE 3 STEP 7a
+```
+
+<!-- !test check java step 7b -->
+```java
+    // BEGIN EXERCISE 3 STEP 7b
+    .attributeName(BEACON_PREFIX + GSI3_PARTITION_KEY)
+    // END EXERCISE 3 STEP 7b
+```
+
+<!-- !test check java step 7c -->
+```java
+    // BEGIN EXERCISE 3 STEP 7c
+    .attributeName(BEACON_PREFIX + GSI3_SORT_KEY)
+    // END EXERCISE 3 STEP 7c
+```
+
+<!-- !test check java step 7d -->
+```java
+    // BEGIN EXERCISE 3 STEP 7d
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(BEACON_PREFIX + GSI3_PARTITION_KEY)
+      .attributeType(ScalarAttributeType.S).build());
+    attrs.add(AttributeDefinition.builder()
+      .attributeName(BEACON_PREFIX + GSI3_SORT_KEY)
+      .attributeType(ScalarAttributeType.S).build());
+    // END EXERCISE 3 STEP 7d
+```
+
+#### What Happened?
+
+The GSIs now all point to the appropriate beacon.
+
+We are now finished with the configuration changes for the Employee Records.
+
+Nothing needs to change in the code that reads, writes or queries.
 
 
 ## Try it Out
