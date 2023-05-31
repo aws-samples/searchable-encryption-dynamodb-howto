@@ -21,8 +21,11 @@ public class Config {
     public static final String TABLE_NAME = "Exercise1_Table";
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
     public static final String BRANCH_KEY_KMS_ARN = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126";
-    public static final String BRANCH_KEY_ID = "4e0315fc-ef45-4bd1-b8bc-49437c0a1e01";
     // END EXERCISE 1 STEP 2
+
+    // END EXERCISE 1 STEP 3
+    public static final String BRANCH_KEY_ID = "4e0315fc-ef45-4bd1-b8bc-49437c0a1e01";
+    // END EXERCISE 1 STEP 3
 
     public static final String GSI1_NAME = "GSI1";
     public static final String GSI2_NAME = "GSI2";

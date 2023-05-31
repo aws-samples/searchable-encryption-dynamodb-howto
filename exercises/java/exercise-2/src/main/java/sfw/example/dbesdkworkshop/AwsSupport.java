@@ -164,19 +164,25 @@ public class AwsSupport {
   }
 // END EXERCISE 2 STEP 2
 
-  public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal) {
+ public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
+  {
     final MaterialProviders matProv = MaterialProviders.builder()
-        .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
-        .build();
+      .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
+      .build();
 
     final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
-        .branchKeyId(BRANCH_KEY_ID)
-        .keyStore(MakeKeyStore(ddbLocal))
-        .ttlSeconds(6000l)
-        .maxCacheSize(100)
-        .build();
+      .branchKeyId(BRANCH_KEY_ID)
+      .keyStore(MakeKeyStore(ddbLocal))
+      .ttlSeconds(6000l)
+      .maxCacheSize(100)
+      .build();
+  
+    return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
+  }
 
-    final IKeyring kmsKeyring = matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
+  public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
+  {
+    final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
 
     HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
     actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
