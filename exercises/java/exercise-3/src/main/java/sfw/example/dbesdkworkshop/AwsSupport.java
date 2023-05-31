@@ -90,35 +90,7 @@ public class AwsSupport {
         .length(8)
         .build());
     // BEGIN EXERCISE 3 STEP 2
-    beacons.add(StandardBeacon.builder()
-        .name(MANAGER_EMAIL_NAME)
-        .length(8)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(BUILDING_NAME)
-        .length(8)
-        .loc(LOCATION_NAME + "." + BUILDING_NAME)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(CITY_NAME)
-        .length(8)
-        .loc(LOCATION_NAME + "." + CITY_NAME)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(FLOOR_NAME)
-        .length(8)
-        .loc(LOCATION_NAME + "." + FLOOR_NAME)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(ROOM_NAME)
-        .length(8)
-        .loc(LOCATION_NAME + "." + ROOM_NAME)
-        .build());
-    beacons.add(StandardBeacon.builder()
-        .name(DESK_NAME)
-        .length(8)
-        .loc(LOCATION_NAME + "." + DESK_NAME)
-        .build());
+
     // END EXERCISE 3 STEP 2
 
     return beacons;
@@ -137,82 +109,6 @@ public class AwsSupport {
   }
 
   // BEGIN EXERCISE 3 STEP 4
-
-  public static Constructor MakeGsi1EmployeeSortKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(EMPLOYEE_NUMBER_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static Constructor MakeGsi2EmployeePartitionKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(MANAGER_EMAIL_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static Constructor MakeGsi3EmployeePartitionKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(CITY_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static Constructor MakeGsi3EmployeeSortKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(BUILDING_NAME).required(true).build());
-    parts.add(ConstructorPart.builder().name(FLOOR_NAME).required(true).build());
-    parts.add(ConstructorPart.builder().name(ROOM_NAME).required(true).build());
-    parts.add(ConstructorPart.builder().name(DESK_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static CompoundBeacon MakeGsi2PartitionKey() {
-    ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
-    encryptedParts.add(EncryptedPart.builder().name(MANAGER_EMAIL_NAME).prefix(MANAGER_EMAIL_PREFIX).build());
-
-    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi2EmployeePartitionKeyConstructor());
-
-    return CompoundBeacon.builder()
-        .name(GSI2_PARTITION_KEY)
-        .split(SPLIT)
-        .encrypted(encryptedParts)
-        .constructors(constructors)
-        .build();
-  }
-
-  public static CompoundBeacon MakeGsi3PartitionKey() {
-    ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
-    encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
-    encryptedParts.add(EncryptedPart.builder().name(CITY_NAME).prefix(CITY_PREFIX).build());
-
-    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi3EmployeePartitionKeyConstructor());
-
-    return CompoundBeacon.builder()
-        .name(GSI3_PARTITION_KEY)
-        .split(SPLIT)
-        .encrypted(encryptedParts)
-        .constructors(constructors)
-        .build();
-  }
-
-  public static CompoundBeacon MakeGsi3SortKey() {
-    ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
-    encryptedParts.add(EncryptedPart.builder().name(BUILDING_NAME).prefix(BUILDING_PREFIX).build());
-    encryptedParts.add(EncryptedPart.builder().name(FLOOR_NAME).prefix(FLOOR_PREFIX).build());
-    encryptedParts.add(EncryptedPart.builder().name(ROOM_NAME).prefix(ROOM_PREFIX).build());
-    encryptedParts.add(EncryptedPart.builder().name(DESK_NAME).prefix(DESK_PREFIX).build());
-
-    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi3EmployeeSortKeyConstructor());
-
-    return CompoundBeacon.builder()
-        .name(GSI3_SORT_KEY)
-        .split(SPLIT)
-        .encrypted(encryptedParts)
-        .constructors(constructors)
-        .build();
-  }
 
   // END EXERCISE 3 STEP 4
 
@@ -236,13 +132,13 @@ public class AwsSupport {
     ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
     signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
     // BEGIN EXERCISE 3 STEP 3
-    signedParts.add(SignedPart.builder().name(EMPLOYEE_NUMBER_NAME).prefix(EMPLOYEE_NUMBER_PREFIX).build());
+
     // END EXERCISE 3 STEP 3
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
     // BEGIN EXERCISE 3 STEP 5
-    constructors.add(MakeGsi1EmployeeSortKeyConstructor());
+
     // END EXERCISE 3 STEP 5
 
     return CompoundBeacon.builder()
@@ -257,11 +153,9 @@ public class AwsSupport {
     ArrayList<CompoundBeacon> beacons = new ArrayList<CompoundBeacon>();
     beacons.add(MakeGsi1PartitionKey());
     beacons.add(MakeGsi1SortKey());
-// BEGIN EXERCISE 3 STEP 6
-    beacons.add(MakeGsi2PartitionKey());
-    beacons.add(MakeGsi3PartitionKey());
-    beacons.add(MakeGsi3SortKey());
-// END EXERCISE 3 STEP 6
+    // BEGIN EXERCISE 3 STEP 6
+
+    // END EXERCISE 3 STEP 6
     return beacons;
   }
 

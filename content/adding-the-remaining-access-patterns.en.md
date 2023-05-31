@@ -1,9 +1,9 @@
 ---
-title : "Exercise 3"
-weight : 300
+title : "Exercise 4"
+weight : 400
 ---
 
-# Exercise 3: Adding The Remaining Access Patterns
+# Exercise 4: Adding The Remaining Access Patterns
 
 In this section, you will will configure searchable encryption
 to configure the remaining access patterns.
