@@ -83,86 +83,9 @@ public class AwsSupport {
         .build();
   }
 
-// BEGIN EXERCISE 2 STEP 2
-  public static ArrayList<StandardBeacon> MakeStandardBeacons() {
-    ArrayList<StandardBeacon> beacons = new ArrayList<StandardBeacon>();
-    beacons.add(StandardBeacon.builder()
-        .name(EMPLOYEE_EMAIL_NAME)
-        .length(8)
-        .build());
+  // BEGIN EXERCISE 2 STEP 2
 
-    return beacons;
-  }
-
-  public static Constructor MakeGsi1TimecardPartitionKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(EMPLOYEE_EMAIL_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static Constructor MakeGsi1TimecardSortKeyConstructor() {
-    ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(START_TIME_NAME).required(true).build());
-    return Constructor.builder().parts(parts).build();
-  }
-
-  public static CompoundBeacon MakeGsi1PartitionKey() {
-    ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
-    encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
-
-    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi1TimecardPartitionKeyConstructor());
-
-    return CompoundBeacon.builder()
-        .name(GSI1_PARTITION_KEY)
-        .split(SPLIT)
-        .encrypted(encryptedParts)
-        .constructors(constructors)
-        .build();
-  }
-
-  public static CompoundBeacon MakeGsi1SortKey() {
-    ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
-    signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
-
-    ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi1TimecardSortKeyConstructor());
-
-    return CompoundBeacon.builder()
-        .name(GSI1_SORT_KEY)
-        .split(SPLIT)
-        .signed(signedParts)
-        .constructors(constructors)
-        .build();
-  }
-
-  public static ArrayList<CompoundBeacon> MakeCompoundBeacons() {
-    ArrayList<CompoundBeacon> beacons = new ArrayList<CompoundBeacon>();
-    beacons.add(MakeGsi1PartitionKey());
-    beacons.add(MakeGsi1SortKey());
-    return beacons;
-  }
-
-  public static BeaconVersion MakeBeaconVersion(boolean ddbLocal) {
-    return BeaconVersion.builder()
-        .version(1)
-        .keyStore(MakeKeyStore(ddbLocal))
-        .keySource(MakeKeySource())
-        .standardBeacons(MakeStandardBeacons())
-        .compoundBeacons(MakeCompoundBeacons())
-        .build();
-  }
-
-  public static SearchConfig MakeSearchConfig(boolean ddbLocal) {
-    ArrayList<BeaconVersion> versions = new ArrayList<BeaconVersion>();
-    versions.add(MakeBeaconVersion(ddbLocal));
-
-    return SearchConfig.builder()
-        .versions(versions)
-        .writeVersion(1)
-        .build();
-  }
-// END EXERCISE 2 STEP 2
+  // END EXERCISE 2 STEP 2
 
  public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
@@ -222,9 +145,8 @@ public class AwsSupport {
         .sortKeyName(SORT_KEY)
         .attributeActionsOnEncrypt(actions)
         .keyring(kmsKeyring)
-// BEGIN EXERCISE 2 STEP 3
-        .search(MakeSearchConfig(ddbLocal))
-// END EXERCISE 2 STEP 3
+        // BEGIN EXERCISE 2 STEP 3
+        // END EXERCISE 2 STEP 3
         .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();
