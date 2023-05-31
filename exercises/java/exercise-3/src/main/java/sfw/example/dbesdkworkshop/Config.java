@@ -18,7 +18,7 @@ public class Config {
     public static final String SPLIT = "^";
 
     // BEGIN EXERCISE 3 STEP 1
-
+    public static final String TABLE_NAME = "Exercise3_Table";
     // END EXERCISE 3 STEP 1
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
     public static final String BRANCH_KEY_KMS_ARN = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126";

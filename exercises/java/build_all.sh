@@ -14,3 +14,6 @@ gradle fatJar
 
 cd ../exercise-4
 gradle fatJar
+
+cd ../complete
+gradle fatJar

@@ -244,16 +244,14 @@ public class Api {
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":email", AttributeValue.builder().s(EMPLOYEE_EMAIL_PREFIX + email).build());
-    AddValue(attrValues, ":startDate", startDate, START_TIME_PREFIX);
-    AddValue(attrValues, ":endDate", endDate, START_TIME_PREFIX);
-    String filterExpr = GetFilterForRange(startDate, endDate, ":startDate", ":endDate", SORT_KEY);
+    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
     
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
       .indexName(GSI1_NAME)
       .keyConditionExpression(GSI1_PARTITION_KEY + " = :email")
       .expressionAttributeValues(attrValues);
-    if (filterExpr != null) builder = builder.filterExpression(filterExpr);
     return MeetingFromResp(ddbClient.query(builder.build()));
   }
 
