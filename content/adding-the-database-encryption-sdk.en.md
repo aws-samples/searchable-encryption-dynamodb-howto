@@ -57,8 +57,8 @@ cd ~/environment/workshop/exercises/java/add-db-esdk-start
 ::::
 
 This workshop will break down each change you have to make into several steps.
-For each step, the workshop will tell you which file to look at.
-Within that file, look for a comment that begins with: `BEGIN EXERCISE 1 STEP N`,
+For each step, the workshop will tell you which files to look at.
+Within those files, look for comments that begins with: `BEGIN EXERCISE 1 STEP N`,
 where `N` is the number step you are are.
 This is where you will want to add new code.
 
@@ -79,7 +79,7 @@ Add the dependencies for:
 - AWS Key Management Service
 - AWS Database Encryption SDK
 - AWS Cryptographic Materials Library
-[TODO the MPL artifact id still needs to be updated]
+[TODO the MPL artifact id, and MPL/Gazelle versions still needs to be updated]
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -101,14 +101,19 @@ Add the dependencies for:
 #### What Happened?
 
 The Gradle build is now configured with the dependencies needed for client-side encryption.
-You configured the AWS SDK client for KMS, which is what will be used to protect your encrypted items,
+You added the AWS SDK client for KMS, which is what will be used to protect your encrypted items,
 and the AWS Database Encryption SDK, which contains the code necessary to perform the encryption of your items.
-You also configured the AWS Cryptographic Materials Library, which contains the Keyring interface necessary
+You also added the AWS Cryptographic Materials Library, which contains the Keyring interface necessary
 to configure the AWS Database Encryption SDK with AWS KMS.
 
 You will see how we use each of these libraries in later steps.
 
-### Step 2: Configure your Table Name and Key Ids.
+### Step 2: Configure your KeyStore
+
+To encrypt your items, you will be using a `Hierarchical Keyring` to wrap your data keys.
+[TODO explain why and how it works]
+Before you can configure your Hierarchical Keyring,
+you need to create and populate the KeyStore that will back the Hierarchical Keyring.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -118,12 +123,12 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
 :::
 ::::
 
-This file contains constants used by our application, which are specific to this exercise.
+This file contains constants used by the Employee Portal Service.
 Update this file to specify the following:
-- The table name for Exercise 1.
-- The table name for the KeyStore we will create. [TODO should we be created this at all yet?]
-- The KMS Key ARN that was created int [Getting Started](TODO)
-- The branch key ID that [TODO at this point the key has not been created yet. Where are the steps to create the Keystore?]
+- The table name for this exercise.
+  The application built in each exercise will use a different DynamoDB table in order to better demonstrate differences between each exercise.
+- The table name for the KeyStore you will create.
+- The KMS Key ARN that was created int [Getting Started](TODO).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -135,53 +140,36 @@ public static class Constants {
     // BEGIN EXERCISE 1 STEP 2
     public static final String TABLE_NAME = "Exercise1_Table";
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
-    public static final String BRANCH_KEY_KMS_ARN = "<kms-key-id>";
-    public static final String BRANCH_KEY_ID = "<branch-key-id>";
+    public static final String BRANCH_KEY_KMS_ARN = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126";
     // END EXERCISE 1 STEP 2
 ```
 
 :::
 ::::
 
-#### What Happened?
+The CLI supports a command that will create a KeyStore and
+create a branch key in that KeyStore,
+via a `CreateBranchKey` method.
 
-You have configured what tables and keys will be used for this exercise.
-
-The `TABLE_NAME` is the name of the DynamoDB table specific to this exercise.
-The next exercise will configure a different table so that it is easier
-to see changes as we move through the exercises.
-
-The `BRANCH_KEY_TABLE` is the name for the KeyStore,
-which is a new DynamoDB table that will be created in future step.
-
-The `BRANCH_KEY_KMS_ARN` identifies the KMS Key that is responsible for protecting
-the key material in the KeyStore.
-This value is set to the KMS Key that was created for you in [Getting Started](TODO).
-
-[TODO branch key. Where does this fit in.]
-
-### Step 3: Import what's needed for client-side encryption configuration
+Next, you will implement this method.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 
 :::
 ::::
 
-This file is currently responsible for creating the DynamoDB Client that the
-Employee Portal Services uses to interact with DynamoDB.
-
-This client needs to be updated to use client-side encryption.
-
-First, let's import everything that is necessary for this configuration.
+First, update the file to import all the necessary classes for this exercise:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
 ```java
-// BEGIN EXERCISE 1 STEP 3
+import static sfw.example.dbesdkworkshop.Config.Constants.*;
+
+// BEGIN EXERCISE 1 STEP 2
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.services.kms.KmsClient;
 import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
@@ -196,10 +184,139 @@ import software.amazon.cryptography.materialproviders.IKeyring;
 import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
-// END EXERCISE 1 STEP 3
+// END EXERCISE 1 STEP 2
 
-/** Helper to pull required Document Bucket configuration keys out of the configuration system. */
 public class AwsSupport {
+```
+
+:::
+::::
+
+Now, to implement `CreateBranchKey`:
+1. Configure and instantiate a KeyStore.
+1. Call the `CreateKeyStore` method on the KeyStore to create the DynamoDB table.
+1. Call the `CreateKey` method on the KeyStore to create a new branch key in that KeyStore.
+1. Return the Branch Key Id returned by the `CreateKey` call.
+
+[TODO customers shouldn't have to reason about ddbLocal...]
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+```java
+  // BEGIN EXERCISE 1 STEP 2
+  public static KeyStore MakeKeyStore(boolean ddbLocal)
+  {
+    return KeyStore.builder().KeyStoreConfig(
+      KeyStoreConfig.builder()
+        .ddbClient(GetClientBuilder(ddbLocal).build())
+        .ddbTableName(BRANCH_KEY_TABLE)
+        .logicalKeyStoreName(BRANCH_KEY_TABLE)
+        .kmsClient(KmsClient.create())
+        .kmsConfiguration(KMSConfiguration.builder()
+          .kmsKeyArn(BRANCH_KEY_KMS_ARN)
+          .build())
+        .build()).build();
+  }
+  
+  public static String CreateBranchKey(boolean ddbLocal) {
+    final KeyStore keystore = MakeKeyStore(ddbLocal);    
+    keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
+    return keystore.CreateKey().branchKeyIdentifier();
+  }
+  // END EXERCISE 1 STEP 2
+```
+
+:::
+::::
+
+Now we can build our application and use the CLI to create our KeyStore and create a branch key.
+Input the following into the terminal:
+
+```bash
+./employee-portal create-branch-key
+```
+
+This command outputs the branch key ID of the branch key just created.
+Keep note of this ID, as we will need to add it to our configuration in the next step.
+
+#### What Happened?
+
+You have configured the KeyStore that will be used with your Hierarchical Keyring,
+and populated the KeyStore with the branch key that will be used to protect your data.
+
+The KeyStore class contains the helper method `CreateKeyStore` which will create
+a DynamoDB table according to your KeyStore configuration.
+The operation is idempotent.
+If a DynamoDB table at the configured name already exists,
+it will verify that the DynamoDB table is configured as expected.
+
+The KeyStore class also contains a method responsible for creating
+new branch keys in the KeyStore.
+A globally unique id is created for each branch key.
+In the next step you will configure your Hierarchical Keyring
+to use this branch key by this branch key id.
+
+### Step 3: Configure the Hierarchical Keyring
+
+Now that we have a KeyStore with a branch key,
+we can configure the Hierarchical Keyring.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+
+:::
+::::
+
+Update the Config file with the branch key id you received in [Step 2](#step-2-configure-your-keystore).
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+```java
+    // END EXERCISE 1 STEP 3
+    public static final String BRANCH_KEY_ID = "4e0315fc-ef45-4bd1-b8bc-49437c0a1e01";
+    // END EXERCISE 1 STEP 3
+```
+
+:::
+::::
+
+Next, add a method which configures a Hierarchical Keyring,
+using the same KeyStore configuration that is used by the CLI,
+and using the branch key ID returned by the CLI in [Step 2](#step-2-configure-your-keystore).
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+
+:::
+::::
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+```java
+  // BEGIN EXERCISE 1 STEP 3
+  public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
+  {
+    final MaterialProviders matProv = MaterialProviders.builder()
+      .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
+      .build();
+
+    final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
+      .branchKeyId(BRANCH_KEY_ID)
+      .keyStore(MakeKeyStore(ddbLocal))
+      .ttlSeconds(6000l)
+      .maxCacheSize(100)
+      .build();
+  
+    return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
+  }
+  // END EXERCISE 1 STEP 3
 ```
 
 :::
@@ -207,14 +324,33 @@ public class AwsSupport {
 
 #### What Happened?
 
-You have just imported all of the classes that we will need to configure client-side encryption.
+You have created a method that configures a Hierarchical Keyring.
 
-### Step 4: Update the configuration for the DynamoDB Client
+This Hierarchical Keyring will use the KeyStore and branch key
+you created in [Step 2](#step-2-configure-your-keystore)
+to encrypt the data keys responsible for protecting your data.
 
-In this same file, note that there exists a method responsible for creating the
-DynamoDB Client.
+In the next step, you will use this Keyring to configure client-side
+encryption for your client.
 
-In that method, update the configuration to add a new [Interceptor](TODO)
+### Step 4: Configure the DynamoDB Client with client-side encryption
+
+Now that you have a Hierarchical Keyring,
+the next step is to configure the DynamoDb Encryption Interceptor
+and build the AWSK SDK client for DynamoDB with this interceptor.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+
+:::
+::::
+
+This file is responsible for creating the DynamoDB Client that the
+Employee Portal Services uses to interact with DynamoDB.
+
+Find `MakeDynamoDbClient` and update the configuration to add a new [Interceptor](TODO)
 in the `override Configuration`.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -237,72 +373,31 @@ public static DynamoDbClient MakeDynamoDbClient()
 :::
 ::::
 
-#### What Happened?
-
-[TODO this will be specific to Java, so a bit unsure how to talk about this. It seems likely that once we add Python we will want to refactor how we break this up into various steps. Do we want to simplify right now so that we are only ever talking about Java?]
-
-You have updated the DynamoDB Client so that it builds with a new Interceptor
-(which we will implement in the next step).
-This Interceptor will be responsible for encrypting items in DynamoDB API requests
-before they are sent to DynamoDB, and decrypting these encrypted items in DynamoDB API responses.
-
-### Step 5: Configure the DynamoDB Encryption Interceptor
-
-In this same file, create a new `MakeInterceptor` method that is
-responsible for creating and configuring the AWS Database Encryption SDK's
+Now create implement `MakeInterceptor` to create and configure
+the AWS Database Encryption SDK's
 DynamoDB Encryption Interceptor.
+The DynamoDB Encryption Interceptor will encrypt DynamoDB items before they are sent to DynamoDB,
+and will decrypt items after they are retrieved from DynamoDB.
 
-[TODO can we ignore the KeyStore configuration now?]
+For each table you want to client-side encrypt,
+you need to configure a DynamoDB Table Encryption Config.
+For this exercise, you only need to create one Table Encryption Config
+for your one table.
 
-[TODO each of these should really be broken down into it's own step]
-
-[TODO as well as steps for creating the branch key we need via the KeyStore]
-
-This configuration contains several parts:
-1. Create the Hierarchical Keyring [TODO Are we just using the Hierarchical Keyring everywhere?]
-1. Configure the cryptographic actions for each attribute that may be included in the items in our table.
-1. Create and configure the DynamoDB Encryption Interceptor to encrypt your table with the above
-   crypto actions and keyring.
+For this table, configuration contains several parts:
+1. Configure a [Crypto Action](TODO) for each attribute in your table.
+1. Configure the Logical Table Name. This can be the same as the DynamoDB table name.
+1. Specify the partition and sort key names on your table.
+1. Configure the Hierarchical Keyring you implemented in [Step 3](#step-3-configure-the-hierarchical-keyring).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
 ```java
-// BEGIN EXERCISE 1 STEP 5
-public static KeyStore MakeKeyStore()
-{
-    return KeyStore.builder().KeyStoreConfig(
-    KeyStoreConfig.builder()
-        .ddbClient(MakeDynamoDbClientPlain())
-        .ddbTableName(BRANCH_KEY_TABLE)
-        .logicalKeyStoreName(BRANCH_KEY_TABLE)
-        .kmsClient(KmsClient.create())
-        .kmsConfiguration(KMSConfiguration.builder()
-        .kmsKeyArn(BRANCH_KEY_KMS_ARN)
-        .build())
-        .build()).build();
-}
-
-public static String CreateBranchKey() {
-    final KeyStore keystore = MakeKeyStore();    
-    keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
-    return keystore.CreateKey().branchKeyIdentifier();
-}
-
-public static DynamoDbEncryptionInterceptor MakeInterceptor()
-{
-    final MaterialProviders matProv = MaterialProviders.builder()
-    .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
-    .build();
-
-    final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
-    .branchKeyId(BRANCH_KEY_ID)
-    .keyStore(MakeKeyStore())
-    .ttlSeconds(6000l)
-    .maxCacheSize(100)
-    .build();
-
-    final IKeyring kmsKeyring = matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
+  // BEGIN EXERCISE 1 STEP 4
+  public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
+  {
+    final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
 
     HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
     actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
@@ -337,35 +432,28 @@ public static DynamoDbEncryptionInterceptor MakeInterceptor()
     actions.put(TICKET_NUMBER_NAME, CryptoAction.SIGN_ONLY);
 
     DynamoDbTableEncryptionConfig tableConfig = DynamoDbTableEncryptionConfig.builder()
-    .logicalTableName(TABLE_NAME)
-    .partitionKeyName(PARTITION_KEY)
-    .sortKeyName(SORT_KEY)
-    .attributeActionsOnEncrypt(actions)
-    .keyring(kmsKeyring)
-    .build();
+      .logicalTableName(TABLE_NAME)
+      .partitionKeyName(PARTITION_KEY)
+      .sortKeyName(SORT_KEY)
+      .attributeActionsOnEncrypt(actions)
+      .keyring(kmsKeyring)
+      .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();
     tables.put(TABLE_NAME, tableConfig);
     DynamoDbTablesEncryptionConfig config = DynamoDbTablesEncryptionConfig.builder()
-    .tableEncryptionConfigs(tables)
-    .build();
+      .tableEncryptionConfigs(tables)
+      .build();
 
     return DynamoDbEncryptionInterceptor.builder().config(config).build();
-}
-// END EXERCISE 1 STEP 5
+  }
+  // END EXERCISE 1 STEP 4
 ```
 
 :::
 ::::
 
 #### What Happened?
-
-You have configured the DynamoDB Encryption Interceptor which will intercept DynamoDB
-calls in order to perform client-side encryption.
-
-You configured a Hierarchical Keyring that is responsible for encrypting the data keys
-that protect your items.
-[TODO if we use the Hierarchical Keyring we really need to go into more detail on the KeyStore and such here]
 
 You configured which attributes in your items are encrypted and signed.
 Every attribute in your items are signed, meaning they are included in the signature calculation,
@@ -375,26 +463,28 @@ The primary and sort key are not encrypted,
 because you need to be able to easily get items based on their partition and sort values.
 Other attributes may not be encrypted for similar reasons,
 as they are either also used as a primary key value,
-or otherwise are needed to be un-encrypted to support
+or otherwise are needed to be plaintext to support
 ranged searched.
-For all other values, we will encrypt them.
+For all other values, you will encrypt them.
 By the end of this workshop, you will see how
 we can keep these items encrypted while still preserving the
-rest of our desired access patterns.
+rest of your desired access patterns.
 
 Note that we have not configured any action for the attributes that the plaintext Employee Portal Service
-used as it's GSIs. Future steps will remove these GSIs from our table,
-as we will eventually need to make new ones that work with searchable encryption.
+used as it's GSIs. In the next step you will remove these GSIs from being written with your items,
+as we will eventually need to make new GSIs that work with searchable encryption.
 [TODO explain and link to GSI documentation]
 
-Finally, you configured the DynamoDB Encryption Interceptor using the above configurations,
-along with configuration specific to the table you will be encrypting items for.
+Using the attribute actions you configured
+and the Hierarchical Keyring you configured in [Step 3](#step-3-configure-the-hierarchical-keyring),
+you have configured the DynamoDB Encryption Interceptor which will intercept DynamoDB
+calls in order to perform client-side encryption.
 
-With these changes, the DynamoDB Client that we are now configuring with this interceptor
+With these changes, the DynamoDB Client built with this interceptor
 will encrypt items as configured, locally, before they are put into DynamoDB,
 and will decrypt items as configured, locally, after they are gotten from DynamoDB.
 
-### Step 6: Remove Projects use of GSIs
+### Step 5: Stop writing to GSIs
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -403,8 +493,6 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Project.j
 
 :::
 ::::
-
-[TODO Logically, it makes sense to put all of the next steps as a single step.]
 
 As mentioned in the previous step, we will not longer be able to use the
 GSIs that were used for the plaintext Employee Portal Service.
@@ -418,20 +506,14 @@ your old GSIs.
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 5
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
 ::::
-
-#### What Happened?
-
-You have updated the code so that `Project` items will no longer populate your old GSI attributes.
-
-### Step 7: Remove Reservations use of GSIs
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -441,7 +523,7 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Reservati
 :::
 ::::
 
-Similar to our previous step, update the code so that we no longer populate your
+Update the code so that we no longer populate your
 old GSIs when writing `Reservation` items.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -451,7 +533,7 @@ old GSIs when writing `Reservation` items.
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-// BEGIN EXERCISE 1 STEP 7
+// BEGIN EXERCISE 1 STEP 5
     // String floor = location.get(FLOOR_NAME);
     // String room = location.get(ROOM_NAME);
     // String building = location.get(BUILDING_NAME);
@@ -460,17 +542,11 @@ old GSIs when writing `Reservation` items.
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 7 
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
-::::s
-
-#### What Happened?
-
-You have updated the code so that `Reservation` items will no longer populate your old GSI attributes.
-
-### Step 8: Remove Ticket use of GSIs
+::::
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -480,7 +556,7 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Ticket.ja
 :::
 ::::
 
-Similar to our previous step, update the code so that we no longer populate your
+Update the code so that we no longer populate your
 old GSIs when writing `Ticket` items.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -492,7 +568,7 @@ public Map<String, AttributeValue> toItem() {
     item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
     item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-// BEGIN EXERCISE 1 STEP 8
+// BEGIN EXERCISE 1 STEP 5
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
@@ -500,17 +576,11 @@ public Map<String, AttributeValue> toItem() {
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-// BEGIN EXERCISE 1 STEP 8
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
 ::::
-
-#### What Happened?
-
-You have updated the code so that `Ticket` items will no longer populate your old GSI attributes.
-
-### Step 9: Remove Timecard's use of GSIs
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -520,7 +590,7 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Timecard.
 :::
 ::::
 
-Similar to our previous step, update the code so that we no longer populate your
+Update the code so that we no longer populate your
 old GSIs when writing `Timecard` items.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -531,20 +601,14 @@ public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 9
+// BEGIN EXERCISE 1 STEP 5
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 9
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
 ::::
-
-#### What Happened?
-
-You have updated the code so that `Timecard` items will no longer populate your old GSI attributes.
-
-### Step 10: Remove Meeting's use of GSIs
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -568,20 +632,14 @@ public Map<String, AttributeValue> toItem() {
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
 
-// BEGIN EXERCISE 1 STEP 10
+// BEGIN EXERCISE 1 STEP 5
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 10
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
 ::::
-
-#### What Happened?
-
-You have updated the code so that `Meeting` items will no longer populate your old GSI attributes.
-
-### Step 1: Update Employee's use of GSIs
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -591,7 +649,7 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Employee.
 :::
 ::::
 
-Similar to our previous step, update the code so that we no longer populate your
+Update the code so that we no longer populate your
 old GSIs when writing `Employee` items.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -608,13 +666,13 @@ public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-// BEGIN EXERCISE 1 STEP 11
+// BEGIN EXERCISE 1 STEP 5
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// BEGIN EXERCISE 1 STEP 11
+// BEGIN EXERCISE 1 STEP 5
 ```
 
 :::
@@ -622,7 +680,7 @@ public Map<String, AttributeValue> toItem() {
 
 #### What Happened?
 
-You have updated the code so that `Employee` items will no longer populate your old GSI attributes.
+You have updated the code so items will no longer populate your old GSI attributes.
 
 Now you have everything set to start using the Employee Portal Service with client-side encryption.
 
