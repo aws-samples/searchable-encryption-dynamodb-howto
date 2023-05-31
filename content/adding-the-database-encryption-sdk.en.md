@@ -3,6 +3,10 @@ title : "Exercise 1"
 weight : 100
 ---
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-1 <&0
+ -->
+
 # Exercise 1: Add the AWS Database Encryption SDK
 
 In this section, you will add client-side encryption
@@ -127,14 +131,15 @@ Add the dependencies for:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 2 -->
 ```java
     api("javax.xml.bind:jaxb-api:2.3.1")
-// BEGIN EXERCISE 1 STEP 1
+// BEGIN EXERCISE 1 STEP 2
     implementation(platform("software.amazon.awssdk:bom:2.19.1"))
     implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
     implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
     implementation("software.amazon.awssdk:kms")
-// END EXERCISE 1 STEP 1
+// END EXERCISE 1 STEP 2
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
 ```
 
@@ -187,14 +192,15 @@ Update this file to specify the following:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3a -->
 ```java
 public static class Constants {
     public static final boolean USE_LOCAL_DDB = true;
 
-    // BEGIN EXERCISE 1 STEP 3
+    // BEGIN EXERCISE 1 STEP 3a
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
     public static final String BRANCH_KEY_KMS_ARN = "<your-kms-key-arn>";
-    // END EXERCISE 1 STEP 3
+    // END EXERCISE 1 STEP 3a
 ```
 
 :::
@@ -219,10 +225,11 @@ First, update the file to import all the necessary classes for this exercise:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3b -->
 ```java
 import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
-// BEGIN EXERCISE 1 STEP 3
+// BEGIN EXERCISE 1 STEP 3b
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.services.kms.KmsClient;
 import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
@@ -237,7 +244,7 @@ import software.amazon.cryptography.materialproviders.IKeyring;
 import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
-// END EXERCISE 1 STEP 3
+// END EXERCISE 1 STEP 3b
 
 public class AwsSupport {
 ```
@@ -268,8 +275,9 @@ Now, to implement `CreateBranchKey`:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3c -->
 ```java
-  // BEGIN EXERCISE 1 STEP 3
+  // BEGIN EXERCISE 1 STEP 3c
   public static KeyStore MakeKeyStore(boolean ddbLocal)
   {
     return KeyStore.builder().KeyStoreConfig(
@@ -289,7 +297,7 @@ Now, to implement `CreateBranchKey`:
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     return keystore.CreateKey().branchKeyIdentifier();
   }
-  // END EXERCISE 1 STEP 3
+  // END EXERCISE 1 STEP 3c
 ```
 
 :::
@@ -342,10 +350,11 @@ Update the Config file with the branch key id you received in [Step 2](#step-2-c
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4a -->
 ```java
-    // END EXERCISE 1 STEP 4
+    // END EXERCISE 1 STEP 4a
     public static final String BRANCH_KEY_ID = "<your-branch-key-id>";
-    // END EXERCISE 1 STEP 4
+    // END EXERCISE 1 STEP 4a
 ```
 
 :::
@@ -373,8 +382,9 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4b -->
 ```java
-  // BEGIN EXERCISE 1 STEP 4
+  // BEGIN EXERCISE 1 STEP 4b
   public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
     final MaterialProviders matProv = MaterialProviders.builder()
@@ -390,7 +400,7 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
   
     return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
   }
-  // END EXERCISE 1 STEP 4
+  // END EXERCISE 1 STEP 4b
 ```
 
 :::
@@ -410,7 +420,7 @@ you call back to KMS.
 In the next step, you will use this Keyring to configure client-side
 encryption for your client.
 
-### Step 4: Configure the DynamoDB Client with client-side encryption
+### Step 5: Configure the DynamoDB Client with client-side encryption
 
 Now that you have a Hierarchical Keyring,
 the next step is to configure the DynamoDB Encryption Interceptor
@@ -435,16 +445,17 @@ in the `override Configuration`.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5a -->
 ```java
 public static DynamoDbClient MakeDynamoDbClient()
 {
     return GetClientBuilder()
-// BEGIN EXERCISE 1 STEP 4
+// BEGIN EXERCISE 1 STEP 5a
     .overrideConfiguration(
         ClientOverrideConfiguration.builder()
         .addExecutionInterceptor(MakeInterceptor())
         .build())
-// END EXERCISE 1 STEP 4
+// END EXERCISE 1 STEP 5a
     .build();
 }
 ```
@@ -474,8 +485,9 @@ For this table, configuration contains several parts:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5b -->
 ```java
-  // BEGIN EXERCISE 1 STEP 5
+  // BEGIN EXERCISE 1 STEP 5b
   public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
   {
     final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
@@ -528,7 +540,7 @@ For this table, configuration contains several parts:
 
     return DynamoDbEncryptionInterceptor.builder().config(config).build();
   }
-  // END EXERCISE 1 STEP 5
+  // END EXERCISE 1 STEP 5b
 ```
 
 :::
@@ -598,13 +610,14 @@ Remove the code that writes to any Global Secondary Index.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6a -->
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6a
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6a
 ```
 
 :::
@@ -624,11 +637,12 @@ old Global Secondary Indexes when writing `Reservation` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6b -->
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6b
     // String floor = location.get(FLOOR_NAME);
     // String room = location.get(ROOM_NAME);
     // String building = location.get(BUILDING_NAME);
@@ -637,7 +651,7 @@ old Global Secondary Indexes when writing `Reservation` items.
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6b
 ```
 
 :::
@@ -657,13 +671,14 @@ old Global Secondary Indexes when writing `Ticket` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6c -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
     item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6c
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
@@ -671,7 +686,7 @@ public Map<String, AttributeValue> toItem() {
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6c
 ```
 
 :::
@@ -691,15 +706,16 @@ old Global Secondary Indexes when writing `Timecard` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6d -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6d
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6d
 ```
 
 :::
@@ -719,6 +735,7 @@ old Global Secondary Indexes when writing `Meeting` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6e -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String floor = location.get(FLOOR_NAME);
@@ -727,10 +744,10 @@ public Map<String, AttributeValue> toItem() {
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
 
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6e
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6e
 ```
 
 :::
@@ -750,6 +767,7 @@ old Global Secondary Indexes when writing `Employee` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6f -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String locTag = "";
@@ -761,13 +779,13 @@ public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6f
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6f
 ```
 
 :::

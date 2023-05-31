@@ -37,7 +37,7 @@ public class Ticket extends BaseItem {
     item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
     item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6c
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
@@ -45,7 +45,7 @@ public class Ticket extends BaseItem {
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-// BEGIN EXERCISE 1 STEP 6
+// BEGIN EXERCISE 1 STEP 6c
 
     item.put(TICKET_NUMBER_NAME, AttributeValue.fromS(ticketNumber));
     item.put(MODIFIED_DATE_NAME, AttributeValue.fromS(modifiedDate));

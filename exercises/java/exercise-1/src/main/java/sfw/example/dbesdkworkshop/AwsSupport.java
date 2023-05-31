@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
-// BEGIN EXERCISE 1 STEP 3
+// BEGIN EXERCISE 1 STEP 3b
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.services.kms.KmsClient;
 import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
@@ -25,7 +25,7 @@ import software.amazon.cryptography.materialproviders.IKeyring;
 import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
-// END EXERCISE 1 STEP 3
+// END EXERCISE 1 STEP 3b
 
 public class AwsSupport {
 
@@ -48,16 +48,16 @@ public class AwsSupport {
               .build();
     else
       return GetClientBuilder(shared.ddbLocal)
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 5a
         .overrideConfiguration(
           ClientOverrideConfiguration.builder()
             .addExecutionInterceptor(MakeInterceptor(shared.ddbLocal))
             .build())
-// END EXERCISE 1 STEP 5
+// END EXERCISE 1 STEP 5a
         .build();
   }
 
-  // BEGIN EXERCISE 1 STEP 3
+  // BEGIN EXERCISE 1 STEP 3c
   public static KeyStore MakeKeyStore(boolean ddbLocal)
   {
     return KeyStore.builder().KeyStoreConfig(
@@ -77,9 +77,9 @@ public class AwsSupport {
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     return keystore.CreateKey().branchKeyIdentifier();
   }
-  // END EXERCISE 1 STEP 3
+  // END EXERCISE 1 STEP 3c
 
-  // BEGIN EXERCISE 1 STEP 4
+  // BEGIN EXERCISE 1 STEP 4b
   public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
     final MaterialProviders matProv = MaterialProviders.builder()
@@ -95,9 +95,9 @@ public class AwsSupport {
   
     return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
   }
-  // END EXERCISE 1 STEP 4
+  // END EXERCISE 1 STEP 4b
 
-  // BEGIN EXERCISE 1 STEP 5
+  // BEGIN EXERCISE 1 STEP 5b
   public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
   {
     final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
@@ -150,5 +150,5 @@ public class AwsSupport {
 
     return DynamoDbEncryptionInterceptor.builder().config(config).build();
   }
-  // END EXERCISE 1 STEP 5
+  // END EXERCISE 1 STEP 5b
 }
