@@ -121,13 +121,13 @@ searchable beacon from a single field of the map.
 
 ### Step 3:
 
-For Employee Records, the HASH Key for GSI1 will be employeeName.
-As Timecard also used employeeName for the HASH key, we need add nothing more here.
+For Employee Records, the Partition Key for GSI1 will be employeeName.
+As Timecard also used employeeName for the Partition key, we need add nothing more here.
 
-For Employee Records, the RANGE Key for GSI1 will be employeeNumber.
+For Employee Records, the Sort Key for GSI1 will be employeeNumber.
 We will not be doing ranged searches on employeeNumber;
 instead, this is just to disambiguate Employee Records from Timecard Records
-that have the same HASH key but a different RANGE key.
+that have the same Partition key but a different Sort key.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -144,7 +144,7 @@ that have the same HASH key but a different RANGE key.
 
 #### What Happened?
 
-employeeNumber is now available as a Part for the GSI1 HASH key compound beacon.
+employeeNumber is now available as a Part for the GSI1 Partition key compound beacon.
 
 ### Step 4a:
 
@@ -259,13 +259,13 @@ for the keys for GSI2 and GSI3.
 #### What Happened?
 
 We can now build the Compound Beacons for the partition keys of GSI2 and GSI3,
-plus the RANGE key for GSI3.
+plus the Sort key for GSI3.
 
 ### Step 5:
 
-For GSI1's RANGE key, we need to add the new Constructor.
+For GSI1's Sort key, we need to add the new Constructor.
 
-Recall that for Employee Records, the HASH key for GSI1 is the same as for Timecard Records,
+Recall that for Employee Records, the Partition key for GSI1 is the same as for Timecard Records,
 so nothing needs to be added for that.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -283,7 +283,7 @@ so nothing needs to be added for that.
 
 #### What Happened?
 
-GSI1's RANGE Key is now ready to go.
+GSI1's Sort Key is now ready to go.
 
 
 ### Step 6:
