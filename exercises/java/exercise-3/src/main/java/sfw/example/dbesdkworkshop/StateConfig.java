@@ -8,7 +8,15 @@ import java.io.File;
 
 /** Helper to pull required Document Bucket configuration keys out of the configuration system. */
 public class StateConfig {
-  private static final File DEFAULT_CONFIG = new File("../../config.toml");
+
+  // This is just a way to share information across processes
+  // This is not portable, but it works for the workshop
+  // This way the various script files can be executed from any path
+  // Another solution might be to add this to the jar
+  // and build the toml into the META-INF
+  // but this might make for confusing state.
+  private static final File JAR_PATH = new File(StateConfig.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+  public static final File DEFAULT_CONFIG = new File(JAR_PATH.getParent(), "../../../../config.toml");
   public static final ConfigContents contents =
     new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
