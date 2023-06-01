@@ -39,8 +39,8 @@ awsAccountConfig:
 
 infrastructure:
   cloudformationTemplates:
-    - templateLocation: static/cfn/cloud9.yaml
-      label: Busy-cloud9-stack
+    - templateLocation: static/cfn/workshop.yaml
+      label: Busy-Database-stack
       parameters:
         - templateParameter: EnvironmentName
           defaultValue: workshop
@@ -55,7 +55,7 @@ infrastructure:
         - templateParameter: AutomaticStopTimeMinutes
           defaultValue: 120
         - templateParameter: RepoName
-          defaultValue: Workshop
+          defaultValue: workshop
         - templateParameter: RepoDescription
           defaultValue: 'Code Commit repository for use in the workshop'
         - templateParameter: S3CodeBucket

@@ -527,26 +527,26 @@ Resources:
                 - echo 'source ~/.bash_profile' >> $BOOTSTRAP_SCRIPT
                 - echo 'sdk install gradle' >> $BOOTSTRAP_SCRIPT
                 # This will clone the codecommit repo
-                - !Sub echo '[ -f ~/environment/code ] || git clone --config credential.helper="!aws codecommit credential-helper $@" --config credential.UseHttpPath=true ${CodeCommitRepo.CloneUrlHttp} ~/environment/code' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo '~/environment/code/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
+                - !Sub echo '[ -f ~/environment/workshop ] || git clone --config credential.helper="!aws codecommit credential-helper $@" --config credential.UseHttpPath=true ${CodeCommitRepo.CloneUrlHttp} ~/environment/workshop' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
 
 
-                - echo 'chmod +x ~/environment/code/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-1/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-2/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-3/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-4/employee-portal' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/complete/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-1/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-2/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-3/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-4/employee-portal' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/complete/employee-portal' >> $BOOTSTRAP_SCRIPT
 
-                - echo 'chmod +x ~/environment/code/java/plaintext-base/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-1/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-2/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-3/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/exercise-4/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo 'chmod +x ~/environment/code/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/plaintext-base/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-1/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-2/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-3/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/exercise-4/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
                 
-                - echo 'chmod +x ~/environment/code/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
@@ -591,7 +591,7 @@ Resources:
       InstanceType: !Ref InstanceType
       Name: !Ref InstanceName
       Repositories:
-        - PathComponent: !Sub code
+        - PathComponent: !Sub workshop
           RepositoryUrl: !GetAtt CodeCommitRepo.CloneUrlHttp
       OwnerArn: 
         Fn::If:
