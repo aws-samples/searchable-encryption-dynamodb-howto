@@ -19,8 +19,6 @@ public class Config {
 
     // BEGIN EXERCISE 2 STEP 1a
 
-    // END EXERCISE 2 STEP 1a
-
     public static final String BRANCH_KEY_TABLE = StateConfig.contents.wrapping_key_info.branch_key_table;
     public static final String BRANCH_KEY_KMS_ARN = StateConfig.contents.wrapping_key_info.branch_key_kms_arn;
     public static final String BRANCH_KEY_ID = StateConfig.contents.wrapping_key_info.branch_key_id;
