@@ -4,6 +4,6 @@ branch_key_table = "BranchKey_Table"
 branch_key_kms_arn = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126"
 # END EXERCISE 1 STEP 3a
 
-# BEGIN EXERCISE 1 STEP 4a
+# BEGIN EXERCISE 1 STEP 6
 branch_key_id = "<your-branch-key-id>"
-# END EXERCISE 1 STEP 4a
+# END EXERCISE 1 STEP 6
