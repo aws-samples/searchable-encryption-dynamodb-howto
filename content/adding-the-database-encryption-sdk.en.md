@@ -96,24 +96,6 @@ Update the table name to something specific to this exercise.
 :::
 ::::
 
-Now use the CLI to create the table that will back the Employee Portal Service
-for this exercise.
-
-<!-- !test program
-# This is dangerous because `eval` lets you do anything.
-# However if you have access to modify the code block
-# then you could modify this script...
-
-read command_input
-cd ./exercises/java/exercise-1
-eval "$command_input" -l
- -->
-
-<!-- !test check java create-table -->
-```bash
-./employee-portal create-table
-```
-
 #### What Happened?
 
 Each exercise is set up to work with a new DynamoDB table to store
@@ -205,11 +187,7 @@ Update this file to specify the following:
 :::tab{label="Java"}
 
 
-<!-- !test program
-# Hard coded value for testing, this is a public KMS key for TESTING ONLY
-BRANCH_KEY_KMS_ARN="arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126"
-./utils/sed-add-change.sh "branch_key_kms_arn.*" "branch_key_kms_arn = $BRANCH_KEY_KMS_ARN" ./exercises/config.toml
- -->
+<!-- Not tested, the public test vector keys are stored -->
 ```toml
 # BEGIN EXERCISE 1 STEP 3a
 branch_key_kms_arn = "<your-kms-key-arn>"
@@ -238,10 +216,6 @@ First, update the file to import all the necessary classes for this exercise:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-1 <&0
- -->
-
 <!-- !test check java step 3b -->
 ```java
 // BEGIN EXERCISE 1 STEP 3b
@@ -260,8 +234,6 @@ import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
 // END EXERCISE 1 STEP 3b
-
-public class AwsSupport {
 ```
 
 :::
@@ -318,22 +290,6 @@ Now, to implement `CreateBranchKey`:
 :::
 ::::
 
-Now we can build our application and use the CLI to create our Key Store and create a branch key.
-Input the following into the terminal:
-
-<!-- !test program
-BRANCH_KEY_ID=$(./exercises/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
-./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
- -->
-
-<!-- !test check java create-branch-key -->
-```bash
-./employee-portal create-branch-key
-```
-
-This command outputs the branch key ID of the branch key just created.
-Keep note of this ID, as we will need to add it to our configuration in the next step.
-
 #### What Happened?
 
 You have configured the Key Store that will be used with your Hierarchical Keyring,
@@ -358,30 +314,7 @@ to use this branch key by this branch key id.
 Now that we have a Key Store with a branch key,
 we can configure the Hierarchical Keyring.
 
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-Go to `~/environment/workshop/config.toml`.
-
-:::
-::::
-
-Update the Config file with the branch key id you received in [Step 2](#step-2-configure-your-keystore).
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-<!-- not tested, this is accomplished in the test create-branch-key above -->
-```toml
-# BEGIN EXERCISE 1 STEP 4a
-branch_key_id = "<your-branch-key-id>"
-# END EXERCISE 1 STEP 4a
-```
-
-:::
-::::
-
-Next, add a method which configures a Hierarchical Keyring,
+Add a method which configures a Hierarchical Keyring,
 using the same Key Store configuration that is used by the CLI,
 and using the branch key ID returned by the CLI in [Step 2](#step-2-configure-your-keystore).
 Additionally, specify a TTL and cache size for the Hierarchical Keyring.
@@ -402,10 +335,6 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
-
-<!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-1 <&0
- -->
 
 <!-- !test check java step 4b -->
 ```java
@@ -593,221 +522,47 @@ With these changes, the DynamoDB Client built with this interceptor
 will encrypt items as configured, before they are put into DynamoDB,
 and will decrypt items as configured, after they are retrieved from DynamoDB.
 
-### Step 6: Stop writing to Global Secondary Index attributes
+### Step 6: Tying it together
 
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
+Now we can build our application and use the CLI to create our Key Store and create a branch key.
+Input the following into the terminal:
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Project.java`.
+<!-- !test program
+BRANCH_KEY_ID=$(./exercises/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
+-->
 
-:::
-::::
-
-In our original Employee Portal Service,
-our application used several [Global Secondary Indexes]()
-in order to support our required access patterns.
-
-Now that we are encrypting data client-side,
-these Global Secondary Indexes are not going to work as intended.
-This is because our encryption scheme is non-deterministic.
-While this non-determinism is a great property for the security
-of our data, it makes indexing on encrypted data difficult.
-We will solve this problem in the next exercise.
-
-For now, update our application so that we no longer
-write data to these Global Secondary Indexes.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Project.java`.
-
-:::
-::::
-
-Remove the code that writes to any Global Secondary Index.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-// BEGIN EXERCISE 1 STEP 6a
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6a
+<!-- !test check java create-branch-key -->
+```bash
+./employee-portal create-branch-key
 ```
 
-:::
-::::
+This command outputs the branch key ID of the branch key just created.
+Keep note of this ID, as we will need to add it to our configuration.
 
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
+Go to `~/environment/workshop/config.toml`.
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Reservation.java`.
+Update the Config file with the branch key id you received just created.
 
-:::
-::::
-
-Update the code so that we no longer populate your
-old Global Secondary Indexes when writing `Reservation` items.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-    item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
-    item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
-
-// BEGIN EXERCISE 1 STEP 6b
-    // String floor = location.get(FLOOR_NAME);
-    // String room = location.get(ROOM_NAME);
-    // String building = location.get(BUILDING_NAME);
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-
-    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
-    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 6b
+<!-- not tested, this is accomplished in the test create-branch-key above -->
+```toml
+# BEGIN EXERCISE 1 STEP 6
+branch_key_id = "<your-branch-key-id>"
+# END EXERCISE 1 STEP 6
 ```
 
-:::
-::::
+Now use the CLI to create the table that will back the Employee Portal Service
+for this exercise.
 
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
+<!-- !test program
+cd ./exercises/java/exercise-1
+./employee-portal create-table -l
+ -->
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Ticket.java`.
-
-:::
-::::
-
-Update the code so that we no longer populate your
-old Global Secondary Indexes when writing `Ticket` items.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-public Map<String, AttributeValue> toItem() {
-    Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
-    item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-
-// BEGIN EXERCISE 1 STEP 6c
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-
-    // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(ASSIGNEE_EMIL_PREFIX + assigneeEmail));
-
-    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
-    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-// BEGIN EXERCISE 1 STEP 6c
+<!-- !test check java create-table -->
+```bash
+./employee-portal create-table
 ```
-
-:::
-::::
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Timecard.java`.
-
-:::
-::::
-
-Update the code so that we no longer populate your
-old Global Secondary Indexes when writing `Timecard` items.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-public Map<String, AttributeValue> toItem() {
-    Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6d
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 6d
-```
-
-:::
-::::
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Meeting.java`.
-
-:::
-::::
-
-Similar to our previous step, update the code so that we no longer populate your
-old Global Secondary Indexes when writing `Meeting` items.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-public Map<String, AttributeValue> toItem() {
-    String floor = location.get(FLOOR_NAME);
-    String room = location.get(ROOM_NAME);
-    Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-    item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
-
-// BEGIN EXERCISE 1 STEP 6e
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 6e
-```
-
-:::
-::::
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/datamodel/Employee.java`.
-
-:::
-::::
-
-Update the code so that we no longer populate your
-old Global Secondary Indexes when writing `Employee` items.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```java
-public Map<String, AttributeValue> toItem() {
-    String locTag = "";
-    locTag = AppendStrWithPrefix(locTag, location.get(BUILDING_NAME), BUILDING_PREFIX);
-    locTag = AppendStrWithPrefix(locTag, location.get(FLOOR_NAME), FLOOR_PREFIX);
-    locTag = AppendStrWithPrefix(locTag, location.get(ROOM_NAME), ROOM_PREFIX);
-    locTag = AppendStrWithPrefix(locTag, location.get(DESK_NAME), DESK_PREFIX);
-
-    Map<String, AttributeValue> item = new HashMap<>();
-    item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-    item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-// BEGIN EXERCISE 1 STEP 6f
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-    // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
-    // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
-    // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// BEGIN EXERCISE 1 STEP 6f
-```
-
-:::
-::::
-
-#### What Happened?
-
-You have updated the code so items will no longer populate your old Global Secondary Indexes attributes.
-
-Now you have everything set to start using the Employee Portal Service with client-side encryption.
 
 ### Checking Your Work
 
