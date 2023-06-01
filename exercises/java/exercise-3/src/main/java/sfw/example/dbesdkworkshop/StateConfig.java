@@ -16,7 +16,7 @@ public class StateConfig {
   // and build the toml into the META-INF
   // but this might make for confusing state.
   private static final File JAR_PATH = new File(StateConfig.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-  public static final File DEFAULT_CONFIG = new File(JAR_PATH.getParent(), "../../../../config.toml");
+  private static final File DEFAULT_CONFIG = new File(JAR_PATH.getParent(), "../../../../config.toml");
   public static final ConfigContents contents =
     new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
