@@ -1,6 +1,6 @@
 
-
-zip:
+zip: clean_exercises
+	find "./exercises/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
 	cd exercises; zip -r ../assets/archive.zip .
 
 put_assets:
@@ -8,8 +8,6 @@ put_assets:
 
 get_assets:
 	aws s3 sync s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 ./assets --delete
-
-
 
 clean_exercises:
 	find "./exercises/java" -type d -name "build" -prune -exec rm -rf {} \;
