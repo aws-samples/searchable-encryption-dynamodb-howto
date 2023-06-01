@@ -6,53 +6,47 @@ package sfw.example.dbesdkworkshop;
 import com.moandjiezana.toml.Toml;
 import java.io.File;
 
-// For automatic mapping, these classes all have names dictated by the TOML file.
-// CHECKSTYLE:OFF MemberName
-// CHECKSTYLE:OFF ParameterName
-// CHECKSTYLE:OFF AbbreviationAsWordInName
-
-/**
- * Helper to pull configuration of CloudFormation-managed AWS resources out of the generated state
- * file.
- */
+/** Helper to pull required Document Bucket configuration keys out of the configuration system. */
 public class StateConfig {
-  public final ConfigContents contents;
+  private static final File DEFAULT_CONFIG = new File("../../config.toml");
+  public static final ConfigContents contents =
+    new Toml().read(DEFAULT_CONFIG).to(ConfigContents.class);
 
-  /**
-   * Parse the state file at the provided path.
-   *
-   * @param path the path to the state file.
-   */
-  public StateConfig(String path) {
-    // Java does not expand ~ automatically
-    String canonicalizedPath = path.replaceFirst("~", System.getProperty("user.home"));
-    contents = new Toml().read(new File(canonicalizedPath)).to(ConfigContents.class);
+  private StateConfig() { // Do not instantiate
   }
 
+  // For automatic mpaping, these classes all have names dictated by the TOML file.
+  // CHECKSTYLE:OFF MemberName
+  // CHECKSTYLE:OFF ParameterName
+
+  /** The top-level contents of the configuration file. */
   public static class ConfigContents {
-    public final State state;
+    /** The [base] section of the configuration file. */
+    public final WrappingKeyInfo wrapping_key_info;
 
-    ConfigContents(State state) {
-      this.state = state;
+    ConfigContents(WrappingKeyInfo base) {
+      this.wrapping_key_info = base;
     }
   }
 
-  /** The top-level content structure of the state file. */
-  public static class State {
-    /** The name of the Document Bucket S3 bucket. */
-    public final String DocumentBucket;
-    /** The name of the Document Bucket DynamoDB table. */
-    public final String DocumentTable;
-    /** The ARN of Faythe's KMS Key. */
-    public final String FaytheKmsKey;
-    /** The ARN of Walter's KMS Key. */
-    public final String WalterKmsKey;
+  /** The [base] section of the configuration file. */
+  public static class WrappingKeyInfo {
+    /** The location of the state file for CloudFormation-managed AWS resource identifiers. */
+    public final String branch_key_table;
+    public final String branch_key_kms_arn;
+    public final String branch_key_id;
 
-    State(String DocumentBucket, String DocumentTable, String FaytheKmsKey, String WalterKmsKey) {
-      this.DocumentBucket = DocumentBucket;
-      this.DocumentTable = DocumentTable;
-      this.FaytheKmsKey = FaytheKmsKey;
-      this.WalterKmsKey = WalterKmsKey;
+    WrappingKeyInfo(
+      String branch_key_table,
+      String branch_key_kms_arn,
+      String branch_key_id
+    ) {
+      this.branch_key_table = branch_key_table;
+      this.branch_key_kms_arn = branch_key_kms_arn;
+      this.branch_key_id = branch_key_id;
     }
   }
+
+  // CHECKSTYLE:ON MemberName
+  // CHECKSTYLE:ON ParameterName
 }
