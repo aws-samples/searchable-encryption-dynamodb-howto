@@ -14,12 +14,10 @@ to configure the remaining access patterns.
 
 ## Background
 
-In Exercise 2, you configured [searchable encryption](TODO)
-to enable you to perform [TODO what is the access pattern?].
-However, this is just one access pattern out of many we want to support.
+In Exercise 3, you configured [searchable encryption](TODO)
+to enable you to perform queries on Employee Records.
 
-In this exercise, you will add support for the remaining access patterns
-originally supported in Exercise 1.
+In this exercise, you will add support for the remaining record types.
 
 As you configure each new beacon to support a new access pattern,
 consider what [truncation length is appropriate for that beacon](TODO)
@@ -49,6 +47,8 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 
 ### Step 1:
 
+As always, this exercise will take place in its own table.
+
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
@@ -65,6 +65,8 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 
 ### Step 2:
 
+We need to associate beacons with five more encrypted attributes.
+
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
@@ -79,11 +81,11 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
         .name(ORGANIZER_EMAIL_NAME)
         .length(8)
         .build());
-        beacons.add(StandardBeacon.builder()
+    beacons.add(StandardBeacon.builder()
         .name(ASSIGNEE_EMAIL_NAME)
         .length(8)
         .build());
-        beacons.add(StandardBeacon.builder()
+    beacons.add(StandardBeacon.builder()
         .name(AUTHOR_EMAIL_NAME)
         .length(8)
         .build());
@@ -98,6 +100,9 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::
 
 ### Step 3:
+
+As we did for Timecards and Employees, each of the remaining four record types
+needs Compound Beacons constructors to satisfy their individual access patterns.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -155,6 +160,9 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 
 ### Step 4:
 
+Ticket records use GSI2 with the ASSIGNEE_EMAIL_NAME attribute,
+and the usual custom constructor.
+
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
@@ -176,6 +184,8 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::
 
 ### Step 5:
+
+Tickets and Reservations use the GSI3 Partition Key.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -200,6 +210,9 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::
 
 ### Step 6:
+
+Similarly, Tickets and Reservations use the GSI3 Sort Key.
+
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -233,6 +246,8 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 
 ### Step 7:
 
+Projects, Tickets and Reservations need their own constructors for the GSI1 Partition Key.
+
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
@@ -258,6 +273,8 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 ::::
 
 ### Step 8:
+
+Tickets and Reservations need their own constructors for the GSI1 Sort Key.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -292,85 +309,14 @@ cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-st
 :::
 ::::
 
-
-
-
 #### What Happened?
 
-The Document Bucket `context` will now be supplied to the AWS Encryption SDK and AWS KMS as encryption context. If a non-empty key-value pair map is supplied to `store`, those key-value pairs will be used in encryption and decryption operations all the way through to KMS:
+We have now added the full configuration for all record types.
 
-* The contents of `context` will appear in KMS audit logs.
-* The contents of `context` will be availble to use in KMS Key Policies and Grants to make authorization decisions.
-* The contents of `context` will be written to the Encryption SDK message.
-* Supplying the exact-match contents of `context` will be required to decrypt any encrypted data keys.
-* The contents of `context` will now be available on Decrypt to use in making assertions.
+All access patterns used in the original plaintext database work in the encrypted database,
+and no change was required in any of the code involved in reading, writing or querying records;
+only configuration, and index creation.
 
-Next you will update `retrieve` to use the encryption context on decrypt.
-
-### Step 2: Use Encryption Context on Decrypt
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```{.java hl_lines="3 4"}
-// Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
-    // ENCRYPTION-CONTEXT-START: Use Encryption Context on Decrypt
-    Map<String, String> actualContext = decryptedMessage.getEncryptionContext();
-    PointerItem pointer = PointerItem.fromKeyAndContext(key, actualContext);
-// Save your changes
-```
-
-:::
-::::
-
-#### What Happened?
-
-Now on decrypt, the validated encryption context from the Encryption SDK Message Format header will be passed back to the application. Any business logic that would benefit from using the encryption context data for making decisions can use the version bound and validated by the Encryption SDK and KMS.
-
-Next you will add a mechanism for the application to test assertions made in encryption context before working with the returned data.
-
-### Step 3: Making Assertions
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```{.java hl_lines="3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25"}
-// Edit ./src/main/java/sfw/example/esdkworkshop/Api.java and find retrieve(...)
-    // ENCRYPTION-CONTEXT-START: Making Assertions
-    boolean allExpectedContextKeysFound = actualContext.keySet().containsAll(expectedContextKeys);
-    if (!allExpectedContextKeysFound) {
-        // Remove all of the keys that were found
-        expectedContextKeys.removeAll(actualContext.keySet());
-        String error =
-        String.format(
-            "Expected context keys were not found in the actual encryption context! "
-            + "Missing keys were: %s",
-            expectedContextKeys.toString());
-        throw new DocumentBucketException(error, new NoSuchElementException());
-    }
-    boolean allExpectedContextFound =
-        actualContext.entrySet().containsAll(expectedContext.entrySet());
-    if (!allExpectedContextFound) {
-        Set<Map.Entry<String, String>> expectedContextEntries = expectedContext.entrySet();
-        expectedContextEntries.removeAll(actualContext.entrySet());
-        String error =
-            String.format(
-                "Expected context pairs were not found in the actual encryption context! "
-                + "Missing pairs were: %s",
-                expectedContextEntries.toString());
-        throw new DocumentBucketException(error, new NoSuchElementException());
-    }
-// Save your work
-```
-
-:::
-::::
-
-#### What Happened?
-
-`retrieve` will use its "expected context keys" argument to validate that all of those keys (with any associated values) are present in the encryption context. `retrieve` will also use its "expected context" argument to validate that the exact key-value pairs specified in expected context are present in the actual encryption context. If either of those assumptions is invalid, `retrieve` will raise an exception before returning the data. These assertions safeguard against accidentally returning unintended, corrupted, or tampered data to the application.
-
-Now the Document Bucket will use AWS KMS and the AWS Encryption SDK to ensure that the `context` metadata is consistent throughout the lifetime of the objects, resistant to tampering or corruption, and make the validated context available to the application logic to make additional business logic assertions safely.
 
 ### Checking Your Work
 
