@@ -56,7 +56,7 @@ Make sure you are in the `exercises` directory for the language of your choice:
 :::tab{label="Java"}
 
 ```bash
-cd ~/environment/workshop/exercises/java/add-db-esdk-start
+cd ~/environment/workshop/exercises/java/exercise-1
 ```
 
 :::
@@ -99,6 +99,17 @@ Update the table name to something specific to this exercise.
 Now use the CLI to create the table that will back the Employee Portal Service
 for this exercise.
 
+<!-- !test program
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+
+read command_input
+cd ./exercises/java/exercise-1
+eval "$command_input" -l
+ -->
+
+<!-- !test check java create-table -->
 ```bash
 ./employee-portal create-table
 ```
@@ -131,16 +142,18 @@ Add the dependencies for:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-1 <&0
+ -->
+
 <!-- !test check java step 2 -->
 ```java
-    api("javax.xml.bind:jaxb-api:2.3.1")
-// BEGIN EXERCISE 1 STEP 2
+    // BEGIN EXERCISE 1 STEP 2
     implementation(platform("software.amazon.awssdk:bom:2.19.1"))
     implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
     implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
     implementation("software.amazon.awssdk:kms")
-// END EXERCISE 1 STEP 2
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
+    // END EXERCISE 1 STEP 2
 ```
 
 :::
@@ -179,28 +192,28 @@ you need to create and populate the Key Store that will back the Hierarchical Ke
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+Look at `~/environment/workshop/config.toml`.
 
 :::
 ::::
 
 This file contains constants used by the Employee Portal Service.
 Update this file to specify the following:
-- The table name for the Key Store you will create.
 - The KMS Key ARN that was created in [Getting Started](TODO).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 3a -->
-```java
-public static class Constants {
-    public static final boolean USE_LOCAL_DDB = true;
 
-    // BEGIN EXERCISE 1 STEP 3a
-    public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
-    public static final String BRANCH_KEY_KMS_ARN = "<your-kms-key-arn>";
-    // END EXERCISE 1 STEP 3a
+<!-- !test program
+# Hard coded value for testing, this is a public KMS key for TESTING ONLY
+BRANCH_KEY_KMS_ARN="arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126"
+./utils/sed-add-change.sh "branch_key_kms_arn.*" "branch_key_kms_arn = $BRANCH_KEY_KMS_ARN" ./exercises/config.toml
+ -->
+```toml
+# BEGIN EXERCISE 1 STEP 3a
+branch_key_kms_arn = "<your-kms-key-arn>"
+# END EXERCISE 1 STEP 3a
 ```
 
 :::
@@ -225,10 +238,12 @@ First, update the file to import all the necessary classes for this exercise:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-1 <&0
+ -->
+
 <!-- !test check java step 3b -->
 ```java
-import static sfw.example.dbesdkworkshop.Config.Constants.*;
-
 // BEGIN EXERCISE 1 STEP 3b
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.services.kms.KmsClient;
@@ -306,6 +321,12 @@ Now, to implement `CreateBranchKey`:
 Now we can build our application and use the CLI to create our Key Store and create a branch key.
 Input the following into the terminal:
 
+<!-- !test program
+BRANCH_KEY_ID=$(./exercises/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
+ -->
+
+<!-- !test check java create-branch-key -->
 ```bash
 ./employee-portal create-branch-key
 ```
@@ -340,7 +361,7 @@ we can configure the Hierarchical Keyring.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+Go to `~/environment/workshop/config.toml`.
 
 :::
 ::::
@@ -350,11 +371,11 @@ Update the Config file with the branch key id you received in [Step 2](#step-2-c
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 4a -->
-```java
-    // END EXERCISE 1 STEP 4a
-    public static final String BRANCH_KEY_ID = "<your-branch-key-id>";
-    // END EXERCISE 1 STEP 4a
+<!-- not tested, this is accomplished in the test create-branch-key above -->
+```toml
+# BEGIN EXERCISE 1 STEP 4a
+branch_key_id = "<your-branch-key-id>"
+# END EXERCISE 1 STEP 4a
 ```
 
 :::
@@ -381,6 +402,10 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
+
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-1 <&0
+ -->
 
 <!-- !test check java step 4b -->
 ```java
@@ -447,17 +472,12 @@ in the `override Configuration`.
 
 <!-- !test check java step 5a -->
 ```java
-public static DynamoDbClient MakeDynamoDbClient()
-{
-    return GetClientBuilder()
-// BEGIN EXERCISE 1 STEP 5a
-    .overrideConfiguration(
-        ClientOverrideConfiguration.builder()
-        .addExecutionInterceptor(MakeInterceptor())
-        .build())
-// END EXERCISE 1 STEP 5a
-    .build();
-}
+        // BEGIN EXERCISE 1 STEP 5a
+        .overrideConfiguration(
+          ClientOverrideConfiguration.builder()
+            .addExecutionInterceptor(MakeInterceptor(shared.ddbLocal))
+            .build())
+        // END EXERCISE 1 STEP 5a
 ```
 
 :::
@@ -573,7 +593,7 @@ With these changes, the DynamoDB Client built with this interceptor
 will encrypt items as configured, before they are put into DynamoDB,
 and will decrypt items as configured, after they are retrieved from DynamoDB.
 
-### Step 6: Stop writing to Glocal Secondary Index attributes
+### Step 6: Stop writing to Global Secondary Index attributes
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -610,10 +630,7 @@ Remove the code that writes to any Global Secondary Index.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6a -->
 ```java
-    item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-    item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
 // BEGIN EXERCISE 1 STEP 6a
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
@@ -637,7 +654,6 @@ old Global Secondary Indexes when writing `Reservation` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6b -->
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
@@ -671,7 +687,6 @@ old Global Secondary Indexes when writing `Ticket` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6c -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
@@ -706,7 +721,6 @@ old Global Secondary Indexes when writing `Timecard` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6d -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
@@ -735,7 +749,6 @@ old Global Secondary Indexes when writing `Meeting` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6e -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String floor = location.get(FLOOR_NAME);
@@ -767,7 +780,6 @@ old Global Secondary Indexes when writing `Employee` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 6f -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String locTag = "";
