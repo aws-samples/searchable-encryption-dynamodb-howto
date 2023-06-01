@@ -78,8 +78,6 @@ public class Api {
     final KeySchemaElement pk1Schema = KeySchemaElement
       .builder()
       // BEGIN EXERCISE 2 STEP 1b
-
-      // END EXERCISE 2 STEP 1b
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk1Schema = KeySchemaElement
@@ -141,8 +139,6 @@ public class Api {
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
       // BEGIN EXERCISE 2 STEP 1c
-
-      // END EXERCISE 2 STEP 1c
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
       .attributeName(GSI1_SORT_KEY)
