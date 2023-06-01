@@ -18,8 +18,10 @@ public class DeleteTable implements Runnable {
   @Override
   public void run() {
     final Api api = App.initializeEmployeePortal(shared);
-    api.deleteTable();
-
+    try {
+      api.deleteTable();
+    } catch (software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException e)
+    {}
     System.out.println("Table Deleted");
   }
 }
