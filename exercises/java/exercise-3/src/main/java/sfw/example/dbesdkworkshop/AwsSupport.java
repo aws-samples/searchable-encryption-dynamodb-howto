@@ -91,8 +91,6 @@ public class AwsSupport {
         .build());
     // BEGIN EXERCISE 3 STEP 2
 
-    // END EXERCISE 3 STEP 2
-
     return beacons;
   }
 
@@ -110,11 +108,7 @@ public class AwsSupport {
 
   // BEGIN EXERCISE 3 STEP 4a
 
-  // END EXERCISE 3 STEP 4a
-
   // BEGIN EXERCISE 3 STEP 4b
-
-  // END EXERCISE 3 STEP 4b
 
   public static CompoundBeacon MakeGsi1PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
@@ -137,13 +131,9 @@ public class AwsSupport {
     signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
     // BEGIN EXERCISE 3 STEP 3
 
-    // END EXERCISE 3 STEP 3
-
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
     // BEGIN EXERCISE 3 STEP 5
-
-    // END EXERCISE 3 STEP 5
 
     return CompoundBeacon.builder()
         .name(GSI1_SORT_KEY)
@@ -158,8 +148,6 @@ public class AwsSupport {
     beacons.add(MakeGsi1PartitionKey());
     beacons.add(MakeGsi1SortKey());
     // BEGIN EXERCISE 3 STEP 6
-
-    // END EXERCISE 3 STEP 6
     return beacons;
   }
 

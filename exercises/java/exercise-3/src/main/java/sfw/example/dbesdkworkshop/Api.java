@@ -98,8 +98,6 @@ public class Api {
     final KeySchemaElement pk2Schema = KeySchemaElement
       .builder()
       // BEGIN EXERCISE 3 STEP 7a
-      .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
-      // END EXERCISE 3 STEP 7a
       .keyType(KeyType.HASH)
       .build();
     final ArrayList<KeySchemaElement> gsi2Schema = new ArrayList<KeySchemaElement>();
@@ -115,15 +113,11 @@ public class Api {
     final KeySchemaElement pk3Schema = KeySchemaElement
       .builder()
     // BEGIN EXERCISE 3 STEP 7b
-
-    // END EXERCISE 3 STEP 7b
     .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk3Schema = KeySchemaElement
       .builder()
     // BEGIN EXERCISE 3 STEP 7c
-
-    // END EXERCISE 3 STEP 7c
     .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi3Schema = new ArrayList<KeySchemaElement>();
@@ -150,8 +144,6 @@ public class Api {
       .attributeName(GSI1_SORT_KEY)
       .attributeType(ScalarAttributeType.S).build());
     // BEGIN EXERCISE 3 STEP 7d
-
-    // END EXERCISE 3 STEP 7d
     final CreateTableRequest request =
         CreateTableRequest.builder()
         .tableName(tableName)
