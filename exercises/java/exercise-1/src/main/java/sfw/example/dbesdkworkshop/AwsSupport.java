@@ -12,8 +12,6 @@ import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 // BEGIN EXERCISE 1 STEP 3b
 
-// END EXERCISE 1 STEP 3b
-
 public class AwsSupport {
 
   private AwsSupport() { // Do not instantiate
@@ -36,20 +34,12 @@ public class AwsSupport {
     else
       return GetClientBuilder(shared.ddbLocal)
         // BEGIN EXERCISE 1 STEP 5a
-
-        // END EXERCISE 1 STEP 5a
         .build();
   }
 
   // BEGIN EXERCISE 1 STEP 3c
 
-  // END EXERCISE 1 STEP 3c
-
   // BEGIN EXERCISE 1 STEP 4b
 
-  // END EXERCISE 1 STEP 4b
-
   // BEGIN EXERCISE 1 STEP 5b
-
-  // END EXERCISE 1 STEP 5b
 }
