@@ -87,3 +87,26 @@ Cloud9 has lots of IDE features for you to leverage. Here's some links to help y
 ### Cryptographic Details
 
 The Busy Engineer's Document Bucket only scratches the surface of the features offered by AWS KMS. To dive deep on how KMS can be useful to your application, check out the <a href="https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html" target="_blank">AWS Key Management Service Cryptographic Details Docs</a>, for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
+
+
+
+:::code{showCopyAction=true showLineNumbers=false language=bash}
+
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+
+curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar
+curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom
+
+curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar
+curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom
+
+mvn -B -ntp install:install-file \
+  -Dfile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar \
+  -DpomFile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom;
+mvn -B -ntp install:install-file \
+  -Dfile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar \
+  -DpomFile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom;
+
+:::
