@@ -17,6 +17,10 @@ awsAccountConfig:
     - CustomerProvided
 
   participantRole:
+
+    iamPolicies: 
+      - static/iam_policy.json
+
     managedPolicies:
       - arn:aws:iam::aws:policy/AWSCloud9User
       - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
