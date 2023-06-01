@@ -30,10 +30,10 @@ considerations on the tradeoffs being made between security and performance.
 
 ### Starting Directory
 
-If you just finished [Adding the Database Encryption SDK](../adding-the-database-encryption-sdk), you are all set.
+If you just finished [Adding Searchable Encryption Configuration](../exercise-2), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `adding-searchable-encryption-configuration` directory for the language of your choice.
+jump into the `exercise-2` directory for the language of your choice.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -451,4 +451,4 @@ Now that you have added support for Timecards (simple) and Employees (complex)
 we need to repeat the process for the four remaining record types.
 
 Move onto the next exercise:
-[Adding a searchable encryption configuration](../adding-the-remaining-access-patterns).
+[Adding a searchable encryption configuration](../exercise-4).

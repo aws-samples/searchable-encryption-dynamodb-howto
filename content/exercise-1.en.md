@@ -718,4 +718,4 @@ Take a look at your [AWS CloudTrail logs](TODO) and
 Now that you are encrypting and decrypting items in the Employee Portal Service,
 let's move onto adding back in those Global Secondary Indexes which enable all of our interesting access patterns.
 Move onto the next exercise:
-[Adding a searchable encryption configuration](./adding-searchable-encryption-configuration.md)?
+[Adding a searchable encryption configuration](../exercise-2)?

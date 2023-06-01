@@ -62,10 +62,10 @@ for timecards based on email and start time.
 
 ### Starting Directory
 
-If you just finished [Adding the Database Encryption SDK](../adding-the-database-encryption-sdk.md), you are all set.
+If you just finished [Adding the Database Encryption SDK](../exercise-1), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `adding-searchable-encryption-configuration` directory for the language of your choice.
+jump into the `exercise-1` directory for the language of your choice.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -592,5 +592,5 @@ Try out these links.
 
 [TODO exercises are out of order?]
 Ready for more?
-Next you will work [add the remaining access patterns](./adding-the-remaining-access-patterns.md)
+Next you will work [add the remaining access patterns](../exercise-3)
 to our searchable encryption configuration.
