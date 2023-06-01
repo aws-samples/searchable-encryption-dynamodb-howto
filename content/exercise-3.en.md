@@ -30,7 +30,7 @@ considerations on the tradeoffs being made between security and performance.
 
 ### Starting Directory
 
-If you just finished [Adding the Database Encryption SDK](./adding-the-database-encryption-sdk.md), you are all set.
+If you just finished [Adding the Database Encryption SDK](../adding-the-database-encryption-sdk), you are all set.
 
 If you aren't sure, or want to catch up,
 jump into the `adding-searchable-encryption-configuration` directory for the language of your choice.
@@ -39,7 +39,7 @@ jump into the `adding-searchable-encryption-configuration` directory for the lan
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-start
+cd ~/environment/workshop/java/exercise-3
 ```
 
 
@@ -451,4 +451,4 @@ Now that you have added support for Timecards (simple) and Employees (complex)
 we need to repeat the process for the four remaining record types.
 
 Move onto the next exercise:
-[Adding a searchable encryption configuration](./adding-the-remaining-access-patterns.en.md).
+[Adding a searchable encryption configuration](../adding-the-remaining-access-patterns).

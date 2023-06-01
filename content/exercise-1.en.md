@@ -42,7 +42,7 @@ will use a strategy known as [envelope encryption](TODO).
 For every item that is encrypted,
 a unique `data key` is generated that is responsible for encrypting that item.
 You will configure the client to generate and protect these data keys
-using the KMS Key that you set up in [Getting Started](./getting-started.md).
+using the KMS Key that you set up in [Getting Started](../getting-started).
 
 ## Let's Go!
 
@@ -56,7 +56,7 @@ Make sure you are in the `exercises` directory for the language of your choice:
 :::tab{label="Java"}
 
 ```bash
-cd ~/environment/workshop/exercises/java/exercise-1
+cd ~/environment/workshop/java/exercise-1
 ```
 
 :::

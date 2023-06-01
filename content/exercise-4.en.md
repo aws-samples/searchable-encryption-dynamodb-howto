@@ -3,7 +3,7 @@ title : "Exercise 4"
 weight : 400
 ---
 
-<!-- !test program
+
 ./utils/check-block.sh ./exercises/java/exercise-4 <&0
  -->
 
@@ -39,7 +39,7 @@ jump into the `adding-the-remaining-access-patterns-start` directory for the lan
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-start
+cd ~/environment/workshop/java/exercise-4
 ```
 
 :::

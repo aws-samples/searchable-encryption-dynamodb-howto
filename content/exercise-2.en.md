@@ -62,7 +62,7 @@ for timecards based on email and start time.
 
 ### Starting Directory
 
-If you just finished [Adding the Database Encryption SDK](./adding-the-database-encryption-sdk.md), you are all set.
+If you just finished [Adding the Database Encryption SDK](../adding-the-database-encryption-sdk.md), you are all set.
 
 If you aren't sure, or want to catch up,
 jump into the `adding-searchable-encryption-configuration` directory for the language of your choice.
@@ -71,7 +71,7 @@ jump into the `adding-searchable-encryption-configuration` directory for the lan
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-start
+cd ~/environment/workshop/java/exercise-2
 ```
 
 :::
