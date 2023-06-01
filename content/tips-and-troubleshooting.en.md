@@ -99,8 +99,8 @@ sudo yum install -y apache-maven
 curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar
 curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom
 
-curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar
-curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom
+curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar
+curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom
 
 :::
 
