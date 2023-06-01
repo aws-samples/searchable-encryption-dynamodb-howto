@@ -18,7 +18,7 @@ public class Config {
     public static final String SPLIT = "^";
 
     // BEGIN EXERCISE 1 STEP 1
-    public static final String TABLE_NAME = "Exercise1_Table";
+
     // END EXERCISE 1 STEP 1
 
     public static final String BRANCH_KEY_TABLE = StateConfig.contents.wrapping_key_info.branch_key_table;
