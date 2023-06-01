@@ -95,9 +95,9 @@ Update the table name to something specific to this exercise.
 
 <!-- !test check java step 1 -->
 ```java
-    // BEGIN EXERCISE 2 STEP 1
+    // BEGIN EXERCISE 2 STEP 1a
     public static final String TABLE_NAME = "Exercise2_Table";
-    // END EXERCISE 2 STEP 1
+    // END EXERCISE 2 STEP 1a
 ```
 
 :::
@@ -132,13 +132,13 @@ Update the code that defines the first Global Secondary Index:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 1 -->
+<!-- !test check java step 1b -->
 ```java
     final KeySchemaElement pk1Schema = KeySchemaElement
       .builder()
-      // BEGIN EXERCISE 2 STEP 1
+      // BEGIN EXERCISE 2 STEP 1b
       .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
-      // END EXERCISE 2 STEP 1
+      // END EXERCISE 2 STEP 1b
       .keyType(KeyType.HASH)
       .build();
 ```
@@ -153,7 +153,7 @@ in the attribute definitions.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 1 -->
+<!-- !test check java step 1c -->
 ```java
     final ArrayList<AttributeDefinition> attrs = new ArrayList<AttributeDefinition>();
     attrs.add(AttributeDefinition.builder()
@@ -163,9 +163,9 @@ in the attribute definitions.
       .attributeName(SORT_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      // BEGIN EXERCISE 2 STEP 1
+      // BEGIN EXERCISE 2 STEP 1c
       .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
-      // END EXERCISE 2 STEP 1
+      // END EXERCISE 2 STEP 1c
 ```
 
 :::
