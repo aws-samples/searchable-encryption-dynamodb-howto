@@ -16,6 +16,7 @@ clean_exercises:
 test_markdown:
 	# find content -name '*.md' | xargs -t -I %  npx txm %
 	# npx txm ./content/adding-employee-configuration.en.md
+	# npx txm ./content/adding-the-remaining-access-patterns.en.md
 	npx txm --jobs 1 ./content/adding-the-database-encryption-sdk.en.md
 
 test: clean_exercises | test_markdown
