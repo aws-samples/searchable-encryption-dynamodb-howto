@@ -12,7 +12,7 @@ get_assets:
 
 
 clean_exercises:
-	find "./exercises/java" -type d -name "build" -exec echo rm -rf {} \;
+	find "./exercises/java" -type d -name "build" -prune -exec rm -rf {} \;
 	git restore --source=HEAD --staged --worktree -- "./exercises/java/"
 
 test_markdown:
