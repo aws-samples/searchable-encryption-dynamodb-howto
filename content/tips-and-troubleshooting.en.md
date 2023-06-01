@@ -102,10 +102,14 @@ curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom" sourc
 curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar
 curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom
 
-mvn -B -ntp install:install-file \
+:::
+
+:::code{showCopyAction=true showLineNumbers=false language=bash}
+
+mvn -B install:install-file \
   -Dfile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar \
   -DpomFile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom;
-mvn -B -ntp install:install-file \
+mvn -B install:install-file \
   -Dfile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar \
   -DpomFile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom;
 
