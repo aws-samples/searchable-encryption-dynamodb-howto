@@ -41,7 +41,7 @@ public class Reservation extends BaseItem {
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6b
     // String floor = location.get(FLOOR_NAME);
     // String room = location.get(ROOM_NAME);
     // String building = location.get(BUILDING_NAME);
@@ -50,7 +50,7 @@ public class Reservation extends BaseItem {
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + SPLIT + FLOOR_PREFIX + floor + SPLIT + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6b
     item.put(RESERVATION_NAME, AttributeValue.fromS(reservation));
     item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
     item.put(LOCATION_NAME, AttributeValue.fromM(StringMapToAttr(location)));

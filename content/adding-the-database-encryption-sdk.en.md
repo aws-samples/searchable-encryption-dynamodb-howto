@@ -3,6 +3,10 @@ title : "Exercise 1"
 weight : 100
 ---
 
+<!-- !test program
+./utils/check-block.sh ./exercises/java/exercise-1 <&0
+ -->
+
 # Exercise 1: Add the AWS Database Encryption SDK
 
 In this section, you will add client-side encryption
@@ -64,9 +68,50 @@ Within those files, look for comments that begins with: `BEGIN EXERCISE 1 STEP N
 where `N` is the number step you are are.
 This is where you will want to add new code.
 
-### Step 1: Add the DB-ESDK Dependency
+### Step 1: Create your table
 
-First, let's begin by updating our dependencies.
+First, create the DynamoDB table that will contain the data for your
+Employee Portal Service.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+
+:::
+::::
+
+Update the table name to something specific to this exercise.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+<!-- !test check java step 1 -->
+```java
+    // BEGIN EXERCISE 1 STEP 1
+    public static final String TABLE_NAME = "Exercise1_Table";
+    // END EXERCISE 1 STEP 1
+```
+
+:::
+::::
+
+Now use the CLI to create the table that will back the Employee Portal Service
+for this exercise.
+
+```bash
+./employee-portal create-table
+```
+
+#### What Happened?
+
+Each exercise is set up to work with a new DynamoDB table to store
+your item data.
+This is to make is easier to compare and contrast as you move through the exercises.
+
+### Step 2: Add the DB-ESDK Dependency
+
+Now, let's begin adding client-side encryption by updating our dependencies.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -86,14 +131,15 @@ Add the dependencies for:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 2 -->
 ```java
     api("javax.xml.bind:jaxb-api:2.3.1")
-// BEGIN EXERCISE 1 STEP 1
+// BEGIN EXERCISE 1 STEP 2
     implementation(platform("software.amazon.awssdk:bom:2.19.1"))
     implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
     implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
     implementation("software.amazon.awssdk:kms")
-// END EXERCISE 1 STEP 1
+// END EXERCISE 1 STEP 2
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
 ```
 
@@ -110,7 +156,7 @@ to configure the AWS Database Encryption SDK with AWS KMS.
 
 You will see how we use each of these libraries in later steps.
 
-### Step 2: Configure your Key Store
+### Step 3: Configure your Key Store
 
 To encrypt your items, you will be using a [Hierarchical Keyring](TODO) to protect the
 data keys that encrypt each item.
@@ -140,23 +186,21 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
 
 This file contains constants used by the Employee Portal Service.
 Update this file to specify the following:
-- The table name for this exercise.
-  The application built in each exercise will use a different DynamoDB table in order to better demonstrate differences between each exercise.
 - The table name for the Key Store you will create.
 - The KMS Key ARN that was created in [Getting Started](TODO).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3a -->
 ```java
 public static class Constants {
     public static final boolean USE_LOCAL_DDB = true;
 
-    // BEGIN EXERCISE 1 STEP 2
-    public static final String TABLE_NAME = "Exercise1_Table";
+    // BEGIN EXERCISE 1 STEP 3a
     public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
     public static final String BRANCH_KEY_KMS_ARN = "<your-kms-key-arn>";
-    // END EXERCISE 1 STEP 2
+    // END EXERCISE 1 STEP 3a
 ```
 
 :::
@@ -181,10 +225,11 @@ First, update the file to import all the necessary classes for this exercise:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3b -->
 ```java
 import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
-// BEGIN EXERCISE 1 STEP 2
+// BEGIN EXERCISE 1 STEP 3b
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.services.kms.KmsClient;
 import software.amazon.cryptography.dbencryptionsdk.dynamodb.*;
@@ -199,7 +244,7 @@ import software.amazon.cryptography.materialproviders.IKeyring;
 import software.amazon.cryptography.materialproviders.MaterialProviders;
 import software.amazon.cryptography.materialproviders.model.CreateAwsKmsHierarchicalKeyringInput;
 import software.amazon.cryptography.materialproviders.model.MaterialProvidersConfig;
-// END EXERCISE 1 STEP 2
+// END EXERCISE 1 STEP 3b
 
 public class AwsSupport {
 ```
@@ -230,8 +275,9 @@ Now, to implement `CreateBranchKey`:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 3c -->
 ```java
-  // BEGIN EXERCISE 1 STEP 2
+  // BEGIN EXERCISE 1 STEP 3c
   public static KeyStore MakeKeyStore(boolean ddbLocal)
   {
     return KeyStore.builder().KeyStoreConfig(
@@ -251,7 +297,7 @@ Now, to implement `CreateBranchKey`:
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     return keystore.CreateKey().branchKeyIdentifier();
   }
-  // END EXERCISE 1 STEP 2
+  // END EXERCISE 1 STEP 3c
 ```
 
 :::
@@ -286,7 +332,7 @@ A globally unique id is created for each branch key.
 In the next step you will configure your Hierarchical Keyring
 to use this branch key by this branch key id.
 
-### Step 3: Configure the Hierarchical Keyring
+### Step 4: Configure the Hierarchical Keyring
 
 Now that we have a Key Store with a branch key,
 we can configure the Hierarchical Keyring.
@@ -304,10 +350,11 @@ Update the Config file with the branch key id you received in [Step 2](#step-2-c
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4a -->
 ```java
-    // END EXERCISE 1 STEP 3
+    // END EXERCISE 1 STEP 4a
     public static final String BRANCH_KEY_ID = "<your-branch-key-id>";
-    // END EXERCISE 1 STEP 3
+    // END EXERCISE 1 STEP 4a
 ```
 
 :::
@@ -335,8 +382,9 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 4b -->
 ```java
-  // BEGIN EXERCISE 1 STEP 3
+  // BEGIN EXERCISE 1 STEP 4b
   public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
     final MaterialProviders matProv = MaterialProviders.builder()
@@ -352,7 +400,7 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
   
     return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
   }
-  // END EXERCISE 1 STEP 3
+  // END EXERCISE 1 STEP 4b
 ```
 
 :::
@@ -372,7 +420,7 @@ you call back to KMS.
 In the next step, you will use this Keyring to configure client-side
 encryption for your client.
 
-### Step 4: Configure the DynamoDB Client with client-side encryption
+### Step 5: Configure the DynamoDB Client with client-side encryption
 
 Now that you have a Hierarchical Keyring,
 the next step is to configure the DynamoDB Encryption Interceptor
@@ -397,16 +445,17 @@ in the `override Configuration`.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5a -->
 ```java
 public static DynamoDbClient MakeDynamoDbClient()
 {
     return GetClientBuilder()
-// BEGIN EXERCISE 1 STEP 4
+// BEGIN EXERCISE 1 STEP 5a
     .overrideConfiguration(
         ClientOverrideConfiguration.builder()
         .addExecutionInterceptor(MakeInterceptor())
         .build())
-// END EXERCISE 1 STEP 4
+// END EXERCISE 1 STEP 5a
     .build();
 }
 ```
@@ -436,8 +485,9 @@ For this table, configuration contains several parts:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 5b -->
 ```java
-  // BEGIN EXERCISE 1 STEP 4
+  // BEGIN EXERCISE 1 STEP 5b
   public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
   {
     final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
@@ -490,7 +540,7 @@ For this table, configuration contains several parts:
 
     return DynamoDbEncryptionInterceptor.builder().config(config).build();
   }
-  // END EXERCISE 1 STEP 4
+  // END EXERCISE 1 STEP 5b
 ```
 
 :::
@@ -523,7 +573,7 @@ With these changes, the DynamoDB Client built with this interceptor
 will encrypt items as configured, before they are put into DynamoDB,
 and will decrypt items as configured, after they are retrieved from DynamoDB.
 
-### Step 5: Stop writing to Glocal Secondary Index attributes
+### Step 6: Stop writing to Glocal Secondary Index attributes
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -560,13 +610,14 @@ Remove the code that writes to any Global Secondary Index.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6a -->
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6a
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(STATUS_PREFIX + status));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6a
 ```
 
 :::
@@ -586,11 +637,12 @@ old Global Secondary Indexes when writing `Reservation` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6b -->
 ```java
     item.put(PARTITION_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
     item.put(SORT_KEY, AttributeValue.fromS(RESERVATION_PREFIX + reservation));
 
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6b
     // String floor = location.get(FLOOR_NAME);
     // String room = location.get(ROOM_NAME);
     // String building = location.get(BUILDING_NAME);
@@ -599,7 +651,7 @@ old Global Secondary Indexes when writing `Reservation` items.
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6b
 ```
 
 :::
@@ -619,13 +671,14 @@ old Global Secondary Indexes when writing `Ticket` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6c -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));
     item.put(SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6c
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(AUTHOR_EMAIL_PREFIX + authorEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
 
@@ -633,7 +686,7 @@ public Map<String, AttributeValue> toItem() {
 
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(SEVERITY_PREFIX + severity));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(MODIFIED_DATE_PREFIX + modifiedDate));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6c
 ```
 
 :::
@@ -653,15 +706,16 @@ old Global Secondary Indexes when writing `Timecard` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6d -->
 ```java
 public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(PROJECT_NAME_PREFIX + projectName));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6d
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6d
 ```
 
 :::
@@ -681,6 +735,7 @@ old Global Secondary Indexes when writing `Meeting` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6e -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String floor = location.get(FLOOR_NAME);
@@ -689,10 +744,10 @@ public Map<String, AttributeValue> toItem() {
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
 
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6e
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + "." + FLOOR_PREFIX + floor + "." + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6e
 ```
 
 :::
@@ -712,6 +767,7 @@ old Global Secondary Indexes when writing `Employee` items.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
+<!-- !test check java step 6f -->
 ```java
 public Map<String, AttributeValue> toItem() {
     String locTag = "";
@@ -723,13 +779,13 @@ public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6f
     // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
     // item.put(GSI1_SORT_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     // item.put(GSI2_PARTITION_KEY, AttributeValue.fromS(MANAGER_EMAIL_PREFIX + managerEmail));
     // item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(CITY_PREFIX + location.get(CITY_NAME)));
     // item.put(GSI3_SORT_KEY, AttributeValue.fromS(locTag));
-// BEGIN EXERCISE 1 STEP 5
+// BEGIN EXERCISE 1 STEP 6f
 ```
 
 :::
@@ -762,13 +818,33 @@ cd ~/environment/workshop/exercises/java/add-esdk-complete
 Now that you have written the code,
 let's try it out and see what it does.
 
-First, let's create the table that will back the Employee Portal Service
-for this exercise.
+### Examine your Key Store
 
-```bash
-./employee-portal create-table
-```
+First, let's take a look at the Key Store that we created.
+Go to the [AWS Console for your Key Store table](TODO).
 
+Here, you should see that there exists two entries.
+One contains a version under the `type` sort attribute.
+This is the branch key that is responsible for
+protecting your data keys.
+The key material for this branch key is itself client-side encrypted
+by your KMS Key, under the `enc` attribute.
+The other item that shares the branch key id is called a beacon key.
+Ignore the beacon key for now, we will use it in a later exercise.
+
+The Hierarchical Keyring will get this branch key and decrypt it
+with your KMS key the first time you encrypt or decrypt an item.
+It will then cache this material so that the next time you encrypt
+or decrypt you do not need to make another call to DynamoDB or KMS.
+The Hierarchical Keyring will use this locally cached branch key
+for as long as the TTL you configured, at which point it will remove
+the branch key from the cache and need to retrieve and re-decrypt
+the branch key from DynamoDB.
+
+### Examine your data table
+
+Now let's look at the DynamoDB table that store the data
+from the Employee Portal Service.
 Go to the [DynamoDB AWS Console](TODO) to confirm that your expected table is created.
 
 Next, load up some test data into your portal!
@@ -777,11 +853,22 @@ Next, load up some test data into your portal!
 ./load-data
 ```
 
+You should see that most of your item attributes.
+now appear in DynamoDB as the `Bytes` DynamoDB type,
+in an encrypted form.
+DynamoDB never sees the plaintext form for these attribute values.
+
+You should also notice that there are two extra attributes written to our items.
+`aws_dbe_head` contains our [material descrption](TODO),
+which contains the metadata necessary for the AWS Database Encryption SDK
+to understand how to decrypt the item.
+`aws_dbe_foot` contains the signature calculated over our item.
+
+### Retrieve items from your encrypted table
+
 Similar to how we got and put records into the plaintext Employee Portal Service,
 you can use the CLI to retrieve and put records into our Employee Portal Service
 with client-side encryption.
-
-### Retrieve items from your encrypted table
 
 To start, let's retrieve all of our employees again:
 
@@ -791,18 +878,6 @@ To start, let's retrieve all of our employees again:
 
 The data that the CLI prints will appear as plaintext
 because you have set up the CLI to locally decrypt items as soon as they are retrieved from DynamoDB.
-
-Let's verify that the data is actually encrypted in DynamoDB.
-Go to the [DynamoDB AWS Console](TODO) for your table again.
-You should see that most of your item attributes.
-now appear in DynamoDB as the `Bytes` DynamoDB type,
-in an encrypted form.
-You should also notice that there are two extra attributes written to our items.
-`aws_dbe_head` contains our [material descrption](TODO),
-which contains the metadata necessary for the AWS Database Encryption SDK
-to understand how to decrypt the item.
-`aws_dbe_foot` contains the signature calculated over our item.
-
 Your data is encrypted in dynamodb, but you've built the Employee Portal Service
 such that this encryption and decryption happens transparently
 when you interact with the data with the CLI.
@@ -862,6 +937,8 @@ is being used as expected to protect your items.
 
 Take a look at your [AWS CloudTrail logs](TODO) and
 [TODO steps to find KMS log for item put above].
+
+[TODO some note about the Hierarchy Keyring is not 1:1 with KMS calls]
 
 ## Explore Further  --- BUG BUG
 
