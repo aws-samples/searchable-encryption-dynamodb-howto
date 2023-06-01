@@ -73,19 +73,29 @@ public class AwsSupport {
     return keystore.CreateKey().branchKeyIdentifier();
   }
 
-  public static BeaconKeySource MakeKeySource() {
-    return BeaconKeySource.builder()
-        .single(
-            SingleKeyStore.builder()
-                .keyId(BRANCH_KEY_ID)
-                .cacheTTL(3600)
-                .build())
-        .build();
-  }
-
   // BEGIN EXERCISE 2 STEP 2
 
   // END EXERCISE 2 STEP 2
+
+  // BEGIN EXERCISE 2 STEP 3a
+
+  // END EXERCISE 2 STEP 3a
+  
+  // BEGIN EXERCISE 2 STEP 3b
+
+  // END EXERCISE 2 STEP 3b
+
+  // BEGIN EXERCISE 2 STEP 4a
+
+  // END EXERCISE 2 STEP 4a
+  
+  // BEGIN EXERCISE 2 STEP 4b
+
+  // END EXERCISE 2 STEP 4b
+  
+  // BEGIN EXERCISE 2 STEP 5a
+
+  // END EXERCISE 2 STEP 5a
 
  public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
@@ -145,8 +155,9 @@ public class AwsSupport {
         .sortKeyName(SORT_KEY)
         .attributeActionsOnEncrypt(actions)
         .keyring(kmsKeyring)
-        // BEGIN EXERCISE 2 STEP 3
-        // END EXERCISE 2 STEP 3
+        // BEGIN EXERCISE 2 STEP 5c
+
+        // END EXERCISE 2 STEP 5c
         .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();
