@@ -39,12 +39,6 @@ public class Meeting extends BaseItem {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_NUMBER_PREFIX + employeeNumber));
     item.put(SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime ));
-
-// BEGIN EXERCISE 1 STEP 6e
-    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(EMPLOYEE_EMAIL_PREFIX + employeeEmail));
-    // item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + SPLIT + FLOOR_PREFIX + floor + SPLIT + ROOM_PREFIX + room));
-// BEGIN EXERCISE 1 STEP 6e
-
     item.put(EMPLOYEE_NUMBER_NAME, AttributeValue.fromS(employeeNumber));
     item.put(START_TIME_NAME, AttributeValue.fromS(startTime));
     item.put(EMPLOYEE_EMAIL_NAME, AttributeValue.fromS(employeeEmail));

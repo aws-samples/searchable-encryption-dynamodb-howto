@@ -1,15 +1,9 @@
-[base]
-state_file = "~/.busy_engineers_state.toml"
+[wrapping_key_info]
+branch_key_table = "BranchKey_Table"
+# BEGIN EXERCISE 1 STEP 3a
+branch_key_kms_arn = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126"
+# END EXERCISE 1 STEP 3a
 
-[ddb_table]
-name = "MyTestTable"
-partition_key = "PK"
-sort_key = "SK"
-gsi1_name = "GSI1"
-gsi1_partition_key = "PK1"
-gsi1_sort_key = "SK1"
-gsi2_name = "GSI2"
-gsi2_partition_key = "PK2"
-gsi3_name = "GSI3"
-gsi3_partition_key = "PK3"
-gsi3_sort_key = "SK3"
+# BEGIN EXERCISE 1 STEP 6
+branch_key_id = "<your-branch-key-id>"
+# END EXERCISE 1 STEP 6

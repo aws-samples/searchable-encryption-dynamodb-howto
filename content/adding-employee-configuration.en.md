@@ -369,9 +369,36 @@ Nothing needs to change in the code that reads, writes or queries.
 Now that you have written the code,
 let's try it out and see what it does.
 
+You likely already did this,
+but if you don't already have a branch key
+in your `config.toml` run this
+and add the branch key id.
+
+
+<!-- !test program
+BRANCH_KEY_ID=$(./exercises/java/exercise-3/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
+ -->
+
+<!-- !test check create-branch-key -->
+```bash
+./employee-portal create-branch-key
+```
+
 First, let's create the table that will back the Employee Portal Service.
 We have made this easy for you by providing a target within the CLI.
 
+<!-- !test program
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+
+read command_input
+cd ./exercises/java/exercise-3
+eval "$command_input" -l
+ -->
+
+<!-- !test check create-table -->
 ```bash
 ./employee-portal create-table
 ```
@@ -381,6 +408,7 @@ We have made this easy for you by providing a target within the CLI.
 Next, load up some test data into your portal!
 We have provided a script that puts some sample data into your table.
 
+<!-- !test check load-data -->
 ```bash
 ./load-data
 ```

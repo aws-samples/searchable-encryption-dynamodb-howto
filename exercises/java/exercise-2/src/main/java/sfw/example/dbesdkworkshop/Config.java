@@ -13,16 +13,17 @@ public class Config {
   // CHECKSTYLE:OFF ParameterName
 
   public static class Constants {
-    public static final boolean USE_LOCAL_DDB = true;
+
     public static final String BEACON_PREFIX = "aws_dbe_b_";
     public static final String SPLIT = "^";
 
     // BEGIN EXERCISE 2 STEP 1a
-    
+
     // END EXERCISE 2 STEP 1a
-    public static final String BRANCH_KEY_TABLE = "BranchKey_Table";
-    public static final String BRANCH_KEY_KMS_ARN = "arn:aws:kms:us-west-2:370957321024:key/9d989aa2-2f9c-438c-a745-cc57d3ad0126";
-    public static final String BRANCH_KEY_ID = "d7c3efee-2ff7-4f1a-a7f5-7d9af64b258d";
+
+    public static final String BRANCH_KEY_TABLE = StateConfig.contents.wrapping_key_info.branch_key_table;
+    public static final String BRANCH_KEY_KMS_ARN = StateConfig.contents.wrapping_key_info.branch_key_kms_arn;
+    public static final String BRANCH_KEY_ID = StateConfig.contents.wrapping_key_info.branch_key_id;
 
     public static final String GSI1_NAME = "GSI1";
     public static final String GSI2_NAME = "GSI2";
