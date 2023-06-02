@@ -542,10 +542,12 @@ Resources:
                 - echo 'chmod +x ~/environment/workshop/java/exercise-3/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/exercise-4/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
+                - echo ' git -C ~/environment/workshop commit -a -m "set executable"' >> $BOOTSTRAP_SCRIPT
 
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal load-data' >> $BOOTSTRAP_SCRIPT
-                - echo ' git -C ~/environment/workshop commit -a -m set executable' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/workshop/java/plaintext-base/employee-portal generate-completion >> ~/.bashrc' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
