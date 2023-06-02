@@ -528,7 +528,18 @@ Now we can build our application and use the CLI to create our Key Store and cre
 Input the following into the terminal:
 
 <!-- !test program
-BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal -l create-branch-key | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+set -o pipefail
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+else
+  BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal create-branch-key | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+fi
+
+exit_code=$?
+if [ $exit_code -ne 0 ]; then
+  exit $exit_code
+fi
+
 ./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
 -->
 
@@ -556,7 +567,11 @@ for this exercise.
 
 <!-- !test program
 cd ./workshop/java/exercise-1
-./employee-portal -l create-table
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  ./employee-portal create-table -l
+else
+  ./employee-portal create-table
+fi
  -->
 
 <!-- !test check java create-table -->

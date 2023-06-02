@@ -1,4 +1,5 @@
- 
+.PHONY: stop-ddb-local
+
 zip: clean_workshop
 	find "./workshop/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
 	cd workshop; zip -r ../assets/archive.zip .
@@ -18,11 +19,12 @@ clean_workshop:
 	cd workshop; git restore --source=HEAD --staged --worktree -- "./java/"
 	cd workshop; git restore --source=HEAD --staged --worktree -- config.toml
 
-test_markdown:
+markdown_test: clean_workshop
 	# find content -name '*.md' | xargs -t -I %  npx txm %
 	npx txm --jobs 1 ./content/exercise-1.en.md
 
-test: clean_workshop | test_markdown 
+test_local: USE_DDB_LOCAL=true
+test_local: start-ddb-local markdown_test stop-ddb-local
 
 get-ddb-local:
 	mkdir dynamodb_local
