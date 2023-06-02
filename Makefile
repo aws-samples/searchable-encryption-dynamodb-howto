@@ -11,10 +11,12 @@ put_assets:
 get_assets:
 	aws s3 sync s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 ./assets --delete
 
+# This command is strange to make it portable
+# This way it can run in the Cloud9 env
 clean_workshop:
 	find "./workshop/java" -type d -name "build" -prune -exec rm -rf {} \;
-	git restore --source=HEAD --staged --worktree -- "./workshop/java/"
-	git restore --source=HEAD --staged --worktree -- workshop/config.toml
+	cd workshop; git restore --source=HEAD --staged --worktree -- "./java/"
+	cd workshop; git restore --source=HEAD --staged --worktree -- config.toml
 
 test_markdown:
 	# find content -name '*.md' | xargs -t -I %  npx txm %

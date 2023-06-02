@@ -528,7 +528,7 @@ Now we can build our application and use the CLI to create our Key Store and cre
 Input the following into the terminal:
 
 <!-- !test program
-BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal -l create-branch-key | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
 ./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
 -->
 
@@ -556,7 +556,7 @@ for this exercise.
 
 <!-- !test program
 cd ./workshop/java/exercise-1
-./employee-portal create-table -l
+./employee-portal -l create-table
  -->
 
 <!-- !test check java create-table -->

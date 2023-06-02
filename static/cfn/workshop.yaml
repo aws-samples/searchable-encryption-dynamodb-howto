@@ -545,6 +545,7 @@ Resources:
 
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal load-data' >> $BOOTSTRAP_SCRIPT
+                - echo ' git -C ~/environment/workshop commit -a -m set executable' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
