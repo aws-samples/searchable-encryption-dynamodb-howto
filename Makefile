@@ -1,4 +1,3 @@
-.PHONY: test
  
 zip: clean_exercises
 	find "./exercises/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
@@ -13,6 +12,7 @@ get_assets:
 clean_exercises:
 	find "./exercises/java" -type d -name "build" -prune -exec rm -rf {} \;
 	git restore --source=HEAD --staged --worktree -- "./exercises/java/"
+	git restore --source=HEAD --staged --worktree -- exercises/config.toml
 
 test_markdown:
 	# find content -name '*.md' | xargs -t -I %  npx txm %
@@ -20,8 +20,12 @@ test_markdown:
 
 test: clean_exercises | test_markdown 
 
+get-ddb-local:
+	mkdir dynamodb_local
+	curl -sSL "https://s3.us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz" | tar -xzf - -C "dynamodb_local"
+
 start-ddb-local:
-	npx dynalite --port 8000 &
+	java -Djava.library.path=dynamodb_local/DynamoDBLocal_lib -jar dynamodb_local/DynamoDBLocal.jar -sharedDb -inMemory &
 
 stop-ddb-local:
-	@pkill dynalite
+	@pkill -f DynamoDBLocal.jar
