@@ -1,4 +1,6 @@
-.PHONY: stop-ddb-local
+# This will make all the targets
+# in this makefile PHONY
+.PHONY: $(MAKECMDGOALS)
 
 zip: clean_workshop
 	find "./workshop/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
@@ -24,14 +26,14 @@ markdown_test: clean_workshop
 	npx txm --jobs 1 ./content/exercise-1.en.md
 
 test_local: USE_DDB_LOCAL=true
-test_local: start-ddb-local markdown_test stop-ddb-local
+test_local: start_ddb_local markdown_test stop_ddb_local
 
-get-ddb-local:
+get_ddb_local:
 	mkdir dynamodb_local
 	curl -sSL "https://s3.us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz" | tar -xzf - -C "dynamodb_local"
 
-start-ddb-local:
+start_ddb_local:
 	java -Djava.library.path=dynamodb_local/DynamoDBLocal_lib -jar dynamodb_local/DynamoDBLocal.jar -sharedDb -inMemory &
 
-stop-ddb-local:
+stop_ddb_local:
 	@pkill -f DynamoDBLocal.jar
