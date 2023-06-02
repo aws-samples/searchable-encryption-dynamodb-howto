@@ -68,3 +68,4 @@ infrastructure:
           defaultValue: '{{.AssetsBucketPrefix}}archive.zip'
       participantVisibleStackOutputs:
         - Cloud9IdeUrl
+        - KMSKeyARN
