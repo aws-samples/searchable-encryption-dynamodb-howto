@@ -543,21 +543,22 @@ Resources:
                 - echo 'chmod +x ~/environment/workshop/java/exercise-4/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
-                - echo ' git -C ~/environment/workshop commit -a -m "set executable"' >> $BOOTSTRAP_SCRIPT
+                
+                - echo !Sub sed -i 's/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${WorkshopKey}"/' ~/environment/workshop/config.toml >> $BOOTSTRAP_SCRIPT
+
+                - echo ' git -C ~/environment/workshop commit -a -m "Bootstrap Updates"' >> $BOOTSTRAP_SCRIPT
 
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal load-data' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal generate-completion >> ~/.bashrc' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/workshop/java/complete/employee-portal help' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/workshop/java/complete/employee-portal create-branch-key' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT
                 # The BOOTSTRAP_SCRIPT is not deleted on purpose.
                 # This means that it is available in the workshop if something went wrong
-
-                # TODO add tab complete for both encrypted and plaintext cli
-
                 # End custom bootstrap
-                - echo 'Anything here???'
                 - echo '=== PREPARE REBOOT in 1 minute with at ==='
                 - FILE=$(mktemp) && echo $FILE && echo '#!/bin/bash' > $FILE && echo 'reboot -f --verbose' >> $FILE && at now + 1 minute -f $FILE
                 - echo "Bootstrap completed with return code $?"
