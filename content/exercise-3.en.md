@@ -42,8 +42,6 @@ jump into the `exercise-2` directory for the language of your choice.
 cd ~/environment/workshop/java/exercise-3
 ```
 
-
-
 :::
 ::::
 
@@ -366,36 +364,21 @@ Nothing needs to change in the code that reads, writes or queries.
 
 ## Try it Out
 
-Now that you have written the code,
-let's try it out and see what it does.
-
-You likely already did this,
-but if you don't already have a branch key
-in your `config.toml` run this
-and add the branch key id.
-
-
-<!-- !test program
-BRANCH_KEY_ID=$(./workshop/java/exercise-3/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
-./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
- -->
-
-<!-- !test check create-branch-key -->
-```bash
-./employee-portal create-branch-key
-```
-
 First, let's create the table that will back the Employee Portal Service.
 We have made this easy for you by providing a target within the CLI.
 
 <!-- !test program
+cd ./workshop/java/exercise-3
+
 # This is dangerous because `eval` lets you do anything.
 # However if you have access to modify the code block
 # then you could modify this script...
-
 read command_input
-cd ./workshop/java/exercise-3
-eval "$command_input" -l
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  eval "$command_input -l"
+else
+  eval "$command_input"
+fi
  -->
 
 <!-- !test check create-table -->

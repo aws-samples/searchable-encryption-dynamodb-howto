@@ -3,7 +3,7 @@ title : "Exercise 4"
 weight : 400
 ---
 
-
+<!-- !test program
 ./utils/check-block.sh ./workshop/java/exercise-4 <&0
  -->
 
@@ -340,10 +340,36 @@ Now that you have completed configuring searchable configuration for each of you
 patterns, you should now be able to perform any query that was possible in your plaintext
 Employee Portal Service in your client-side encrypted Employee Portal Service.
 
-For example, we can now [TODO]:
+Again, since each exercise is independent,
+you need to create the table.
 
+<!-- !test program
+cd ./workshop/java/exercise-4
+
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+read command_input
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  eval "$command_input -l"
+else
+  eval "$command_input"
+fi
+ -->
+
+<!-- !test check create-table -->
 ```bash
-TODO compare
+./employee-portal create-table
+```
+
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+
+Next, load up some test data into your portal!
+We have provided a script that puts some sample data into your table.
+
+<!-- !test check load-data -->
+```bash
+./load-data
 ```
 
 If you take a look at your DynamoDB table, you will now see

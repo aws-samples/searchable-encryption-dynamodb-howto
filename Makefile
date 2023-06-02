@@ -21,12 +21,23 @@ clean_workshop:
 	cd workshop; git restore --source=HEAD --staged --worktree -- "./java/"
 	cd workshop; git restore --source=HEAD --staged --worktree -- config.toml
 
+# These are in explicit order.
+# This order mirrors the steps in the exercise.
+# Since each test is run one-at-a-time
+# this will replicate how customers will interact
+# with the workshop
 markdown_test: clean_workshop
-	# find content -name '*.md' | xargs -t -I %  npx txm %
 	npx txm --jobs 1 ./content/exercise-1.en.md
+	npx txm --jobs 1 ./content/exercise-2.en.md
+	npx txm --jobs 1 ./content/exercise-3.en.md
+	npx txm --jobs 1 ./content/exercise-4.en.md
 
+# The expectation is that you run stop_ddb_local seprately
+# This is because a test may fail,
+# but also you may want to have access to the data
+# to check the stat of ddb.
 test_local: USE_DDB_LOCAL=true
-test_local: start_ddb_local markdown_test stop_ddb_local
+test_local: start_ddb_local markdown_test
 
 get_ddb_local:
 	mkdir dynamodb_local
