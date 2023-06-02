@@ -4,7 +4,7 @@ weight : 100
 ---
 
 <!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-1 <&0
+./utils/check-block.sh ./workshop/java/exercise-1 <&0
  -->
 
 # Exercise 1: Add the AWS Database Encryption SDK
@@ -125,7 +125,7 @@ Add the dependencies for:
 :::tab{label="Java"}
 
 <!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-1 <&0
+./utils/check-block.sh ./workshop/java/exercise-1 <&0
  -->
 
 <!-- !test check java step 2 -->
@@ -528,8 +528,8 @@ Now we can build our application and use the CLI to create our Key Store and cre
 Input the following into the terminal:
 
 <!-- !test program
-BRANCH_KEY_ID=$(./exercises/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
-./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
+BRANCH_KEY_ID=$(./workshop/java/exercise-1/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
 -->
 
 <!-- !test check java create-branch-key -->
@@ -555,7 +555,7 @@ Now use the CLI to create the table that will back the Employee Portal Service
 for this exercise.
 
 <!-- !test program
-cd ./exercises/java/exercise-1
+cd ./workshop/java/exercise-1
 ./employee-portal create-table -l
  -->
 
@@ -574,7 +574,7 @@ Check out the code in one of the `-complete` folders to compare.
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/add-esdk-complete
+cd ~/environment/workshop/workshop/java/add-esdk-complete
 ```
 
 :::

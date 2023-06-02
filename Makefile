@@ -1,7 +1,7 @@
  
-zip: clean_exercises
-	find "./exercises/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
-	cd exercises; zip -r ../assets/archive.zip .
+zip: clean_workshop
+	find "./workshop/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
+	cd workshop; zip -r ../assets/archive.zip .
 
 put_assets:
 	aws s3 sync ./assets s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 --delete
@@ -9,16 +9,16 @@ put_assets:
 get_assets:
 	aws s3 sync s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 ./assets --delete
 
-clean_exercises:
-	find "./exercises/java" -type d -name "build" -prune -exec rm -rf {} \;
-	git restore --source=HEAD --staged --worktree -- "./exercises/java/"
-	git restore --source=HEAD --staged --worktree -- exercises/config.toml
+clean_workshop:
+	find "./workshop/java" -type d -name "build" -prune -exec rm -rf {} \;
+	git restore --source=HEAD --staged --worktree -- "./workshop/java/"
+	git restore --source=HEAD --staged --worktree -- workshop/config.toml
 
 test_markdown:
 	# find content -name '*.md' | xargs -t -I %  npx txm %
 	npx txm --jobs 1 ./content/exercise-1.en.md
 
-test: clean_exercises | test_markdown 
+test: clean_workshop | test_markdown 
 
 get-ddb-local:
 	mkdir dynamodb_local

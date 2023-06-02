@@ -4,7 +4,7 @@ weight : 300
 ---
 
 <!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-3 <&0
+./utils/check-block.sh ./workshop/java/exercise-3 <&0
  -->
 
 # Exercise 3: Adding The Employee Record access patterns
@@ -376,8 +376,8 @@ and add the branch key id.
 
 
 <!-- !test program
-BRANCH_KEY_ID=$(./exercises/java/exercise-3/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
-./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./exercises/config.toml
+BRANCH_KEY_ID=$(./workshop/java/exercise-3/employee-portal create-branch-key -l | tail -n 1 | sed 's/.*: //' | sed 's/^/\\\"/; s/$/\\\"/')
+./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
  -->
 
 <!-- !test check create-branch-key -->
@@ -394,7 +394,7 @@ We have made this easy for you by providing a target within the CLI.
 # then you could modify this script...
 
 read command_input
-cd ./exercises/java/exercise-3
+cd ./workshop/java/exercise-3
 eval "$command_input" -l
  -->
 

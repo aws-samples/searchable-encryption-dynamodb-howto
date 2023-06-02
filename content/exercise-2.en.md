@@ -4,7 +4,7 @@ weight : 200
 ---
 
 <!-- !test program
-./utils/check-block.sh ./exercises/java/exercise-2 <&0
+./utils/check-block.sh ./workshop/java/exercise-2 <&0
  -->
 
 # Exercise 2: Adding Searchable Encryption Configuration
@@ -518,7 +518,7 @@ There is a `-complete` folder for each language.
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/adding-searchable-encryption-configuration-complete
+cd ~/environment/workshop/workshop/java/adding-searchable-encryption-configuration-complete
 ```
 
 :::

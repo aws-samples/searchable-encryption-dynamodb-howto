@@ -4,7 +4,7 @@ weight : 400
 ---
 
 
-./utils/check-block.sh ./exercises/java/exercise-4 <&0
+./utils/check-block.sh ./workshop/java/exercise-4 <&0
  -->
 
 # Exercise 4: Adding The Remaining Access Patterns
@@ -328,7 +328,7 @@ There is a `-complete` folder for each language.
 :::tab{label="Java"}
 
 ```bash 
-cd ~/environment/workshop/exercises/java/adding-the-remaining-access-patterns-complete
+cd ~/environment/workshop/workshop/java/adding-the-remaining-access-patterns-complete
 ```
 
 :::
