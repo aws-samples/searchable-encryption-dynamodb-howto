@@ -115,7 +115,6 @@ mvn -B install:install-file \
 
 :::
 
-
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 
 curl -sSL ':assetUrl{path="/testing.tar.gz" source=s3}' | tar -xzf - -C ~/environment
