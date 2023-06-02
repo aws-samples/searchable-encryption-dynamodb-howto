@@ -623,6 +623,45 @@ Resources:
         - Key: Environment
           Value: !Sub ${EnvironmentName}
 
+  ################## AWS KMS Key ################
+  WorkshopKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: A KMS for the workshop
+      KeyPolicy:
+        Version: '2012-10-17'
+        Id: key-default-1
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: kms:*
+            Resource: '*'
+          - Sid: Allow Key Administrators to Manage Key
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:user/AdminUser"  # Replace with the IAM user or role that should have administrative access to the key
+            Action:
+              - kms:Create*
+              - kms:Describe*
+              - kms:Enable*
+              - kms:List*
+              - kms:Put*
+              - kms:Update*
+              - kms:Revoke*
+              - kms:Disable*
+              - kms:Get*
+              - kms:Delete*
+              - kms:TagResource
+              - kms:UntagResource
+              - kms:ScheduleKeyDeletion
+              - kms:CancelKeyDeletion
+            Resource: '*'
+      Tags:
+        - Key: Name
+          Value: WorkshopKey
+
 ################## OUTPUTS #####################
 Outputs:
   Cloud9IdeUrl:
@@ -634,3 +673,8 @@ Outputs:
   RepoCloneUrlSsh:
     Description: URL to use for cloning the repository over SSH
     Value: !GetAtt CodeCommitRepo.CloneUrlSsh
+  KMSKeyARN:
+    Description: KMS Key ARN
+    Value: !Ref WorkshopKey
+    Export:
+      Name: WorkshopKeyARN
