@@ -567,10 +567,15 @@ for this exercise.
 
 <!-- !test program
 cd ./workshop/java/exercise-1
+
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+read command_input
 if [[ -n "$USE_DDB_LOCAL" ]]; then
-  ./employee-portal create-table -l
+  eval "$command_input -l"
 else
-  ./employee-portal create-table
+  eval "$command_input"
 fi
  -->
 
