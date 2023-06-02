@@ -114,3 +114,10 @@ mvn -B install:install-file \
   -DpomFile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom;
 
 :::
+
+
+:::code{showCopyAction=true showLineNumbers=false language=bash}
+
+curl -sSL ':assetUrl{path="/testing.tar.gz" source=s3}' | tar -xzf - -C ~/environment
+
+:::

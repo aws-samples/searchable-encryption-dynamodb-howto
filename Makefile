@@ -2,6 +2,8 @@
 zip: clean_workshop
 	find "./workshop/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
 	cd workshop; zip -r ../assets/archive.zip .
+	cd ..
+	tar -czvf assets/testing.tar.gz utils content Makefile
 
 put_assets:
 	aws s3 sync ./assets s3://ws-assets-us-east-1/92b06038-2f5d-4a28-81e6-1ae85294cb42 --delete
