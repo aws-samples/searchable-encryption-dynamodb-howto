@@ -1,4 +1,5 @@
-
+.PHONY: test
+ 
 zip: clean_exercises
 	find "./exercises/java" -type d -name ".gradle" -prune -exec rm -rf {} \;
 	cd exercises; zip -r ../assets/archive.zip .
@@ -15,8 +16,12 @@ clean_exercises:
 
 test_markdown:
 	# find content -name '*.md' | xargs -t -I %  npx txm %
-	# npx txm ./content/adding-employee-configuration.en.md
-	# npx txm ./content/adding-the-remaining-access-patterns.en.md
-	npx txm --jobs 1 ./content/adding-the-database-encryption-sdk.en.md
+	npx txm --jobs 1 ./content/exercise-1.en.md
 
-test: clean_exercises | test_markdown
+test: clean_exercises | test_markdown 
+
+start-ddb-local:
+	npx dynalite --port 8000 &
+
+stop-ddb-local:
+	@pkill dynalite
