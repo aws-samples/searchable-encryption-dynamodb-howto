@@ -160,13 +160,6 @@ in the attribute definitions for table creation.
 :::
 ::::
 
-Now use the CLI to create the table that will back the Employee Portal Service
-for this exercise.
-
-```bash
-./employee-portal create-table
-```
-
 #### What Happened?
 
 Each exercise is set up to work with a new DynamoDB table to store
@@ -526,14 +519,39 @@ cd ~/environment/workshop/workshop/java/adding-searchable-encryption-configurati
 
 ## Try it Out
 
+Now use the CLI to create the table that will back the Employee Portal Service
+for this exercise.
+
+<!-- !test program
+cd ./workshop/java/exercise-2
+
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+read command_input
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  eval "$command_input -l"
+else
+  eval "$command_input"
+fi
+ -->
+
+<!-- !test check create-table -->
+```bash
+./employee-portal create-table
+```
+
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+
 Now that you have updated the code
 to support this access pattern on encrypted data
 you need to write the beacons to the database.
 
 Before we get started, let's first reset the data in your table.
 
+<!-- !test check load-data -->
 ```bash
-./load_data
+./load-data
 ```
 
 ## Get Timecards by Email
