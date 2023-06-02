@@ -544,7 +544,7 @@ Resources:
                 - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
                 
-                - echo !Sub sed -i 's/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${WorkshopKey}"/' ~/environment/workshop/config.toml >> $BOOTSTRAP_SCRIPT
+                - !Sub echo sed -i 's/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${WorkshopKey}"/' ~/environment/workshop/config.toml >> $BOOTSTRAP_SCRIPT
 
                 - echo ' git -C ~/environment/workshop commit -a -m "Bootstrap Updates"' >> $BOOTSTRAP_SCRIPT
 
