@@ -543,7 +543,7 @@ fi
 ./utils/sed-add-change.sh "branch_key_id.*" "branch_key_id = $BRANCH_KEY_ID" ./workshop/config.toml
 -->
 
-<!-- !test check java create-branch-key -->
+<!-- !test check create-branch-key -->
 ```bash
 ./employee-portal create-branch-key
 ```
@@ -579,7 +579,7 @@ else
 fi
  -->
 
-<!-- !test check java create-table -->
+<!-- !test check create-table -->
 ```bash
 ./employee-portal create-table
 ```
@@ -636,6 +636,7 @@ Go to the [DynamoDB AWS Console](TODO) to confirm that your expected table is cr
 
 Next, load up some test data into your portal!
 
+<!-- !test check load-data -->
 ```bash
 ./load-data
 ```
