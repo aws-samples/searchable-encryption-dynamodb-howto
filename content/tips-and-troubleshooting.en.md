@@ -115,6 +115,12 @@ mvn -B install:install-file \
 
 :::
 
+
+
+This is a helper link for testing.
+It will download the required assets to test the workshop
+in the Cloud9 Environment
+
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 
 curl -sSL ':assetUrl{path="/testing.tar.gz" source=s3}' | tar -xzf - -C ~/environment
