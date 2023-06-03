@@ -5,7 +5,7 @@ localeCodes:
 
 additionalLinks:
   - title: AWS DynamoDB
-    link: https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=MyTestTable
+    link: https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table
   - title: AWS Key Management Service
     link: https://console.aws.amazon.com/kms
   - title: AWS CloudTrail

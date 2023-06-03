@@ -544,20 +544,15 @@ Resources:
                 - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
                 
-                - !Sub echo 'sed -i \'s/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${WorkshopKey}"/\' ~/environment/workshop/config.toml' >> $BOOTSTRAP_SCRIPT
+                - !Sub echo 'sed -i '\''s/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key\/${WorkshopKey}"/'\'' ~/environment/workshop/config.toml' >> $BOOTSTRAP_SCRIPT
 
-                - echo ' git -C ~/environment/workshop commit -a -m "Bootstrap Updates"' >> $BOOTSTRAP_SCRIPT
+                - echo 'git -C ~/environment/workshop commit -a -m "Bootstrap Updates"' >> $BOOTSTRAP_SCRIPT
 
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal load-data' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal generate-completion >> ~/.bashrc' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/complete/employee-portal help' >> $BOOTSTRAP_SCRIPT
-                - echo '~/environment/workshop/java/complete/employee-portal create-branch-key' >> $BOOTSTRAP_SCRIPT
-
-                - echo 'gradle -p ~/environment/workshop/java/exercise-1/ dependencies --configuration compileClasspath' >> $BOOTSTRAP_SCRIPT
-                - echo 'gradle -p ~/environment/workshop/java/exercise-2/ dependencies --configuration compileClasspath' >> $BOOTSTRAP_SCRIPT
-                - echo 'gradle -p ~/environment/workshop/java/exercise-3/ dependencies --configuration compileClasspath' >> $BOOTSTRAP_SCRIPT
-                - echo 'gradle -p ~/environment/workshop/java/exercise-4/ dependencies --configuration compileClasspath' >> $BOOTSTRAP_SCRIPT
+                - echo '~/environment/workshop/java/complete/employee-portal create-branch-key -t' >> $BOOTSTRAP_SCRIPT
 
                 - chmod +x $BOOTSTRAP_SCRIPT
                 - sudo --set-home -u ec2-user $BOOTSTRAP_SCRIPT

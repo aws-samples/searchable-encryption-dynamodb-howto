@@ -2,5 +2,6 @@
 assets
 .DS_Store
 .history
+.idea
 preview_build
 /dynamodb_local
