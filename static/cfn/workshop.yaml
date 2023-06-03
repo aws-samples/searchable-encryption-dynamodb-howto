@@ -529,6 +529,9 @@ Resources:
                 # This will clone the codecommit repo
                 - !Sub echo '[ -f ~/environment/workshop ] || git clone --config credential.helper="!aws codecommit credential-helper $@" --config credential.UseHttpPath=true ${CodeCommitRepo.CloneUrlHttp} ~/environment/workshop' >> $BOOTSTRAP_SCRIPT
 
+                # There are several executable scripts,
+                # need to set the bit so they can be run.
+                # I do not know how to set this in a zip file for CodeCommit
                 - echo 'chmod +x ~/environment/workshop/java/plaintext-base/employee-portal' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/exercise-1/employee-portal' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/exercise-2/employee-portal' >> $BOOTSTRAP_SCRIPT
@@ -543,11 +546,17 @@ Resources:
                 - echo 'chmod +x ~/environment/workshop/java/exercise-4/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/java/complete/load-data' >> $BOOTSTRAP_SCRIPT
                 - echo 'chmod +x ~/environment/workshop/load-data' >> $BOOTSTRAP_SCRIPT
-                
+                # Default the KMS key to the workshop key
+                # This makes it easy to test things
+                # and is nice for the customer of the workshop
                 - !Sub echo 'sed -i '\''s/^branch_key_kms_arn = .*/branch_key_kms_arn = "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key\/${WorkshopKey}"/'\'' ~/environment/workshop/config.toml' >> $BOOTSTRAP_SCRIPT
 
+                # Need to commit all the changes, to make sure we don't lose them
                 - echo 'git -C ~/environment/workshop commit -a -m "Bootstrap Updates"' >> $BOOTSTRAP_SCRIPT
 
+                # Do some housekeeping
+                # This sets up all the plaintext operations
+                # as well as building the local gradle cache
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal create-table' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal load-data' >> $BOOTSTRAP_SCRIPT
                 - echo '~/environment/workshop/java/plaintext-base/employee-portal generate-completion >> ~/.bashrc' >> $BOOTSTRAP_SCRIPT
