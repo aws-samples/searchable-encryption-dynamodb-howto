@@ -10,15 +10,19 @@ and searchable encryption using the AWS Database Encryption SDK and AWS KMS.
 
 # Cleaning Up
 
-There are helper scripts available to help you completely tear down your stack resources.
+## AWS Classroom
 
-TODO
+If you are working through these exercises in an AWS classroom environment, your AWS resources will be automatically torn down. You do not need to take any action to clean up your resources.
 
-## Finished!
+## Personal AWS account
+
+If you are using your own AWS account for these workshops, you will need to clean up your resources. There are helper scripts available to help you completely tear down your stack resources.
+
+TODO: helper scripts
+
+Use the CloudFormation console in your working region(s) to confirm your resources are all successfully cleaned up.
 
 That's it! Your workshop resources have been torn down.
-
-TODO Use the CloudFormation console in both regions to confirm your resources are all successfully cleaned up.
 
 # Feedback
 

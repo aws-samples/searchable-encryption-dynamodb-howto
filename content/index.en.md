@@ -105,7 +105,31 @@ There are a variety of access patterns that this Employee Portal Service
 will support.
 For example, you may want to get all the meetings booked by a particular employee.
 Or you may want to get all of the tickets created within a certain time range.
-[TODO list out the access patterns]
+A full list of supported access patterns is provided below:
+
+1. Get meetings by date and email
+1. Get meetings by date and employeeID
+1. Get meetings by date and building/floor/room
+1. Get employee data by email
+1. Get meetings by email
+1. Get tickets by email
+1. Get reservations by email
+1. Get time cards by email
+1. Get employee info by employeeID
+1. Get employee info by email
+1. Get ticket history by ticket ID
+1. Get ticket history by employee email
+1. Get ticket history by assignee email
+1. Get employees by city.building.floor.desk
+1. Get employees by manager email
+1. Get assigned tickets by assignee email
+1. Get tickets last touched in the past 24 hours
+1. Get projects by status, start and target date
+1. Get projects by name
+1. Get project history by date range
+1. Get project history by role
+1. Get reservations by building ID
+1. Get reservations by building ID and time range
 
 For this workshop, you will be interacting with this Employee Portal Service
 with a CLI that can retrieve this data via these access patterns.
@@ -116,8 +140,8 @@ is already built for you.
 
 During the workshop, you will add client-side encryption
 to this Employee Portal Service,
-such that data is encrypted before it is sent to DynamoDB,
-and decrypted locally once it is retrieved from DynamoDB. 
+such that data is encrypted before it is sent to DynamoDB
+and is decrypted locally once it is retrieved from DynamoDB. 
 With client-side encryption, you will configure searchable
 encryption so that you can maintain the original access patterns
 supported by the Employee Portal Service.
@@ -179,7 +203,6 @@ DataKey --> EmployeePortalService
 ## Exercises
 
 In this workshop, you will work through the following exercises:
-[TODO make sure this is correct]
 
 1. Adding the AWS Database Encryption SDK
 1. Adding searchable encryption configuration
