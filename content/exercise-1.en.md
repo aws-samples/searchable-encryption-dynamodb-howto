@@ -16,7 +16,7 @@ and [AWS Key Management Service](TODO).
 
 ## Background
 
-In [Getting Started](./getting-started.md),
+In [Getting Started](../getting-started.md),
 you set the
 Employee Portal Service
 and learned how to get and put items

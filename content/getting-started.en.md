@@ -44,7 +44,7 @@ To set up your environment, you will:
 If you are using your own AWS Account for this workshop, make sure:
 
 1. It is not a production account. This is a workshop for learning and experimentation. Don't put production at risk!
-1. When you are done with the exercises, you follow the instructions in [Clean Up and Closing](./clean-up-and-closing.md) to clean up the deployed resources.
+1. When you are done with the exercises, you follow the instructions in [Clean Up and Closing](../clean-up-and-closing.md) to clean up the deployed resources.
 
 If you are working through these exercises in an AWS classroom environment, AWS accounts have been created for you.
 
@@ -53,7 +53,7 @@ If you are working through these exercises in an AWS classroom environment, AWS 
 1. Sign in to your AWS Account for the workshop. If you are working through these exercises in an AWS classroom environment, click the "Open AWS console" link in the sidebar.
 2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the "Event dashboard", then copy and paste the "Cloud9IdeUrl" into your browser.
 
-## What's next?
+## Interact with your table
 
 At this point, you should have a Cloud9 environment open
 in the AWS account you will be using for the workshop.
@@ -62,7 +62,7 @@ If you go to [your DynamoDB table's items](https://us-west-2.console.aws.amazon.
 you will see that it is empty.
 You will now use the CLI to add items to the table.
 
-## Putting records into the table
+### Putting records into the table
 
 From your Cloud9 environment's terminal, access the `plaintext-base` folder:
 
@@ -93,7 +93,7 @@ For example, create a new meeting in your table:
 If you now go to [your DynamoDB table's items](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#item-explorer?table=Plaintext_Table&maximize=true),
 you will see that it now contains one item with the arguments you provided.
 
-We have provided a helper script to load more items into your table. Let's add more items now:
+We have provided a helper script to load more items into your table. Let's add them now:
 
 ```bash
 ./load-data
@@ -113,6 +113,7 @@ Take a look at all of our current employees:
 
 This command displays all of the employee records currently in your table.
 Can you think of any particular ways in which you might want to index on these employees?
+
 Let's see what our options are for getting a particular set of employees:
 
 ```bash
@@ -180,4 +181,4 @@ as we build a version with client-side encryption in later steps.
 Now that you have all of the prerequisite resources set up
 and understand how to interact with them,
 you can now start the first exercise:
-[Adding the Database Encryption SDK](./exercise-1.md).
+[Adding the Database Encryption SDK](../exercise-1.md).
