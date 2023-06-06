@@ -51,7 +51,7 @@ If you are working through these exercises in an AWS classroom environment, AWS 
 ### Set up your development environment
 
 1. Sign in to your AWS Account for the workshop. If you are working through these exercises in an AWS classroom environment, click the "Open AWS console" link in the sidebar.
-2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the "Event dashboard", then copy and paste the "Cloud9IdeUrl" into your browser.
+2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the [Event dashboard](https://catalog.us-east-1.prod.workshops.aws/event/dashboard/en-US), then copy and paste the "Cloud9IdeUrl" into your browser.
 
 ## Interact with your table
 

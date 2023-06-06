@@ -22,9 +22,9 @@ If your table only ever sees your data in encrypted form,
 how can you ever effectively query on that encrypted data?
 
 To accomplish this, the AWS Database Encryption SDK for DynamoDB
-includes the [searchable encryption](TODO) feature,
+includes the [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html) feature,
 which allows you to calculate and store
-[beacons](TODO) alongside your data.
+[beacons](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/beacons.html) alongside your data.
 The client then utilizes these beacons whenever you make a query,
 retrieving the correct encrypted data for your query.
 
@@ -36,16 +36,16 @@ be leaked if we configure searchable encryption.
 We continue with this example, however,
 because it is a use-case with a wide variety of 
 complex, yet still easy to understand, access-patterns.
-Before you use [searchable encryption](TODO)
-for your own use case, please read our [AWS documentation](TODO)
-and ensure that [beacons are right for your use case](TODO).
+Before you use [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html)
+for your own use case, please read our [AWS documentation](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/what-is-database-encryption-sdk.html)
+and ensure that [beacons are right for your use case](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
 
-To use [searchable encryption](TODO),
+To use [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html),
 you need another kind of key: a beacon key.
 This beacon key will be used during both write and query
 in order to calculate the truncated HMACs that comprise beacons.
 
-In [Exercise 2](TODO), you created a Key Store with a branch key.
+In [Exercise 1](../exercise-1), you created a Key Store with a branch key.
 The `CreateBranchKey` API additionally created a second key for
 you that is associated with this branch key.
 This second key, which we will call the beacon key,
@@ -192,7 +192,7 @@ configure `name` as "employeeEmail".
 
 The beacon length you should choose depends on your dataset,
 and is a tradeoff between security and performance.
-See [Choosing a Becaon Length](TODO) in our docs for more
+See [Choosing a Beacon Length](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html) in our docs for more
 information.
 
 For this example, choose a length of 8.
@@ -231,7 +231,7 @@ with the beacon value instead.
 ### Step 3: Configure Compound Beacon for Global Secondary Index
 
 With the standard beacon created,
-you can now create the [compound beacon](TODO) that you will use as the value
+you can now create the [compound beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-type.html#plan-compound-beacons) that you will use as the value
 for your new Global Secondary Index.
 
 The value written to this Global Secondary Index in this exercise
@@ -304,7 +304,7 @@ Because this compound beacon contains a constructor which specifies a required e
 any time an item with a "email" field is written, the client will write to this compound beacon.
 
 The value used in the beacon will include only the email standard beacon.
-For example, if the calculated beacon value for "TODO@TODO.com" is "a",
+For example, if the calculated beacon value for "zorro@gmail.com" is "a",
 then the value written to this field will be "EE-a".
 
 ### Step 4:
@@ -399,10 +399,10 @@ of the DynamoDB Encryption Interceptor.
 First configure a `BeaconVersion` which includes:
 - The standard beacon you configured above
 - The compound beacons your configured above
-- The Key Store you configured in [Exercise 2](TODO).
+- The Key Store you configured in [Exercise 1](../exercise-1).
 - A Key Source that uses the branch key ID you configured
-  in [Exercise 2](TODO).
-  When you created a branch key in Exercise 2,
+  in [Exercise 1](../exercise-1).
+  When you created a branch key in Exercise 1,
   a beacon key that shared that same id was automatically generated.
   This is the key that will be used to calculate beacon values.
 
@@ -541,7 +541,7 @@ fi
 ./employee-portal create-table
 ```
 
-[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise2_Table).
 
 Now that you have updated the code
 to support this access pattern on encrypted data
@@ -586,9 +586,9 @@ to support this access pattern.
 
 ## Inspect your table DynamoDB side
 
-Take a look at the [AWS Console for your DynamoDB table](TODO).
+Take a look at the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise2_Table).
 
-Note that all of your data is still encrypted as it was in Exercise 2,
+Note that all of your data is still encrypted as it was in Exercise 1,
 however there are a couple of additional fields calculated.
 
 For every ticket item in your table, there are now attributes
@@ -610,5 +610,5 @@ Try out these links.
 
 [TODO exercises are out of order?]
 Ready for more?
-Next you will work [add the remaining access patterns](../exercise-3)
+Next you will work on [adding another access pattern](../exercise-3)
 to our searchable encryption configuration.

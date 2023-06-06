@@ -11,8 +11,8 @@ weight : 100
 
 In this section, you will add client-side encryption
 to the example Employee Portal Service
-using the [AWS Database Encryption SDK](TODO)
-and [AWS Key Management Service](TODO).
+using the [AWS Database Encryption SDK](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/)
+and [AWS Key Management Service](https://docs.aws.amazon.com/kms/).
 
 ## Background
 
@@ -24,7 +24,7 @@ into your DynamoDB table.
 
 Now we are going to build a new version of this
 Employee Portal Service that includes client-side encryption
-with the [AWS Database Encryption SDK](TODO).
+with the [AWS Database Encryption SDK](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/).
 
 We will use the AWS Database Encryption SDK
 to encrypt items on the client,
@@ -35,10 +35,10 @@ When you retrieve these encrypted items from DynamoDB,
 the client locally decrypts and verifies these items on your host.
 In this way, DynamoDB never has access to the plaintext
 of the item attributes you encrypt.
-This process is called [client-side encryption](TODO).
+This process is called [client-side encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html).
 
 To perform this encryption, the AWS Database Encryption SDK
-will use a strategy known as [envelope encryption](TODO).
+will use a strategy known as [envelope encryption](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#enveloping).
 For every item that is encrypted,
 a unique `data key` is generated that is responsible for encrypting that item.
 You will configure the client to generate and protect these data keys
@@ -49,8 +49,6 @@ using the KMS Key that you set up in [Getting Started](../getting-started).
 ### Starting Directory
 
 Make sure you are in the `exercises` directory for the language of your choice:
-
-[TODO will these paths be correct?]
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -153,7 +151,7 @@ You will see how we use each of these libraries in later steps.
 
 ### Step 3: Configure your Key Store
 
-To encrypt your items, you will be using a [Hierarchical Keyring](TODO) to protect the
+To encrypt your items, you will be using a [Hierarchical Keyring](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/use-hierarchical-keyring.html) to protect the
 data keys that encrypt each item.
 
 The Hierarchical Keyring establishes a key hierarchy,
@@ -180,8 +178,8 @@ Look at `~/environment/workshop/config.toml`.
 ::::
 
 This file contains constants used by the Employee Portal Service.
-Update this file to specify the following:
-- The KMS Key ARN that was created in [Getting Started](TODO).
+Update this file to specify your KMS Key ARN.
+If you are working through these exercises in an AWS classroom environment, a KMS Key has been created for you. Open the [Event dashboard](https://catalog.us-east-1.prod.workshops.aws/event/dashboard/en-US), grab the "KMSKeyArn" field value, and use it in the code snippet below:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -316,7 +314,7 @@ we can configure the Hierarchical Keyring.
 
 Add a method which configures a Hierarchical Keyring,
 using the same Key Store configuration that is used by the CLI,
-and using the branch key ID returned by the CLI in [Step 2](#step-2-configure-your-keystore).
+and using the branch key ID returned by the CLI in [Step 3](#step-3-configure-your-key-store).
 Additionally, specify a TTL and cache size for the Hierarchical Keyring.
 The TTL determines how long a branch key can be reused locally
 before the Hierarchy Keyring is required to re-retrieve the material
@@ -365,7 +363,7 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 You have created a method that configures a Hierarchical Keyring.
 
 This Hierarchical Keyring will use the Key Store and branch key
-you created in [Step 2](#step-2-configure-your-keystore)
+you created in [Step 3](#step-3-configure-your-key-store)
 to encrypt the data keys responsible for protecting your data.
 This Hierarchical Keyring will also cache these branch keys
 according to your configuration, limiting how often
@@ -378,7 +376,7 @@ encryption for your client.
 
 Now that you have a Hierarchical Keyring,
 the next step is to configure the DynamoDB Encryption Interceptor
-and build the AWSK SDK client for DynamoDB with this interceptor.
+and build the AWS SDK client for DynamoDB with this interceptor.
 The DynamoDB Encryption Interceptor contains that logic that
 performs client-side encryption with DynamoDB.
 
@@ -393,7 +391,7 @@ Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 This file is responsible for creating the DynamoDB Client that the
 Employee Portal Services uses to interact with DynamoDB.
 
-Find `MakeDynamoDbClient` and update the configuration to add a new [Interceptor](TODO)
+Find `MakeDynamoDbClient` and update the configuration to add a new [Interceptor](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/core/interceptor/ExecutionInterceptor.html)
 in the `override Configuration`.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -421,15 +419,15 @@ For this exercise, you only need to create one Table Encryption Config
 for your one table.
 
 For this table, configuration contains several parts:
-1. Configure a [Crypto Action](TODO) for each attribute in your table.
+1. Configure a [Crypto Action](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/concepts.html#crypt-actions) for each attribute in your table.
   - For every attribute, you can `ENCRYPT_AND_SIGN`, `SIGN_ONLY`, or `DO_NOTHING`.
     For this exercise, you will `ENCRYPT_AND_SIGN` as many attributes as possible,
     and `SIGN_ONLY` the rest.
 1. Configure the Logical Table Name. This is the name that is cryptographically bound
-   to your items for the purposes of authentcation.
+   to your items for the purposes of authentication.
    For this, you can use the same value as the DynamoDB table name.
 1. Specify the partition and sort key names on your table.
-1. Configure the Hierarchical Keyring you implemented in [Step 3](#step-3-configure-the-hierarchical-keyring).
+1. Configure the Hierarchical Keyring you implemented in [Step 4](#step-4-configure-the-hierarchical-keyring).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -608,7 +606,7 @@ let's try it out and see what it does.
 ### Examine your Key Store
 
 First, let's take a look at the Key Store that we created.
-Go to the [AWS Console for your Key Store table](TODO).
+Go to the [AWS Console for your Key Store table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=BranchKey_Table).
 
 Here, you should see that there exists two entries.
 One contains a version under the `type` sort attribute.
@@ -632,7 +630,7 @@ the branch key from DynamoDB.
 
 Now let's look at the DynamoDB table that store the data
 from the Employee Portal Service.
-Go to the [DynamoDB AWS Console](TODO) to confirm that your expected table is created.
+Go to the [DynamoDB AWS Console](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#tables) to confirm that your expected table is created.
 
 Next, load up some test data into your portal!
 
@@ -647,7 +645,7 @@ in an encrypted form.
 DynamoDB never sees the plaintext form for these attribute values.
 
 You should also notice that there are two extra attributes written to our items.
-`aws_dbe_head` contains our [material descrption](TODO),
+`aws_dbe_head` contains our [material description](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/concepts.html#material-description),
 which contains the metadata necessary for the AWS Database Encryption SDK
 to understand how to decrypt the item.
 `aws_dbe_foot` contains the signature calculated over our item.
@@ -703,10 +701,8 @@ via the CLI still behaves as expected.
 
 Put a new ticket into our table:
 
-[TODO fill with approved sample data]
-
 ```bash
-./employee-portal put-ticket --ticket-number=<ticketNumber> --modified-date=<modifiedDate> --author-email=<authorEmail> --assignee-email=<assigneeEmail> --severity=<severity> --subject=<subject> --message=<message>
+./employee-portal put-ticket --ticket-number=3 --modified-date=2022-10-07T15:32:25 --author-email=barney@gmail.com --assignee-email=charlie@gmail.com --severity=3 --subject="Bad Bug Followup" --message="We should follow up on the Bad Bug"
 ```
 
 Now verify that this ticket appears in our table:
@@ -716,7 +712,7 @@ Now verify that this ticket appears in our table:
 ```
 
 You may additionally want to verify that this item is encrypted as expected
-in [your DynamoDB table](TODO).
+in [your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise1_Table).
 
 ### Verify KMS Usage
 
@@ -739,4 +735,4 @@ Take a look at your [AWS CloudTrail logs](TODO) and
 Now that you are encrypting and decrypting items in the Employee Portal Service,
 let's move onto adding back in those Global Secondary Indexes which enable all of our interesting access patterns.
 Move onto the next exercise:
-[Adding a searchable encryption configuration](../exercise-2)?
+[Adding a searchable encryption configuration](../exercise-2)
