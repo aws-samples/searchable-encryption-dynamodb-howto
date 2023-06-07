@@ -82,8 +82,8 @@ public class Api {
       .build();
     final KeySchemaElement sk1Schema = KeySchemaElement
       .builder()
-      .attributeName(GSI1_SORT_KEY)
-      .keyType(KeyType.RANGE)
+    // BEGIN EXERCISE 4 STEP 9b
+    .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
     gsi1Schema.add(pk1Schema);
@@ -141,7 +141,7 @@ public class Api {
       .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(GSI1_SORT_KEY)
+    // BEGIN EXERCISE 4 STEP 9a
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
       .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
