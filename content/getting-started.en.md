@@ -72,6 +72,21 @@ cd ~/environment/workshop/java/plaintext-base
 
 We provide a helper script to interact with the table, `employee-data`. Take a look at all the `put` commands available in the CLI:
 
+<!-- !test program
+cd ./workshop/java/plaintext-base
+
+# This is dangerous because `eval` lets you do anything.
+# However if you have access to modify the code block
+# then you could modify this script...
+read command_input
+if [[ -n "$USE_DDB_LOCAL" ]]; then
+  eval "$command_input -l"
+else
+  eval "$command_input"
+fi
+ -->
+
+<!-- !test check help -->
 ```bash
 ./employee-portal help
 ```
@@ -79,6 +94,7 @@ We provide a helper script to interact with the table, `employee-data`. Take a l
 Let's try to add a new meeting into our table.
 To see what data we need to specify, do:
 
+<!-- !test check help put-meeting -->
 ```bash
 ./employee-portal help put-meeting
 ```
@@ -86,6 +102,7 @@ To see what data we need to specify, do:
 Now try specifying the required data so a new meeting can be added to your table.
 For example, create a new meeting in your table:
 
+<!-- !test check put-meeting -->
 ```bash
 ./employee-portal put-meeting --employee-number=1234 --start=2022-07-04T13:00 --employee-email=able@gmail.com --floor=12 --room=403 --duration=30 --attendees=SomeList --subject="Scan Beacons"
 ```
@@ -95,6 +112,7 @@ you will see that it now contains one item with the arguments you provided.
 
 We have provided a helper script to load more items into your table. Let's add them now:
 
+<!-- !test check load-data -->
 ```bash
 ./load-data
 ```
@@ -107,11 +125,21 @@ you will see that it now contains more items.
 Let's use the CLI to access some of our data.
 Take a look at all of our current employees:
 
+<!-- !test in get-employees -->
 ```bash
 ./employee-portal get-employees
 ```
 
 This command displays all of the employee records currently in your table.
+You should see the following
+<!-- !test out get-employees -->
+```
+4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+```
+
 Can you think of any particular ways in which you might want to index on these employees?
 Let's see what our options are for getting a particular set of employees:
 
@@ -120,10 +148,16 @@ Let's see what our options are for getting a particular set of employees:
 ```
 
 This should display the additional argument you can use to specify which employees to return.
-For example, to get all employees in Seattle, do:
+For example, to get all employees in New York, do:
 
+<!-- !test in get-employees NYC -->
 ```bash
-./employee-portal get-employees --city=SEA
+./employee-portal get-employees --city=NYC
+```
+You should see:
+<!-- !test out get-employees NYC -->
+```
+4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 Now try to see if you can index the data in a different way, e.g. getting all employees in New York City.

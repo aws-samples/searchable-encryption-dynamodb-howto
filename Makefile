@@ -27,17 +27,21 @@ clean_workshop:
 # this will replicate how customers will interact
 # with the workshop
 markdown_test: clean_workshop
+	npx txm --jobs 1 ./content/getting-started.en.md
 	npx txm --jobs 1 ./content/exercise-1.en.md
 	npx txm --jobs 1 ./content/exercise-2.en.md
 	npx txm --jobs 1 ./content/exercise-3.en.md
 	npx txm --jobs 1 ./content/exercise-4.en.md
+
+create_plaintext_table:
+	workshop/java/plaintext-base/employee-portal create-table -l
 
 # The expectation is that you run stop_ddb_local seprately
 # This is because a test may fail,
 # but also you may want to have access to the data
 # to check the stat of ddb.
 test_local: USE_DDB_LOCAL=true
-test_local: start_ddb_local markdown_test
+test_local: start_ddb_local create_plaintext_table markdown_test
 
 get_ddb_local:
 	mkdir dynamodb_local
