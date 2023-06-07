@@ -165,29 +165,35 @@ Now try to see if you can index the data in a different way, e.g. getting all em
 Alternatively, explore the other data in our table.
 What are our current meetings, projects, reservations, tickets, or timecards?
 Keep in mind the list of supported access patterns we will implement on our encrypted table:
+
+1. Get employee info by email
+1. Get employee info by employeeID
+1. Get employees by manager email
+1. Get employees by city.building.floor.desk
+
 1. Get meetings by date and email
 1. Get meetings by date and employeeID
 1. Get meetings by date and building/floor/room
-1. Get employee data by email
 1. Get meetings by email
-1. Get tickets by email
+
+1. Get projects by status, start and target date
+1. Get projects by name
+
+1. Get project history by date range
+1. Get project history by role
+
 1. Get reservations by email
-1. Get time cards by email
-1. Get employee info by employeeID
-1. Get employee info by email
+1. Get reservations by building ID
+1. Get reservations by building ID and time range
+
 1. Get ticket history by ticket ID
 1. Get ticket history by employee email
 1. Get ticket history by assignee email
-1. Get employees by city.building.floor.desk
-1. Get employees by manager email
 1. Get assigned tickets by assignee email
+1. Get tickets by email
 1. Get tickets last touched in the past 24 hours
-1. Get projects by status, start and target date
-1. Get projects by name
-1. Get project history by date range
-1. Get project history by role
-1. Get reservations by building ID
-1. Get reservations by building ID and time range
+
+1. Get time cards by email
 
 If you have time, try out some of these access patterns on your plaintext table.
 
