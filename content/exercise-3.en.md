@@ -403,29 +403,56 @@ with client-side encryption.
 ### Retrieve items from your encrypted table
 
 To start, let's retrieve all of our employees again:
-
+<!-- !test in get-employees -->
 ```bash
 ./employee-portal get-employees
+```
+
+You should see the same list you have seen before:
+<!-- !test out get-employees -->
+```
+4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 This shows all of the employee records.
 
 To test GSI1, try
-
+<!-- !test in get-employees --employee-number=1234 -->
 ```bash
-./employee-portal get-employees --employee-number=XXX
+./employee-portal get-employees --employee-number=1234
+```
+and this should give you
+<!-- !test out get-employees --employee-number=1234 -->
+```
+1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
 ```
 
 To test GSI2, try
-
+<!-- !test in get-employees --manager-email=zorro@gmail.com -->
 ```bash
-./employee-portal get-employees --manager-email=XXX
+./employee-portal get-employees --manager-email=zorro@gmail.com
+```
+and you should get
+<!-- !test out get-employees --manager-email=zorro@gmail.com -->
+```
+1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 To test GSI3, try
-
+<!-- !test in get-employees --city NYC -->
 ```bash
-./employee-portal get-employees --city=XXX
+./employee-portal get-employees --city NYC
+```
+and you should get
+<!-- !test out get-employees --city NYC -->
+```
+4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 # Next exercise
