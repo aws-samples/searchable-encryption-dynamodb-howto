@@ -59,13 +59,16 @@ public class Ticket extends BaseItem {
 
   @Override
   public String toString() {
-    return ticketNumber.toString() +
-    "\t" + modifiedDate.toString() +
-    "\t" + authorEmail.toString() +
-    "\t" + assigneeEmail.toString() +
-    "\t" + severity.toString() +
-    "\t" + subject.toString() +
-    "\t" + message.toString();
+    return String
+      .format("%-5s%-20s%-20s%-20s%-5s%-20s%s",
+        ticketNumber.toString(),
+        modifiedDate.toString(),
+        authorEmail.toString(),
+        assigneeEmail.toString(),
+        severity.toString(),
+        subject.toString(),
+        message.toString()
+      );
   }
 
 }

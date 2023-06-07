@@ -48,11 +48,14 @@ public class Project extends BaseItem {
 
   @Override
   public String toString() {
-    return projectName +
-    "\t" + status +
-    "\t" + startTime +
-    "\t" + description +
-    "\t" + targetDate;
+    return String
+      .format("%-6s%-10s%-20s%-20s%-20s",
+        projectName,
+        status,
+        startTime,
+        description,
+        targetDate
+      );
   }
 
 }

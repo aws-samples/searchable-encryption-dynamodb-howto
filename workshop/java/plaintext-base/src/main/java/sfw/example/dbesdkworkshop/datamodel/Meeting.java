@@ -67,13 +67,16 @@ public class Meeting extends BaseItem {
 
   @Override
   public String toString() {
-    return employeeNumber +
-    "\t" + employeeEmail +
-    "\t" + startTime +
-    "\t" + subject +
-    "\t" + duration +
-    "\t" + attendees +
-    "\t" + location.toString();
+    return String
+      .format("%-6s%-20s%-20s%-20s%-5s%-10s%s",
+        employeeNumber,
+        employeeEmail,
+        startTime,
+        subject,
+        duration,
+        attendees,
+        location.toString()
+      );
   }
 }
 

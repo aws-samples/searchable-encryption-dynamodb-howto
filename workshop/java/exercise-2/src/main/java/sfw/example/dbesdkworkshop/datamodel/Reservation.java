@@ -63,13 +63,16 @@ public class Reservation extends BaseItem {
 
   @Override
   public String toString() {
-    return reservation.toString() +
-    "\t" + startTime.toString() +
-    "\t" + organizerEmail.toString() +
-    "\t" + duration.toString() +
-    "\t" + attendees.toString() +
-    "\t" + subject.toString() +
-    "\t" + location.toString();
+    return String
+      .format("%-40s%-20s%-20s%-5s%-20s%-20s%s",
+        reservation.toString(),
+        startTime.toString(),
+        organizerEmail.toString(),
+        duration.toString(),
+        attendees.toString(),
+        subject.toString(),
+        location.toString()
+      );
   }
 }
 

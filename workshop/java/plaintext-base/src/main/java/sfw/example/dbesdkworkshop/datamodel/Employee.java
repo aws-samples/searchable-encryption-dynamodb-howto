@@ -79,11 +79,14 @@ public class Employee extends BaseItem {
 
   @Override
   public String toString() {
-    return employeeNumber +
-    "\t" + employeeEmail +
-    "\t" + managerEmail +
-    "\t" + name +
-    "\t" + title +
-    "\t" + location.toString();
+    return String
+      .format("%-6s%-20s%-20s%-20s%-10s%s",
+        employeeNumber,
+        employeeEmail,
+        managerEmail,
+        name,
+        title,
+        location.toString()
+      );
   }
 }

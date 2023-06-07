@@ -55,12 +55,15 @@ public class Timecard extends BaseItem {
 
   @Override
   public String toString() {
-    return projectName.toString() +
-    "\t" + startTime.toString() +
-    "\t" + employeeNumber.toString() +
-    "\t" + employeeEmail.toString() +
-    "\t" + hours.toString() +
-    "\t" + role.toString();
+    return String
+      .format("%-5s%-20s%-20s%-20s%-5s%-20s",
+        projectName.toString(),
+        startTime.toString(),
+        employeeNumber.toString(),
+        employeeEmail.toString(),
+        hours.toString(),
+        role.toString()
+      );
   }
 
 }
