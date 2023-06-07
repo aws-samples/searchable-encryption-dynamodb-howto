@@ -67,6 +67,18 @@ make test_local; make start_ddb_local
 1. Run `txm` in the background to test the markdown content
 1. Stop the started background DDB-local process
 
+Some useful commands for testing with DDB-Local
+```bash
+aws dynamodb list-tables --endpoint-url http://localhost:8000
+aws dynamodb scan --table-name BranchKey_Table --endpoint-url http://localhost:8000
+aws dynamodb scan --table-name Exercise1_Table --endpoint-url http://localhost:8000
+```
+
+When testing locally,
+`test_local` updates the workshop in place.
+To make this repeatable it will git reset the workshop.
+If you are working on the code remember to commit your test first.
+
 ### Testing in Workshop Studio
 
 First you need to create a test event.
