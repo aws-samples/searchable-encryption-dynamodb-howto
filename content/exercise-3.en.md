@@ -14,15 +14,15 @@ to configure the access patterns for the Employee data type.
 
 ## Background
 
-In Exercise 2, you configured [searchable encryption](TODO)
+In Exercise 2, you configured [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html)
 to enable you to perform some simple searches on Timecard records.
 
 In this exercise, you will add support for Employee records,
 which we will need to search in much more complex ways.
 
 As you configure each new beacon to support a new access pattern,
-consider what [truncation length is appropriate for that beacon](TODO)
-as well as whether [beacons are right for that access pattern in the first place](TODO).
+consider what [truncation length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
+as well as whether [beacons are right for that access pattern in the first place](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
 As you go through the workshop, note that various
 considerations on the tradeoffs being made between security and performance.
 
@@ -386,7 +386,7 @@ fi
 ./employee-portal create-table
 ```
 
-[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise3_Table).
 
 Next, load up some test data into your portal!
 We have provided a script that puts some sample data into your table.

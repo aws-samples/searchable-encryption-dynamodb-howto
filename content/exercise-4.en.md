@@ -14,14 +14,14 @@ to configure the remaining access patterns.
 
 ## Background
 
-In Exercise 3, you configured [searchable encryption](TODO)
+In Exercise 3, you configured [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html)
 to enable you to perform queries on Employee Records.
 
 In this exercise, you will add support for the remaining record types.
 
 As you configure each new beacon to support a new access pattern,
-consider what [truncation length is appropriate for that beacon](TODO)
-as well as whether [beacons are right that access pattern in the first place](TODO).
+consider what [truncation length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
+as well as whether [beacons are right for that access pattern in the first place](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
 As you go through the workshop, note that various
 considerations on the tradeoffs being made between security and performance.
 
@@ -29,7 +29,7 @@ considerations on the tradeoffs being made between security and performance.
 
 ### Starting Directory
 
-If you just finished [Adding The Employee Record access patterns](./exercise-3),
+If you just finished [Adding The Employee Record access patterns](../exercise-3),
 you are all set.
 
 If you aren't sure, or want to catch up,
@@ -362,7 +362,7 @@ fi
 ./employee-portal create-table
 ```
 
-[Go to the DynamoDB AWS Console to confirm that your expected table is created](TODO).
+[Go to the DynamoDB AWS Console to confirm that your expected table is created](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise3_Table).
 
 Next, load up some test data into your portal!
 We have provided a script that puts some sample data into your table.
@@ -377,7 +377,29 @@ a new attribute for every new beacon you configured.
 [TODO describe a couple in more detail]
 
 Try out each of these access patterns yourself:
-- TODO
+1. Get meetings by date and email
+1. Get meetings by date and employeeID
+1. Get meetings by date and building/floor/room
+1. Get employee data by email
+1. Get meetings by email
+1. Get tickets by email
+1. Get reservations by email
+1. Get time cards by email
+1. Get employee info by employeeID
+1. Get employee info by email
+1. Get ticket history by ticket ID
+1. Get ticket history by employee email
+1. Get ticket history by assignee email
+1. Get employees by city.building.floor.desk
+1. Get employees by manager email
+1. Get assigned tickets by assignee email
+1. Get tickets last touched in the past 24 hours
+1. Get projects by status, start and target date
+1. Get projects by name
+1. Get project history by date range
+1. Get project history by role
+1. Get reservations by building ID
+1. Get reservations by building ID and time range
 
 ## Explore Further
 
