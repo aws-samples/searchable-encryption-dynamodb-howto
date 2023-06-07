@@ -11,7 +11,7 @@ This page contains reference information that might be useful as you work throug
 
 ### Missing CloudFormation resources
 
-Make sure you take the defaults for which region to launch in (us-east-2). If you've changed the region for any part of the workshop, tear your stack down and start fresh.
+Make sure you take the defaults for which region to launch in (us-west-2). If you've changed the region for any part of the workshop, tear your stack down and start fresh.
 
 ### More disk space on Cloud9
 
@@ -60,7 +60,7 @@ sudo resize2fs /dev/nvme0n1p1
 
 ### API Documentation
 
-Python and Java have API documentation available for each exercise. You can view the documentation as you work in Cloud9.
+There is Java API documentation available for each exercise. You can view the documentation as you work in Cloud9.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -80,13 +80,13 @@ Cloud9 will open a new pane in your IDE with a web browser rendering your API do
 
 Cloud9 has lots of IDE features for you to leverage. Here's some links to help you make the most of your Cloud9 experience. (Links all open in a new window.)
 
-* <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/menu-commands.html" target="_blank">Cloud9 Code Navigation</a>
-* <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/settings-keybindings.html" target="_blank">Cloud9 Keybindings</a>
-* <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/tutorial.html" target="_blank">Cloud9 Tutorial</a>
+* [Cloud9 Code Navigation](https://docs.aws.amazon.com/cloud9/latest/user-guide/menu-commands.html)
+* [Cloud9 Keybindings](https://docs.aws.amazon.com/cloud9/latest/user-guide/settings-keybindings.html)
+* [Cloud9 Tutorial](https://docs.aws.amazon.com/cloud9/latest/user-guide/tutorial.html)
 
 ### Cryptographic Details
 
-The Busy Engineer's Document Bucket only scratches the surface of the features offered by AWS KMS. To dive deep on how KMS can be useful to your application, check out the <a href="https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html" target="_blank">AWS Key Management Service Cryptographic Details Docs</a>, for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
+The Busy Engineer's Document Bucket only scratches the surface of the features offered by AWS KMS. To dive deep on how KMS can be useful to your application, check out the [AWS Key Management Service Cryptographic Details Docs](https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html), for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
 
 
 
