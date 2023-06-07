@@ -577,7 +577,7 @@ else
 fi
  -->
 
-!test check create-table
+<!-- !test check create-table -->
 ```bash
 ./employee-portal create-table
 ```
