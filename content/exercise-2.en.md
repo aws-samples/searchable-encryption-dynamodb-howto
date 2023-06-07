@@ -188,7 +188,7 @@ all the standard beacons used in your table.
 Right now, this will just be a standard beacon over the email attribute.
 
 To create a beacon that is calculated over the email attribute,
-configure `name` as "employeeEmail".
+configure `name` as "authorEmail".
 
 The beacon length you should choose depends on your dataset,
 and is a tradeoff between security and performance.
@@ -206,7 +206,7 @@ For this example, choose a length of 8.
   public static ArrayList<StandardBeacon> MakeStandardBeacons() {
     ArrayList<StandardBeacon> beacons = new ArrayList<StandardBeacon>();
     beacons.add(StandardBeacon.builder()
-        .name(EMPLOYEE_EMAIL_NAME)
+        .name(AUTHOR_EMAIL_NAME)
         .length(8)
         .build());
 
@@ -224,8 +224,8 @@ You have created a standard beacon configuration over the email attribute.
 
 When this is later configured with your client, the client
 will calculate a beacon value over the plaintext email attribute,
-and write that value to a new attribute named "aws_dbe_b_employeeEmail".
-During queries, the client will replace anywhere you specify an employee email
+and write that value to a new attribute named "aws_dbe_b_authorEmail".
+During queries, the client will replace anywhere you specify an author email
 with the beacon value instead.
 
 ### Step 3: Configure Compound Beacon for Global Secondary Index
@@ -241,7 +241,7 @@ the value written to this attribute will depend on the item being written.
 
 To start, you need to tell this compound beacon how
 it should be constructed.
-Configure a beacon constructor that contains a single, required part: employee email.
+Configure a beacon constructor that contains a single, required part: author email.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -251,7 +251,7 @@ Configure a beacon constructor that contains a single, required part: employee e
   // BEGIN EXERCISE 2 STEP 3a
   public static Constructor MakeGsi1TimecardPartitionKeyConstructor() {
     ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(EMPLOYEE_EMAIL_NAME).required(true).build());
+    parts.add(ConstructorPart.builder().name(AUTHOR_EMAIL_NAME).required(true).build());
     return Constructor.builder().parts(parts).build();
   }
   // END EXERCISE 2 STEP 3a
@@ -263,7 +263,7 @@ Configure a beacon constructor that contains a single, required part: employee e
 Now configure the compound beacon,
 giving it the same name as your original Global Secondary Index, "PK1".
 
-For `encryptedParts`, specify name as "employeeEmail" and the unique prefix "EE-".
+For `encryptedParts`, specify name as "authorEmail" and the unique prefix "CE-".
 Also configure the constructor you configured above.
 
 For `split`, define a character that does not appear in any of the data you are not client-side encrypting.
@@ -277,7 +277,7 @@ For this example, `SPLIT` uses "^".
   // BEGIN EXERCISE 2 STEP 3b
   public static CompoundBeacon MakeGsi1PartitionKey() {
     ArrayList<EncryptedPart> encryptedParts = new ArrayList<EncryptedPart>();
-    encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
+    encryptedParts.add(EncryptedPart.builder().name(AUTHOR_EMAIL_NAME).prefix(AUTHOR_EMAIL_PREFIX).build());
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardPartitionKeyConstructor());
@@ -305,7 +305,7 @@ any time an item with a "email" field is written, the client will write to this 
 
 The value used in the beacon will include only the email standard beacon.
 For example, if the calculated beacon value for "zorro@gmail.com" is "a",
-then the value written to this field will be "EE-a".
+then the value written to this field will be "CE-a".
 
 ### Step 4:
 
@@ -323,8 +323,6 @@ For example, a query that gets the tickets within a specific time range.
 To start, configure the constructor for this compound beacon.
 You want this beacon to be written to if the item contains the modified date attribute.
 
-[TODO wait why is this START_TIME? Shouldn't this be modified date?]
-
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
@@ -333,7 +331,7 @@ You want this beacon to be written to if the item contains the modified date att
   // BEGIN EXERCISE 2 STEP 4a
   public static Constructor MakeGsi1TimecardSortKeyConstructor() {
     ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
-    parts.add(ConstructorPart.builder().name(START_TIME_NAME).required(true).build());
+    parts.add(ConstructorPart.builder().name(MODIFIED_DATE_NAME).required(true).build());
     return Constructor.builder().parts(parts).build();
   }
   // END EXERCISE 2 STEP 4a
@@ -358,7 +356,7 @@ add it to the configuration as a signed part.
   // BEGIN EXERCISE 2 STEP 4b
   public static CompoundBeacon MakeGsi1SortKey() {
     ArrayList<SignedPart> signedParts = new ArrayList<SignedPart>();
-    signedParts.add(SignedPart.builder().name(START_TIME_NAME).prefix(START_TIME_PREFIX).build());
+    signedParts.add(SignedPart.builder().name(MODIFIED_DATE_NAME).prefix(MODIFIED_DATE_PREFIX).build());
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
@@ -462,11 +460,15 @@ configuration.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test check java step 5b -->
+<!-- TODO This is 5b but the code says 5c...
+     I have changed this to 5c so tests will insert it correctly
+    but ideally we will change the underlying code>
+
+<!-- !test check java step 5c -->
 ```java
-        // BEGIN EXERCISE 2 STEP 5b
+        // BEGIN EXERCISE 2 STEP 5c
         .search(MakeSearchConfig(ddbLocal))
-        // END EXERCISE 2 STEP 5b
+        // END EXERCISE 2 STEP 5c
 ```
 
 :::
@@ -558,8 +560,17 @@ Before we get started, let's first reset the data in your table.
 
 Let's try querying timecards using the newly supported access pattern:
 
+<!-- !test in get-tickets-author -->
 ```bash
-./employee-portal get-tickets --employee-email=XXX
+./employee-portal get-tickets --author-email=zorro@gmail.com
+```
+
+Expected output:
+
+<!-- !test out get-tickets-author -->
+```
+2    2022-10-06T14:32:25 zorro@gmail.com     charlie@gmail.com   3    Easy Bug            This seems simple enough
+1    2022-10-07T14:32:25 zorro@gmail.com     able@gmail.com      3    Bad Bug             This bug looks pretty bad
 ```
 
 Even though email is encrypted client-side, by utilizing
@@ -568,16 +579,22 @@ correct records!
 
 ## Get Timecards by Email and Date
 
-[TODO did I get the access pattern here wrong?]
-
 Because you configured the sort key for your new
 Global Secondary Index to contain the ticket's creation date,
 you can also specify start and end dates using the CLI.
 With this command, the CLI will return all timecards
-that were created on or after `start-date` and on or after `end-date`:
+that were created on or after the `start` date and on or after the `end` date:
 
+<!-- !test in get-tickets-author-start-end -->
 ```bash
-./employee-portal get-tickets --employee-email=XXX --start-date=XXX --end-date=XXX
+./employee-portal get-tickets --author-email=zorro@gmail.com --start=2022-10-06T00:00:00 --end=2022-10-07T00:00:00 
+```
+
+Expected output:
+
+<!-- !test out get-tickets-author-start-end -->
+```
+2    2022-10-06T14:32:25 zorro@gmail.com     charlie@gmail.com   3    Easy Bug            This seems simple enough
 ```
 
 While creation date is not encrypted in our table,
@@ -608,7 +625,6 @@ Try out these links.
 
 # Next exercise
 
-[TODO exercises are out of order?]
 Ready for more?
 Next you will work on [adding another access pattern](../exercise-3)
 to our searchable encryption configuration.
