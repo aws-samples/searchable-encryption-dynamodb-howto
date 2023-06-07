@@ -238,7 +238,7 @@ public class Api {
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
       .indexName(GSI1_NAME)
-      .keyConditionExpression(GSI1_PARTITION_KEY + " = :email")
+      .keyConditionExpression(GSI1_PARTITION_KEY + " = :email and " + GSI1_SORT_KEY + " between :startDate and :endDate")
       .expressionAttributeValues(attrValues);
     return MeetingFromResp(ddbClient.query(builder.build()));
   }
