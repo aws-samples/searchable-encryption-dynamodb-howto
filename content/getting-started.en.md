@@ -51,7 +51,7 @@ If you are working through these exercises in an AWS classroom environment, AWS 
 ### Set up your development environment
 
 1. Sign in to your AWS Account for the workshop. If you are working through these exercises in an AWS classroom environment, click the "Open AWS console" link in the sidebar.
-2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the "Event dashboard", then copy and paste the "Cloud9IdeUrl" into your browser.
+2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the [Event dashboard](https://catalog.us-east-1.prod.workshops.aws/event/dashboard/en-US), then copy and paste the "Cloud9IdeUrl" into your browser.
 
 ## Interact with your table
 
@@ -113,7 +113,6 @@ Take a look at all of our current employees:
 
 This command displays all of the employee records currently in your table.
 Can you think of any particular ways in which you might want to index on these employees?
-
 Let's see what our options are for getting a particular set of employees:
 
 ```bash
