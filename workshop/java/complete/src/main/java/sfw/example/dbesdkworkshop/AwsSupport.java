@@ -27,10 +27,12 @@ import software.amazon.cryptography.materialproviders.model.MaterialProvidersCon
 
 public class AwsSupport {
 
+  private static boolean ddbLocal;
+
   private AwsSupport() { // Do not instantiate
   }
 
-  public static DynamoDbClientBuilder GetClientBuilder(boolean ddbLocal) {
+  public static DynamoDbClientBuilder GetClientBuilder() {
     if (ddbLocal)
       return DynamoDbClient.builder()
           .endpointOverride(URI.create("http://localhost:8000"));
@@ -39,22 +41,24 @@ public class AwsSupport {
   }
 
   public static DynamoDbClient MakeDynamoDbClient(SharedOptions shared) {
+    ddbLocal = shared.ddbLocal;
+
     if (shared.plain)
-      return GetClientBuilder(shared.ddbLocal)
+      return GetClientBuilder()
           .build();
     else
-      return GetClientBuilder(shared.ddbLocal)
+      return GetClientBuilder()
           .overrideConfiguration(
               ClientOverrideConfiguration.builder()
-                  .addExecutionInterceptor(MakeInterceptor(shared.ddbLocal))
+                  .addExecutionInterceptor(MakeInterceptor())
                   .build())
           .build();
   }
 
-  public static KeyStore MakeKeyStore(boolean ddbLocal) {
+  public static KeyStore MakeKeyStore() {
     return KeyStore.builder().KeyStoreConfig(
         KeyStoreConfig.builder()
-            .ddbClient(GetClientBuilder(ddbLocal).build())
+            .ddbClient(GetClientBuilder().build())
             .ddbTableName(BRANCH_KEY_TABLE)
             .logicalKeyStoreName(BRANCH_KEY_TABLE)
             .kmsClient(KmsClient.create())
@@ -65,8 +69,8 @@ public class AwsSupport {
         .build();
   }
 
-  public static String CreateBranchKey(boolean ddbLocal) {
-    final KeyStore keystore = MakeKeyStore(ddbLocal);
+  public static String CreateBranchKey() {
+    final KeyStore keystore = MakeKeyStore();
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     return keystore.CreateKey().branchKeyIdentifier();
   }
@@ -346,19 +350,19 @@ public class AwsSupport {
     return beacons;
   }
 
-  public static BeaconVersion MakeBeaconVersion(boolean ddbLocal) {
+  public static BeaconVersion MakeBeaconVersion() {
     return BeaconVersion.builder()
         .version(1)
-        .keyStore(MakeKeyStore(ddbLocal))
+        .keyStore(MakeKeyStore())
         .keySource(MakeKeySource())
         .standardBeacons(MakeStandardBeacons())
         .compoundBeacons(MakeCompoundBeacons())
         .build();
   }
 
-  public static SearchConfig MakeSearchConfig(boolean ddbLocal) {
+  public static SearchConfig MakeSearchConfig() {
     ArrayList<BeaconVersion> versions = new ArrayList<BeaconVersion>();
-    versions.add(MakeBeaconVersion(ddbLocal));
+    versions.add(MakeBeaconVersion());
 
     return SearchConfig.builder()
         .versions(versions)
@@ -366,7 +370,7 @@ public class AwsSupport {
         .build();
   }
 
- public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
+ public static IKeyring MakeHierarchicalKeyring()
   {
     final MaterialProviders matProv = MaterialProviders.builder()
       .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
@@ -374,7 +378,7 @@ public class AwsSupport {
 
     final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
       .branchKeyId(BRANCH_KEY_ID)
-      .keyStore(MakeKeyStore(ddbLocal))
+      .keyStore(MakeKeyStore())
       .ttlSeconds(6000l)
       .maxCacheSize(100)
       .build();
@@ -382,9 +386,9 @@ public class AwsSupport {
     return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
   }
 
-  public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
+  public static DynamoDbEncryptionInterceptor MakeInterceptor()
   {
-    final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
+    final IKeyring kmsKeyring = MakeHierarchicalKeyring();
 
     HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
     actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
@@ -424,7 +428,7 @@ public class AwsSupport {
         .sortKeyName(SORT_KEY)
         .attributeActionsOnEncrypt(actions)
         .keyring(kmsKeyring)
-        .search(MakeSearchConfig(ddbLocal))
+        .search(MakeSearchConfig())
         .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();

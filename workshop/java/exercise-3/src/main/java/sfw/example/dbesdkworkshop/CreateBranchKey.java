@@ -18,7 +18,7 @@ public class CreateBranchKey implements Runnable {
 
   @Override
   public void run() {
-    String keyId = AwsSupport.CreateBranchKey(shared.ddbLocal);
+    String keyId = AwsSupport.CreateBranchKey();
 
     System.out.println("Created branch key : " + keyId);
   }
