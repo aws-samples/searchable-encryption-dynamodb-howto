@@ -219,27 +219,39 @@ public class Api {
     }
   }
 
-  public String GetKeyExprForRangeWithFallback(String startDate, String endDate, String sk)
-  {
-    if (endDate != null) {
-      return " AND " + sk + " between :startDate and :endDate";
-    } else {
-      return " AND " + sk + " >= :startDate"; // FIXME - not constrained to prefix
-    }
-  }
-
-  public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate)
+  public List<Meeting> getMeetingsByEmail(String email, String startDate, String endDate, String floor, String room)
   {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":email", AttributeValue.builder().s(EMPLOYEE_EMAIL_PREFIX + email).build());
-    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
-    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
-    
+    attrValues.put(":pk", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
+    String keyExpr = GSI1_PARTITION_KEY + " = :email";
+    if (floor == null && room == null) {
+      AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+      AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+      keyExpr += " and " + GSI1_SORT_KEY + " between :startDate and :endDate";
+    } else {
+      if (startDate == null)
+        throw new IllegalArgumentException("get-meetings by email, with floor or room, must also have --start");
+      if (endDate != null)
+        throw new IllegalArgumentException("get-meetings by email, with floor or room, must not have --end");
+      if (floor == null)
+        throw new IllegalArgumentException("get-meetings by email, with room, must also have --floor");
+      
+      String tag = START_TIME_PREFIX + startDate + SPLIT + FLOOR_PREFIX + floor;
+      if (room != null)
+        tag += SPLIT + ROOM_PREFIX + room;
+
+      keyExpr += " and begins_with(" + GSI1_SORT_KEY + ", :tag)";
+      attrValues.put(":tag", AttributeValue.builder().s(tag).build());
+    }
+    String filterExpr = "begins_with(" + PARTITION_KEY + ",:pk)";
+
     QueryRequest.Builder builder = QueryRequest.builder()
       .tableName(tableName)
       .indexName(GSI1_NAME)
-      .keyConditionExpression(GSI1_PARTITION_KEY + " = :email and " + GSI1_SORT_KEY + " between :startDate and :endDate")
-      .expressionAttributeValues(attrValues);
+      .keyConditionExpression(keyExpr)
+      .expressionAttributeValues(attrValues)
+      .filterExpression(filterExpr);
     return MeetingFromResp(ddbClient.query(builder.build()));
   }
 
@@ -407,13 +419,22 @@ public class Api {
     return results;
   }
 
-  protected List<Meeting> ScanMeetings(String startDate, String endDate) {
+  protected List<Meeting> ScanMeetings(String startDate, String endDate, String floor, String room) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
     AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
     AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
     String filterExpr = MakeFilter(":e", ":s") + " and " + GSI1_SORT_KEY + " between :startDate and :endDate";
+    if (floor != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :floor)";
+      attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
+    }
+    if (room != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :room)";
+      attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
       filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
