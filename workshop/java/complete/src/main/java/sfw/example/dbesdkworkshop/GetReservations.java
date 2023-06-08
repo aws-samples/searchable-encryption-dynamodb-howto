@@ -47,7 +47,7 @@ public class GetReservations implements Runnable {
     else if (building != null)
       results = api.getReservationsByBuilding(building, startTime, endTime, floor, room);
     else
-      results = api.ScanReservations();
+      results = api.ScanReservations(startTime, endTime, floor, room);
 
     System.out.println(Reservation.heading());
     for (Reservation item : results)

@@ -17,9 +17,8 @@ public class Config {
     public static final String BEACON_PREFIX = "aws_dbe_b_";
     public static final String SPLIT = "^";
 
-    // BEGIN EXERCISE 4 STEP 1
     public static final String TABLE_NAME = "Complete_Table";
-    // END EXERCISE 4 STEP 1
+
     public static final String BRANCH_KEY_TABLE = StateConfig.contents.wrapping_key_info.branch_key_table;
     public static final String BRANCH_KEY_KMS_ARN = StateConfig.contents.wrapping_key_info.branch_key_kms_arn;
     public static final String BRANCH_KEY_ID = StateConfig.contents.wrapping_key_info.branch_key_id;
