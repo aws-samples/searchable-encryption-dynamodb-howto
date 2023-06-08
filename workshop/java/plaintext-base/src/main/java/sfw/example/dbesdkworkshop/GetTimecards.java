@@ -41,7 +41,7 @@ public class GetTimecards implements Runnable {
     else if (name != null)
       results = api.getTimecardsByName(name, startDate, endDate, role);
     else
-      results = api.ScanTimecards();
+      results = api.ScanTimecards(startDate, endDate, role);
 
     System.out.println(Timecard.heading());
     for (Timecard item : results)

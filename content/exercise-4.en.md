@@ -93,6 +93,10 @@ We need to associate beacons with five more encrypted attributes.
         .name(SEVERITY_NAME)
         .length(8)
         .build());
+    beacons.add(StandardBeacon.builder()
+        .name(ROLE_NAME)
+        .length(8)
+        .build());
     // END EXERCISE 4 STEP 2
 ```
 
