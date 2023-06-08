@@ -65,7 +65,7 @@ for timecards based on email and start time.
 If you just finished [Adding the Database Encryption SDK](../exercise-1), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-1` directory for the language you are using:.
+jump into the `exercise-1` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
