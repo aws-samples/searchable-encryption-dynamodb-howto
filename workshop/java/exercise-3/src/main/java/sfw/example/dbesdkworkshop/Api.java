@@ -461,11 +461,20 @@ public class Api {
     return results;
   }
 
-  protected List<Ticket> ScanTickets() {
+  protected List<Ticket> ScanTickets(String startDate, String endDate) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":t", AttributeValue.builder().s(TICKET_NUMBER_PREFIX).build());
-    final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":t"))
+    String filterExpr = MakeFilter(":t");
+    if (startDate != null) {
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+      filterExpr += " and " + MODIFIED_DATE_NAME + " >= :startDate";
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+      filterExpr += " and " + MODIFIED_DATE_NAME + " <= :endDate";
+    }
+    final ScanRequest request = ScanRequest.builder().tableName(tableName)
+      .filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);

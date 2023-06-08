@@ -475,11 +475,11 @@ public class Api {
     String filterExpr = MakeFilter(":t");
     if (startDate != null) {
       attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
-      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+      filterExpr += " and " + MODIFIED_DATE_NAME + " >= :startDate";
     }
     if (endDate != null) {
       attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
-      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+      filterExpr += " and " + MODIFIED_DATE_NAME + " <= :endDate";
     }
     final ScanRequest request = ScanRequest.builder().tableName(tableName)
       .filterExpression(filterExpr)
