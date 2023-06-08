@@ -70,7 +70,7 @@ From your Cloud9 environment's terminal, access the `plaintext-base` folder:
 cd ~/environment/workshop/java/plaintext-base
 ```
 
-We provide a helper script to interact with the table, `employee-data`. Take a look at all the `put` commands available in the CLI:
+We provide a helper script to interact with the table, `employee-portal`. Take a look at all the `put` commands available in the CLI:
 
 <!-- !test program
 cd ./workshop/java/plaintext-base
