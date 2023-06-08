@@ -53,16 +53,30 @@ public class Timecard extends BaseItem {
         item.get(ROLE_NAME).s());
   }
 
+  private static String format = "%-15s%-20s%-20s%-20s%-8s%-20s";
+
   @Override
   public String toString() {
     return String
-      .format("%-5s%-20s%-20s%-20s%-5s%-20s",
+      .format(format,
         projectName.toString(),
         startTime.toString(),
         employeeNumber.toString(),
         employeeEmail.toString(),
         hours.toString(),
         role.toString()
+      );
+  }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "projectName",
+        "startTime",
+        "employeeNumber",
+        "employeeEmail",
+        "hours",
+        "role"
       );
   }
 

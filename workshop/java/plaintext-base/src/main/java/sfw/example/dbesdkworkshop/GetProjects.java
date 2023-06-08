@@ -45,6 +45,8 @@ public class GetProjects implements Runnable {
     else
       results = api.ScanProjects();
 
+    System.out.println(Project.heading());
     for (Project item : results)
-      System.out.println(item);  }
+      System.out.println(item);
+  }
 }

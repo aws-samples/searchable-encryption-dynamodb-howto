@@ -49,6 +49,7 @@ public class GetReservations implements Runnable {
     else
       results = api.ScanReservations();
 
+    System.out.println(Reservation.heading());
     for (Reservation item : results)
       System.out.println(item);
   }

@@ -61,10 +61,12 @@ public class Reservation extends BaseItem {
         item.get(SUBJECT_NAME).s());
   }
 
+  private static String format = "%-40s%-20s%-20s%-10s%-20s%-20s%s";
+
   @Override
   public String toString() {
     return String
-      .format("%-40s%-20s%-20s%-5s%-20s%-20s%s",
+      .format(format,
         reservation.toString(),
         startTime.toString(),
         organizerEmail.toString(),
@@ -72,6 +74,19 @@ public class Reservation extends BaseItem {
         attendees.toString(),
         subject.toString(),
         location.toString()
+      );
+  }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "reservation",
+        "startTime",
+        "organizerEmail",
+        "duration",
+        "attendees",
+        "subject",
+        "location"
       );
   }
 }

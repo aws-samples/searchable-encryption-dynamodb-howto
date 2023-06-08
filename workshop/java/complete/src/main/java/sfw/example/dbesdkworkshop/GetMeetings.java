@@ -41,6 +41,7 @@ public class GetMeetings implements Runnable {
     else
       results = api.ScanMeetings();
 
+    System.out.println(Meeting.heading());
     for (Meeting item : results)
       System.out.println(item);
   }

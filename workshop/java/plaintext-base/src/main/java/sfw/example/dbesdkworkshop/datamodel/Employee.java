@@ -77,16 +77,30 @@ public class Employee extends BaseItem {
         item.get(TITLE_NAME).s());
   }
 
+  private static String format = "%-15s%-20s%-20s%-20s%-10s%s";
+
   @Override
   public String toString() {
     return String
-      .format("%-6s%-20s%-20s%-20s%-10s%s",
+      .format(format,
         employeeNumber,
         employeeEmail,
         managerEmail,
         name,
         title,
         location.toString()
+      );
+  }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "employeeNumber",
+        "employeeEmail",
+        "managerEmail",
+        "name",
+        "title",
+        "location"
       );
   }
 }

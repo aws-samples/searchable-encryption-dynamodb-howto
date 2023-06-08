@@ -43,6 +43,7 @@ public class GetTimecards implements Runnable {
     else
       results = api.ScanTimecards();
 
+    System.out.println(Timecard.heading());
     for (Timecard item : results)
       System.out.println(item);
 

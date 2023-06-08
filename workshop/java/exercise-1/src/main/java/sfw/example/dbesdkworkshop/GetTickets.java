@@ -44,6 +44,7 @@ public class GetTickets implements Runnable {
     else
       results = api.ScanTickets();
 
+    System.out.println(Ticket.heading());
     for (Ticket item : results)
       System.out.println(item);
   }
