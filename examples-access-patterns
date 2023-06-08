@@ -24,8 +24,7 @@
 # 1. Get projects by status, start and target date
 ./employee-portal get-projects -l --status Active --start 2022-05-04 --end 2022-07-08 --target-start 2022-12-12 --target-end 2023-04-12
 # 1. Get projects by name
-# This appears to say name but map to id...
-./employee-portal get-projects -l --project-name "Scan Beacons"
+./employee-portal get-projects -l --project-name 2
 
 # 1. Get reservations by email
 ./employee-portal get-reservations -l --organizer-email barney@gmail.com
