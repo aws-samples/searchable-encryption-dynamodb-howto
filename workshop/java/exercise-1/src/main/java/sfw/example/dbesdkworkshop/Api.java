@@ -397,12 +397,15 @@ public class Api {
     return results;
   }
 
-  protected List<Meeting> ScanMeetings() {
+  protected List<Meeting> ScanMeetings(String startDate, String endDate) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+    String filterExpr = MakeFilter(":e", ":s") + " and " + GSI1_SORT_KEY + " between :startDate and :endDate";
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":e", ":s"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
