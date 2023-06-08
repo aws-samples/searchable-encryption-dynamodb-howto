@@ -33,7 +33,7 @@ If you just finished [Adding The Employee Record access patterns](../exercise-3)
 you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-3` directory for the language of your choice.
+jump into the `exercise-3` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}

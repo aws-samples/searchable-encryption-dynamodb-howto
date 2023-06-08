@@ -33,7 +33,7 @@ considerations on the tradeoffs being made between security and performance.
 If you just finished [Adding Searchable Encryption Configuration](../exercise-2), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-2` directory for the language of your choice.
+jump into the `exercise-2` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -415,10 +415,10 @@ You should see the same list you have seen before:
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 employeeNumber employeeEmail       managerEmail        name                title     location
-4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
-3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
 1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
 2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
 ```
 
 This shows all of the employee records.
