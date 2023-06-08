@@ -458,11 +458,23 @@ public class Api {
     return results;
   }
 
-
-  protected List<Timecard> ScanTimecards() {
+  protected List<Timecard> ScanTimecards(String startDate, String endDate, String role) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
     attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    String filterExpr = MakeFilter(":p", ":s");
+    if (startDate != null) {
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+    }
+    if (role != null) {
+      attrValues.put(":role", AttributeValue.builder().s(role).build());
+      filterExpr += " and " + ROLE_NAME + " = :role";
+    }
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
       filterExpression(MakeFilter(":p", ":s"))
       .expressionAttributeValues(attrValues)
@@ -474,7 +486,6 @@ public class Api {
     }
     return results;
   }
-
 
   public List<Employee> getEmployeeById(String id)
   {
