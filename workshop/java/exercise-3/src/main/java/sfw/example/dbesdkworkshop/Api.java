@@ -340,13 +340,32 @@ public class Api {
     final ScanResponse response = ddbClient.scan(request);
     return response.items();
   }
-  protected List<Employee> ScanEmployees() {
-      HashMap<String, AttributeValue> attrValues = new HashMap<>();
+
+  protected List<Employee> ScanEmployees(String building, String floor, String room, String desk) {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
+    String filterExpr = MakeFilter(":e", ":e");
+    if (building != null) {
+      filterExpr += "and contains(SK3, :building)";
+      attrValues.put(":building", AttributeValue.builder().s(BUILDING_PREFIX + building).build());
+    }
+    if (floor != null) {
+      filterExpr += "and contains(SK3, :floor)";
+      attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
+    }
+    if (room != null) {
+      filterExpr += "and contains(SK3, :room)";
+      attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
+    }
+    if (desk != null) {
+      filterExpr += "and contains(SK3, :desk)";
+      attrValues.put(":desk", AttributeValue.builder().s(DESK_PREFIX + desk).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":e", ":e"))
-      .expressionAttributeValues(attrValues)
-      .build();
+    filterExpression(filterExpr)
+    .expressionAttributeValues(attrValues)
+    .build();
     final ScanResponse response = ddbClient.scan(request);
     final ArrayList<Employee> results = new ArrayList<Employee>();
     for (Map<String,AttributeValue> item : response.items()) {
