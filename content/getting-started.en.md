@@ -181,21 +181,18 @@ Keep in mind the list of supported access patterns we will implement on our encr
 1. Get projects by status, start and target date
 1. Get projects by name
 
-1. Get project history by date range
-1. Get project history by role
-
 1. Get reservations by email
 1. Get reservations by building ID
 1. Get reservations by building ID and time range
 
-1. Get ticket history by ticket ID
-1. Get ticket history by employee email
-1. Get ticket history by assignee email
-1. Get assigned tickets by assignee email
-1. Get tickets by email
-1. Get tickets last touched in the past 24 hours
+1. Get ticket by ticket ID
+1. Get ticket by employee email
+1. Get ticket by assignee email
+1. Get tickets last modified in a date range
 
 1. Get time cards by email
+1. Get time cards by date range
+1. Get time cards by role
 
 If you have time, try out some of these access patterns on your plaintext table.
 
