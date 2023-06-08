@@ -28,18 +28,29 @@
 # This appears to say name but map to id...
 ./employee-portal get-projects -l --project-name "Scan Beacons"
 
+# I don't know how to do this?
 # 1. Get project history by date range
 # 1. Get project history by role
 
 # 1. Get reservations by email
+/employee-portal get-reservations -l --organizer-email barney@gmail.com
 # 1. Get reservations by building ID
+/employee-portal get-reservations -l --building 44
 # 1. Get reservations by building ID and time range
+/employee-portal get-reservations -l --building 44 --start 2022-07-04T13:00 --end 2022-07-04T15:00
 
 # 1. Get ticket history by ticket ID
+/employee-portal get-tickets -l --ticket-number 1
 # 1. Get ticket history by employee email
+/employee-portal get-tickets -l --author-email zorro@gmail.com
 # 1. Get ticket history by assignee email
+/employee-portal get-tickets -l --assignee-email able@gmail.com
+
+# It is not clear to me how history differs from "an active ticket"
 # 1. Get assigned tickets by assignee email
 # 1. Get tickets by email
+
 # 1. Get tickets last touched in the past 24 hours
+/employee-portal get-tickets --start 2022-10-07T14:32:25 --stop 2022-10-07T16:32:25
 
 # 1. Get time cards by email
