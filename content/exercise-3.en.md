@@ -33,7 +33,7 @@ considerations on the tradeoffs being made between security and performance.
 If you just finished [Adding Searchable Encryption Configuration](../exercise-2), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-2` directory for the language of your choice.
+jump into the `exercise-2` directory for the language you are using:.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}

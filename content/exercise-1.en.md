@@ -48,7 +48,7 @@ using the KMS Key that you set up in [Getting Started](../getting-started).
 
 ### Starting Directory
 
-Make sure you are in the `exercises` directory for the language of your choice:
+Make sure you are in the `exercises` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
