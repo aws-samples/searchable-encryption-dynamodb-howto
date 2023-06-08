@@ -134,6 +134,9 @@ This command displays all of the employee records currently in your table.
 You should see the following
 <!-- !test out get-employees -->
 ```
+
+WARNING : You are doing a full table scan. In real life, this would be very time consuming.
+
 employeeNumber employeeEmail       managerEmail        name                title     location
 4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}

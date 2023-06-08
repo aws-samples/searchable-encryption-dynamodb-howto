@@ -667,6 +667,9 @@ Expected output:
 
 <!-- !test out get-employees -->
 ```
+
+WARNING : You are doing a full table scan. In real life, this would be very time consuming.
+
 employeeNumber employeeEmail       managerEmail        name                title     location
 4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
@@ -743,6 +746,9 @@ Expected output:
 
 <!-- !test out get-tickets -->
 ```
+
+WARNING : You are doing a full table scan. In real life, this would be very time consuming.
+
 ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
 2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
 2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
