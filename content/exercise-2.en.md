@@ -432,19 +432,19 @@ Then, configure a `SearchConfig` with this `BeaconVersion`.
         .build();
   }
 
-  public static BeaconVersion MakeBeaconVersion() {
+  public static BeaconVersion MakeBeaconVersion(boolean ddbLocal) {
     return BeaconVersion.builder()
         .version(1)
-        .keyStore(MakeKeyStore())
+        .keyStore(MakeKeyStore(ddbLocal))
         .keySource(MakeKeySource())
         .standardBeacons(MakeStandardBeacons())
         .compoundBeacons(MakeCompoundBeacons())
         .build();
   }
 
-  public static SearchConfig MakeSearchConfig() {
+  public static SearchConfig MakeSearchConfig(boolean ddbLocal) {
     ArrayList<BeaconVersion> versions = new ArrayList<BeaconVersion>();
-    versions.add(MakeBeaconVersion());
+    versions.add(MakeBeaconVersion(ddbLocal));
 
     return SearchConfig.builder()
         .versions(versions)
@@ -466,7 +466,7 @@ configuration.
 <!-- !test check java step 5b -->
 ```java
         // BEGIN EXERCISE 2 STEP 5b
-        .search(MakeSearchConfig())
+        .search(MakeSearchConfig(ddbLocal))
         // END EXERCISE 2 STEP 5b
 ```
 

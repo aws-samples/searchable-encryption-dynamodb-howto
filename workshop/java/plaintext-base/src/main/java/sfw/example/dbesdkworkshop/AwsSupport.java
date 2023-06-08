@@ -12,12 +12,10 @@ import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class AwsSupport {
 
-  private static boolean ddbLocal;
-
   private AwsSupport() { // Do not instantiate
   }
 
-  public static DynamoDbClientBuilder GetClientBuilder()
+  public static DynamoDbClientBuilder GetClientBuilder(boolean ddbLocal)
   {
     if (ddbLocal)
       return DynamoDbClient.builder()
@@ -28,17 +26,15 @@ public class AwsSupport {
 
   public static DynamoDbClient MakeDynamoDbClient(SharedOptions shared)
   {
-    ddbLocal = shared.ddbLocal;
-
     if (shared.plain)
-      return GetClientBuilder()
+      return GetClientBuilder(shared.ddbLocal)
               .build();
     else
-      return GetClientBuilder()
+      return GetClientBuilder(shared.ddbLocal)
               .build();
   }
 
-  public static String CreateBranchKey() {
+  public static String CreateBranchKey(boolean ddbLocal) {
     return "No branch keys in plain text";
   }
 

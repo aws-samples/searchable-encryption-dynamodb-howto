@@ -246,6 +246,7 @@ Now, to implement `CreateBranchKey`:
     - The Key Store requires a DynamoDB client.
       This is the client that will be used to put and retrieve
       branch keys in the Key Store's backing DynamoDB table.
+      [TODO how do we talk about the DDB Client being created here with ddbLocal]
     - The Key Store also requires a KMS Client.
       This is the client that will be used to call KMS GenerateWithoutPlaintext
       when creating the branch key, and call KMS Decrypt when your application
@@ -254,17 +255,19 @@ Now, to implement `CreateBranchKey`:
 1. Call the `CreateKey` method on the Key Store to create a new branch key in that Key Store.
 1. Return the Branch Key Id returned by the `CreateKey` call.
 
+[TODO customers shouldn't have to reason about ddbLocal...]
+
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
 <!-- !test check java step 3c -->
 ```java
   // BEGIN EXERCISE 1 STEP 3c
-  public static KeyStore MakeKeyStore()
+  public static KeyStore MakeKeyStore(boolean ddbLocal)
   {
     return KeyStore.builder().KeyStoreConfig(
       KeyStoreConfig.builder()
-        .ddbClient(GetClientBuilder().build())
+        .ddbClient(GetClientBuilder(ddbLocal).build())
         .ddbTableName(BRANCH_KEY_TABLE)
         .logicalKeyStoreName(BRANCH_KEY_TABLE)
         .kmsClient(KmsClient.create())
@@ -274,8 +277,8 @@ Now, to implement `CreateBranchKey`:
         .build()).build();
   }
   
-  public static String CreateBranchKey() {
-    final KeyStore keystore = MakeKeyStore();    
+  public static String CreateBranchKey(boolean ddbLocal) {
+    final KeyStore keystore = MakeKeyStore(ddbLocal);    
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     return keystore.CreateKey().branchKeyIdentifier();
   }
@@ -334,7 +337,7 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 <!-- !test check java step 4b -->
 ```java
   // BEGIN EXERCISE 1 STEP 4b
-  public static IKeyring MakeHierarchicalKeyring()
+  public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
     final MaterialProviders matProv = MaterialProviders.builder()
       .MaterialProvidersConfig(MaterialProvidersConfig.builder().build())
@@ -342,7 +345,7 @@ Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 
     final CreateAwsKmsHierarchicalKeyringInput keyringInput = CreateAwsKmsHierarchicalKeyringInput.builder()
       .branchKeyId(BRANCH_KEY_ID)
-      .keyStore(MakeKeyStore())
+      .keyStore(MakeKeyStore(ddbLocal))
       .ttlSeconds(6000l)
       .maxCacheSize(100)
       .build();
@@ -399,7 +402,7 @@ in the `override Configuration`.
         // BEGIN EXERCISE 1 STEP 5a
         .overrideConfiguration(
           ClientOverrideConfiguration.builder()
-            .addExecutionInterceptor(MakeInterceptor())
+            .addExecutionInterceptor(MakeInterceptor(shared.ddbLocal))
             .build())
         // END EXERCISE 1 STEP 5a
 ```
@@ -432,9 +435,9 @@ For this table, configuration contains several parts:
 <!-- !test check java step 5b -->
 ```java
   // BEGIN EXERCISE 1 STEP 5b
-  public static DynamoDbEncryptionInterceptor MakeInterceptor()
+  public static DynamoDbEncryptionInterceptor MakeInterceptor(boolean ddbLocal)
   {
-    final IKeyring kmsKeyring = MakeHierarchicalKeyring();
+    final IKeyring kmsKeyring = MakeHierarchicalKeyring(ddbLocal);
 
     HashMap<String, CryptoAction> actions = new HashMap<String, CryptoAction>();
     actions.put(PARTITION_KEY, CryptoAction.SIGN_ONLY);
@@ -670,10 +673,10 @@ Expected output:
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 employeeNumber employeeEmail       managerEmail        name                title     location
-1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 The data that the CLI prints will appear as plaintext
@@ -749,11 +752,11 @@ Expected output:
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
-3                   2022-10-07T15:32:25      barney@gmail.com    charlie@gmail.com   3           Bad Bug Followup    We should follow up on the Bad Bug
 2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
 2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
 1                   2022-10-07T14:32:25      zorro@gmail.com     able@gmail.com      3           Bad Bug             This bug looks pretty bad
 1                   2022-10-07T15:32:25      able@gmail.com      charlie@gmail.com   3           Bad Bug             Charlie should handle this
+3                   2022-10-07T15:32:25      barney@gmail.com    charlie@gmail.com   3           Bad Bug Followup    We should follow up on the Bad Bug
 ```
 
 You may additionally want to verify that this item is encrypted as expected
