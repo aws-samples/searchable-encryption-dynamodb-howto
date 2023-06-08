@@ -543,6 +543,8 @@ fi
 ./employee-portal create-branch-key
 ```
 
+(If this command fails with a `ResourceNotFoundException`, wait a few seconds and run it again.)
+
 This command outputs the branch key ID of the branch key just created.
 Keep note of this ID, as we will need to add it to our configuration.
 

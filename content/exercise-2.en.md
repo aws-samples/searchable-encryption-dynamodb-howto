@@ -38,12 +38,15 @@ because it is a use-case with a wide variety of
 complex, yet still easy to understand, access-patterns.
 Before you use [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html)
 for your own use case, please read our [AWS documentation](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/what-is-database-encryption-sdk.html)
-and ensure that [beacons are right for your use case](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
+to ensure that [beacons are right for your use case](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
+You should also discuss this feature with your security teams
+to ensure it meets security requirements in your organization.
 
 To use [searchable encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html),
 you need another kind of key: a beacon key.
 This beacon key will be used during both write and query
-in order to calculate the truncated HMACs that comprise beacons.
+in order to calculate the truncated HMACs ([hash-based message authentication codes](https://en.wikipedia.org/wiki/HMAC))
+that comprise beacons.
 
 In [Exercise 1](../exercise-1), you created a Key Store with a branch key.
 The `CreateBranchKey` API additionally created a second key for
