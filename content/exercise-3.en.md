@@ -411,10 +411,11 @@ To start, let's retrieve all of our employees again:
 You should see the same list you have seen before:
 <!-- !test out get-employees -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
-3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 This shows all of the employee records.
@@ -427,7 +428,8 @@ To test GSI1, try
 and this should give you
 <!-- !test out get-employees --employee-number=1234 -->
 ```
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
 ```
 
 To test GSI2, try
@@ -438,10 +440,11 @@ To test GSI2, try
 and you should get
 <!-- !test out get-employees --manager-email=zorro@gmail.com -->
 ```
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
-3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 To test GSI3, try
@@ -452,7 +455,8 @@ To test GSI3, try
 and you should get
 <!-- !test out get-employees --city NYC -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 # Next exercise

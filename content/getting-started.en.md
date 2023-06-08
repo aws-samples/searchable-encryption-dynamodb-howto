@@ -134,10 +134,11 @@ This command displays all of the employee records currently in your table.
 You should see the following
 <!-- !test out get-employees -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
-3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 Can you think of any particular ways in which you might want to index on these employees?
@@ -157,7 +158,8 @@ For example, to get all employees in New York, do:
 You should see:
 <!-- !test out get-employees NYC -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 Now try to see if you can index the data in a different way, e.g. getting all employees in New York City.
