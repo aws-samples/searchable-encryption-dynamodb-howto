@@ -39,7 +39,7 @@ public class GetMeetings implements Runnable {
     else if (id != null)
       results = api.getMeetingsById(id, startDate, endDate);
     else
-      results = api.ScanMeetings();
+      results = api.ScanMeetings(startDate, endDate);
 
     for (Meeting item : results)
       System.out.println(item);
