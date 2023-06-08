@@ -40,7 +40,7 @@ create_plaintext_table:
 # This is because a test may fail,
 # but also you may want to have access to the data
 # to check the stat of ddb.
-test_local: USE_DDB_LOCAL=true
+test_local: export USE_DDB_LOCAL=true
 test_local: start_ddb_local create_plaintext_table markdown_test
 
 get_ddb_local:
