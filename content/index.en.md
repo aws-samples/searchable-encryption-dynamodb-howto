@@ -32,9 +32,9 @@ if you want to learn more.
 
 Here is the entity relationship diagram for the Employee Portal Service.
 
-[TODO render the diagram not the model]
+![er-diagram](/static/er-diagram.svg)
 
-```plantuml alt="Data Model" title="Data Model"
+<!-- ```plantuml alt="Data Model" title="Data Model"
 @startuml
 
 skinparam BackgroundColor transparent
@@ -53,16 +53,18 @@ Buildings ||-[#black]o{ Employees
 Buildings ||-[#black]-o{ Rooms
 
 @enduml
-```
+``` -->
 
 As you begin this workshop,
 this system uses DynamoDB to store records for searching.
 All record are stored in a single DynamoDB table
-with global secondary indexes.
+with global secondary indexes. 
 
-[TODO render the diagram not the model]
+See this diagram to understand the architecture of this system at the beginning of the workshop:
 
-```plantuml alt="Beginning architecture overview" title="Beginning architecture overview"
+![beginning-architecture-diagram](/static/beginning-architecture-overview.svg)
+
+<!-- ```plantuml alt="Beginning architecture overview" title="Beginning architecture overview"
 @startuml
 
 skinparam BackgroundColor transparent
@@ -91,15 +93,16 @@ AWSGroupEntity(DDBGroup, "Amazon DynamoDB", #3B48CC, DynamoDB, DDBService) {
   DynamoDBGlobalsecondaryindex(GSI1, "GSI", "")
   DynamoDBGlobalsecondaryindex(GSI2, "GSI", "")
 
-  DDBTable --> GSI1
-  DDBTable --> GSI2
+  NOTE: When uncommenting, remove the backslash from next 2 lines
+  DDBTable -\-> GSI1
+  DDBTable -\-> GSI2
 }
 
 EmployeePortalService <- DDBItem
 DDBItem -> DDBGroup
 
 @enduml
-```
+``` -->
 
 There are a variety of access patterns that this Employee Portal Service
 will support.
@@ -146,9 +149,11 @@ With client-side encryption, you will configure searchable
 encryption so that you can maintain the original access patterns
 supported by the Employee Portal Service.
 
-[TODO render the diagram not the model]
+See this diagram to understand the expected architecture of this system when the workshop is completed:
 
-```plantuml alt="Final architecture overview" title="Final architecture overview"
+![final-architecture](/static/final-architecture.svg)
+
+<!-- ```plantuml alt="Final architecture overview" title="Final architecture overview"
 @startuml
 
 skinparam BackgroundColor transparent
@@ -187,18 +192,20 @@ AWSGroupEntity(DDBGroup, "Amazon DynamoDB", #3B48CC, DynamoDB, DDBService) {
   DynamoDBGlobalsecondaryindex(GSI1, "GSI", "")
   DynamoDBGlobalsecondaryindex(GSI2, "GSI", "")
 
-  DDBTable --> GSI1
-  DDBTable --> GSI2
+  NOTE: When uncommenting, remove the backslash from next 2 lines
+  DDBTable -\-> GSI1
+  DDBTable -\-> GSI2
 }
 
 EmployeePortalService <- DDBItem
 DDBItem -> DDBGroup
 
 AWSKMS <-- DataKey
-DataKey --> EmployeePortalService
+  NOTE: When uncommenting, remove the backslash from next line
+DataKey -\-> EmployeePortalService
 
 @enduml
-```
+``` -->
 
 ## Exercises
 

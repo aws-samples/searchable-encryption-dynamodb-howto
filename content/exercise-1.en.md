@@ -779,11 +779,10 @@ reducing the number of calls the client needs to make to KMS.
 the new client will have a clean cache,
 and the `Decrypt` call will go to KMS.)
 
-## Explore Further  --- BUG BUG
+## Explore Further
 
 * **AWS Cloud Development Kit** - Check out the `~/environment/workshop/cdk` directory to see how the workshop resources are described using CDK.
 * **Alice, Bob, and Friends** - <a href="https://en.wikipedia.org/wiki/Alice_and_Bob#Cast_of_characters" target="_blank">Who are Faythe and Walter?</a>
-* [TODO]
 
 # Next exercise
 
