@@ -8,10 +8,9 @@
 # 1. Get employees by manager email
 ./employee-portal get-employees -l --manager-email zorro@gmail.com
 # 1. Get meetings by date and building/floor/room
-./employee-portal get-employees -l --building 22
-./employee-portal get-employees -l --city NYC
-./employee-portal get-employees -l --desk 3
-./employee-portal get-employees -l --floor 2
+./employee-portal get-employees -l --building 22 --city NYC
+./employee-portal get-employees -l --building 22 --city NYC --desk 3
+./employee-portal get-employees -l --building 22 --city NYC --desk 3 --floor 2
 
 # 1. Get meetings by date and email
 ./employee-portal get-meetings -l --employee-email barney@gmail.com --start 2022-07-04T14:00 --end 2022-07-04T14:20
