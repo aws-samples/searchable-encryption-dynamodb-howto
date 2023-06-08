@@ -41,8 +41,10 @@ public class GetTickets implements Runnable {
       results = api.getTicketByAuthor(author, ticket, start, end);
     else if (ticket != null)
       results = api.getTicketById(ticket, start, end);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanTickets(start, end);
+    }
 
     System.out.println(Ticket.heading());
     for (Ticket item : results)

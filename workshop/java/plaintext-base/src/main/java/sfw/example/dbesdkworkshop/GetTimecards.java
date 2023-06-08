@@ -40,8 +40,10 @@ public class GetTimecards implements Runnable {
       results = api.getTimecardsByEmail(email, startDate, endDate, role);
     else if (name != null)
       results = api.getTimecardsByName(name, startDate, endDate, role);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanTimecards(startDate, endDate, role);
+    }
 
     System.out.println(Timecard.heading());
     for (Timecard item : results)

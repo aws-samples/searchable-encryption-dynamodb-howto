@@ -46,8 +46,10 @@ public class GetReservations implements Runnable {
       results = api.getReservationsByEmail(organizerEmail, startTime, endTime, floor, room);
     else if (building != null)
       results = api.getReservationsByBuilding(building, startTime, endTime, floor, room);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanReservations(startTime, endTime, floor, room);
+    }
 
     System.out.println(Reservation.heading());
     for (Reservation item : results)

@@ -50,8 +50,10 @@ public class GetEmployees implements Runnable {
       results = api.getEmployeeByManager(manager);
     else if (city != null)
       results = api.getEmployeeByCity(city, building, floor, room, desk);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanEmployees(building, floor, room, desk);
+    }
 
     System.out.println(Employee.heading());
     for (Employee item : results)

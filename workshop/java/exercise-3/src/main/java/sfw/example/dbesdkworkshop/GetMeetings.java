@@ -38,8 +38,10 @@ public class GetMeetings implements Runnable {
       results = api.getMeetingsByEmail(email, startDate, endDate);
     else if (id != null)
       results = api.getMeetingsById(id, startDate, endDate);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanMeetings(startDate, endDate);
+    }
 
     System.out.println(Meeting.heading());
     for (Meeting item : results)

@@ -42,8 +42,10 @@ public class GetProjects implements Runnable {
       results = api.getProjectByName(project);
     else if (status != null)
       results = api.getProjectsByStatus(status, startDate, endDate, startTarget, endTarget);
-    else
+    else {
+      System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
       results = api.ScanProjects(startDate, endDate, startTarget, endTarget);
+    }
 
     System.out.println(Project.heading());
     for (Project item : results)
