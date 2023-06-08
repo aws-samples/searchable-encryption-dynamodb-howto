@@ -354,19 +354,19 @@ public class Api {
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     String filterExpr = MakeFilter(":e", ":e");
     if (building != null) {
-      filterExpr += "and contains(SK3, :building)";
+      filterExpr += " and contains(SK3, :building)";
       attrValues.put(":building", AttributeValue.builder().s(BUILDING_PREFIX + building).build());
     }
     if (floor != null) {
-      filterExpr += "and contains(SK3, :floor)";
+      filterExpr += " and contains(SK3, :floor)";
       attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
     }
     if (room != null) {
-      filterExpr += "and contains(SK3, :room)";
+      filterExpr += " and contains(SK3, :room)";
       attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
     }
     if (desk != null) {
-      filterExpr += "and contains(SK3, :desk)";
+      filterExpr += " and contains(SK3, :desk)";
       attrValues.put(":desk", AttributeValue.builder().s(DESK_PREFIX + desk).build());
     }
 
