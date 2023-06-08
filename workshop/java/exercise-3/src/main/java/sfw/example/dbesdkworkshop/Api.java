@@ -408,11 +408,31 @@ public class Api {
     return results;
   }
 
-  protected List<Project> ScanProjects() {
+  protected List<Project> ScanProjects(String startDate, String endDate, String startTarget, String endTarget) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
+
+    String filterExpr = MakeFilter(":p", ":p");
+    if (startDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+    }
+    if (endDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+    }
+
+    if (startTarget != null) {
+      filterExpr += " and " + TARGET_DATE_NAME + " >= :startTarget";
+      attrValues.put(":startTarget", AttributeValue.builder().s(startTarget).build());
+    }
+    if (endTarget != null) {
+      filterExpr += " and " + TARGET_DATE_NAME + " <= :endTarget";
+      attrValues.put(":endTarget", AttributeValue.builder().s(endTarget).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":p", ":p"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
