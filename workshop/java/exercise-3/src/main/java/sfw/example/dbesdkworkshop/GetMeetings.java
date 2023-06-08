@@ -25,6 +25,10 @@ public class GetMeetings implements Runnable {
   String email;
   @Option( names = {"-n", "--employee-number"}, required = false, description = "by id")
   String id;
+  @Option( names = {"-f", "--floor"}, required = false, description = "by floor")
+  String floor;
+  @Option( names = {"-r", "--room"}, required = false, description = "by room")
+  String room;
   @CommandLine.Mixin
   SharedOptions shared = new SharedOptions();
 
@@ -35,12 +39,12 @@ public class GetMeetings implements Runnable {
     if (email != null && id != null)
       throw new IllegalArgumentException("get-meetings must not specify both email and employee-number");
     else if (email != null)
-      results = api.getMeetingsByEmail(email, startDate, endDate);
+      results = api.getMeetingsByEmail(email, startDate, endDate, floor, room);
     else if (id != null)
       results = api.getMeetingsById(id, startDate, endDate);
     else {
       System.out.println("\nWARNING : You are doing a full table scan. In real life, this would be very time consuming.\n");
-      results = api.ScanMeetings(startDate, endDate);
+      results = api.ScanMeetings(startDate, endDate, floor, room);
     }
 
     System.out.println(Meeting.heading());
