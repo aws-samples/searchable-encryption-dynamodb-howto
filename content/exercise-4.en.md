@@ -93,6 +93,10 @@ We need to associate beacons with five more encrypted attributes.
         .name(SEVERITY_NAME)
         .length(8)
         .build());
+    beacons.add(StandardBeacon.builder()
+        .name(ROLE_NAME)
+        .length(8)
+        .build());
     // END EXERCISE 4 STEP 2
 ```
 
@@ -304,6 +308,32 @@ Tickets and Reservations need their own constructors for the GSI1 Sort Key.
     // BEGIN EXERCISE 4 STEP 8c
         .signed(signedParts)
     // BEGIN EXERCISE 4 STEP 8c
+```
+
+:::
+::::
+
+### Step 9:
+
+The Sort Key for GSI1 now has some encrypted parts, where it didn't in exercise 3.
+
+This means that the name of the attribute has changed from "SK1" to "aws_dbe_b_SK1".
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+<!-- !test check java step 9a -->
+```java
+    // BEGIN EXERCISE 4 STEP 9a
+    .attributeName(BEACON_PREFIX + GSI1_SORT_KEY)
+    // END EXERCISE 4 STEP 9a
+```
+
+<!-- !test check java step 9b -->
+```java
+    // BEGIN EXERCISE 4 STEP 9b
+      .attributeName(BEACON_PREFIX + GSI1_SORT_KEY)
+    // END EXERCISE 4 STEP 9b
 ```
 
 :::

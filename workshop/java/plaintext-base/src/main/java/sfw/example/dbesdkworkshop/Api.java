@@ -348,13 +348,32 @@ public class Api {
     final ScanResponse response = ddbClient.scan(request);
     return response.items();
   }
-  protected List<Employee> ScanEmployees() {
-      HashMap<String, AttributeValue> attrValues = new HashMap<>();
+
+  protected List<Employee> ScanEmployees(String building, String floor, String room, String desk) {
+    HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
+    String filterExpr = MakeFilter(":e", ":e");
+    if (building != null) {
+      filterExpr += " and contains(SK3, :building)";
+      attrValues.put(":building", AttributeValue.builder().s(BUILDING_PREFIX + building).build());
+    }
+    if (floor != null) {
+      filterExpr += " and contains(SK3, :floor)";
+      attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
+    }
+    if (room != null) {
+      filterExpr += " and contains(SK3, :room)";
+      attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
+    }
+    if (desk != null) {
+      filterExpr += " and contains(SK3, :desk)";
+      attrValues.put(":desk", AttributeValue.builder().s(DESK_PREFIX + desk).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":e", ":e"))
-      .expressionAttributeValues(attrValues)
-      .build();
+    filterExpression(filterExpr)
+    .expressionAttributeValues(attrValues)
+    .build();
     final ScanResponse response = ddbClient.scan(request);
     final ArrayList<Employee> results = new ArrayList<Employee>();
     for (Map<String,AttributeValue> item : response.items()) {
@@ -363,11 +382,29 @@ public class Api {
     return results;
   }
 
-  protected List<Reservation> ScanReservations() {
+  protected List<Reservation> ScanReservations(String startDate, String endDate, String floor, String room) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(RESERVATION_PREFIX).build());
+    String filterExpr = MakeFilter(":p");
+    if (startDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+    }
+    if (endDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+    }
+    if (floor != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :floor)";
+      attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
+    }
+    if (room != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :room)";
+      attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":p"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
@@ -378,12 +415,15 @@ public class Api {
     return results;
   }
 
-  protected List<Meeting> ScanMeetings() {
+  protected List<Meeting> ScanMeetings(String startDate, String endDate) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":e", AttributeValue.builder().s(EMPLOYEE_NUMBER_PREFIX).build());
     attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    AddValueWithFallback(attrValues, ":startDate", startDate, START_TIME_PREFIX, START_TIME_PREFIX);
+    AddValueWithFallback(attrValues, ":endDate", endDate, START_TIME_PREFIX, IncrString(START_TIME_PREFIX));
+    String filterExpr = MakeFilter(":e", ":s") + " and " + GSI1_SORT_KEY + " between :startDate and :endDate";
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":e", ":s"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
@@ -394,11 +434,31 @@ public class Api {
     return results;
   }
 
-  protected List<Project> ScanProjects() {
+  protected List<Project> ScanProjects(String startDate, String endDate, String startTarget, String endTarget) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
+
+    String filterExpr = MakeFilter(":p", ":p");
+    if (startDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+    }
+    if (endDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+    }
+
+    if (startTarget != null) {
+      filterExpr += " and " + TARGET_DATE_NAME + " >= :startTarget";
+      attrValues.put(":startTarget", AttributeValue.builder().s(startTarget).build());
+    }
+    if (endTarget != null) {
+      filterExpr += " and " + TARGET_DATE_NAME + " <= :endTarget";
+      attrValues.put(":endTarget", AttributeValue.builder().s(endTarget).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":p", ":p"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
@@ -409,11 +469,20 @@ public class Api {
     return results;
   }
 
-  protected List<Ticket> ScanTickets() {
+  protected List<Ticket> ScanTickets(String startDate, String endDate) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":t", AttributeValue.builder().s(TICKET_NUMBER_PREFIX).build());
-    final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":t"))
+    String filterExpr = MakeFilter(":t");
+    if (startDate != null) {
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+      filterExpr += " and " + MODIFIED_DATE_NAME + " >= :startDate";
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+      filterExpr += " and " + MODIFIED_DATE_NAME + " <= :endDate";
+    }
+    final ScanRequest request = ScanRequest.builder().tableName(tableName)
+      .filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
@@ -424,11 +493,23 @@ public class Api {
     return results;
   }
 
-
-  protected List<Timecard> ScanTimecards() {
+  protected List<Timecard> ScanTimecards(String startDate, String endDate, String role) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(PROJECT_NAME_PREFIX).build());
     attrValues.put(":s", AttributeValue.builder().s(START_TIME_PREFIX).build());
+    String filterExpr = MakeFilter(":p", ":s");
+    if (startDate != null) {
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+    }
+    if (endDate != null) {
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+    }
+    if (role != null) {
+      attrValues.put(":role", AttributeValue.builder().s(role).build());
+      filterExpr += " and " + ROLE_NAME + " = :role";
+    }
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
       filterExpression(MakeFilter(":p", ":s"))
       .expressionAttributeValues(attrValues)
@@ -440,7 +521,6 @@ public class Api {
     }
     return results;
   }
-
 
   public List<Employee> getEmployeeById(String id)
   {

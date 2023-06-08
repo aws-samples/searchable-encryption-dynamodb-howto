@@ -18,15 +18,15 @@ import sfw.example.dbesdkworkshop.datamodel.Ticket;
 @Command(name = "get-tickets", description = "get tickets.")
 public class GetTickets implements Runnable {
 
-  @Option( names = {"-g", "--assignee-email"}, required = false, description = "by assignee")
+  @Option(names = { "-g", "--assignee-email" }, required = false, description = "by assignee")
   String assignee;
-  @Option( names = {"-k", "--ticket-number"}, required = false, description = "by id")
+  @Option(names = { "-k", "--ticket-number" }, required = false, description = "by id")
   String ticket;
-  @Option( names = {"-A", "--author-email"}, required = false, description = "by author")
+  @Option(names = { "-A", "--author-email" }, required = false, description = "by author")
   String author;
-  @Option( names = {"-S", "--start"}, required = false, description = "by start time")
+  @Option(names = { "-S", "--start" }, required = false, description = "by start time")
   String start;
-  @Option( names = {"-E", "--end"}, required = false, description = "by end time")
+  @Option(names = { "-E", "--end" }, required = false, description = "by end time")
   String end;
   @CommandLine.Mixin
   SharedOptions shared = new SharedOptions();
@@ -42,8 +42,9 @@ public class GetTickets implements Runnable {
     else if (ticket != null)
       results = api.getTicketById(ticket, start, end);
     else
-      results = api.ScanTickets();
+      results = api.ScanTickets(start, end);
 
+    System.out.println(Ticket.heading());
     for (Ticket item : results)
       System.out.println(item);
   }

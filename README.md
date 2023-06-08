@@ -72,6 +72,7 @@ Some useful commands for testing with DDB-Local
 aws dynamodb list-tables --endpoint-url http://localhost:8000
 aws dynamodb scan --table-name BranchKey_Table --endpoint-url http://localhost:8000
 aws dynamodb scan --table-name Exercise1_Table --endpoint-url http://localhost:8000
+aws dynamodb describe-table --table-name Exercise1_Table --endpoint-url http://localhost:8000
 ```
 
 When testing locally,

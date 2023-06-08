@@ -43,8 +43,10 @@ public class GetProjects implements Runnable {
     else if (status != null)
       results = api.getProjectsByStatus(status, startDate, endDate, startTarget, endTarget);
     else
-      results = api.ScanProjects();
+      results = api.ScanProjects(startDate, endDate, startTarget, endTarget);
 
+    System.out.println(Project.heading());
     for (Project item : results)
-      System.out.println(item);  }
+      System.out.println(item);
+  }
 }

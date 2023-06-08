@@ -134,10 +134,11 @@ This command displays all of the employee records currently in your table.
 You should see the following
 <!-- !test out get-employees -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
-3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 Can you think of any particular ways in which you might want to index on these employees?
@@ -157,7 +158,8 @@ For example, to get all employees in New York, do:
 You should see:
 <!-- !test out get-employees NYC -->
 ```
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 ```
 
 Now try to see if you can index the data in a different way, e.g. getting all employees in New York City.
@@ -165,29 +167,32 @@ Now try to see if you can index the data in a different way, e.g. getting all em
 Alternatively, explore the other data in our table.
 What are our current meetings, projects, reservations, tickets, or timecards?
 Keep in mind the list of supported access patterns we will implement on our encrypted table:
+
+1. Get employee info by email
+1. Get employee info by employeeID
+1. Get employees by manager email
+1. Get employees by city.building.floor.desk
+
 1. Get meetings by date and email
 1. Get meetings by date and employeeID
 1. Get meetings by date and building/floor/room
-1. Get employee data by email
 1. Get meetings by email
-1. Get tickets by email
-1. Get reservations by email
-1. Get time cards by email
-1. Get employee info by employeeID
-1. Get employee info by email
-1. Get ticket history by ticket ID
-1. Get ticket history by employee email
-1. Get ticket history by assignee email
-1. Get employees by city.building.floor.desk
-1. Get employees by manager email
-1. Get assigned tickets by assignee email
-1. Get tickets last touched in the past 24 hours
+
 1. Get projects by status, start and target date
 1. Get projects by name
-1. Get project history by date range
-1. Get project history by role
+
+1. Get reservations by email
 1. Get reservations by building ID
 1. Get reservations by building ID and time range
+
+1. Get ticket by ticket ID
+1. Get ticket by employee email
+1. Get ticket by assignee email
+1. Get tickets last modified in a date range
+
+1. Get time cards by email
+1. Get time cards by date range
+1. Get time cards by role
 
 If you have time, try out some of these access patterns on your plaintext table.
 

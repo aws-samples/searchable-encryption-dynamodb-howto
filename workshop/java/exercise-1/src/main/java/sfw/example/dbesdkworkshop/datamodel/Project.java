@@ -43,10 +43,12 @@ public class Project extends BaseItem {
         item.get(TARGET_DATE_NAME).s());
   }
 
+  private static String format = "%-15s%-10s%-20s%-20s%-20s";
+
   @Override
   public String toString() {
     return String
-      .format("%-6s%-10s%-20s%-20s%-20s",
+      .format(format,
         projectName,
         status,
         startTime,
@@ -54,5 +56,17 @@ public class Project extends BaseItem {
         targetDate
       );
   }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "projectName",
+        "status",
+        "startTime",
+        "description",
+        "targetDate"
+      );
+  }
+
 
 }

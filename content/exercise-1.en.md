@@ -667,10 +667,11 @@ Expected output:
 
 <!-- !test out get-employees -->
 ```
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345  barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
-4567  david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
-3456  charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
+3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 The data that the CLI prints will appear as plaintext
@@ -695,16 +696,13 @@ Expected output:
 
 <!-- !test out get-employees-1234 -->
 ```
-1234  able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+employeeNumber employeeEmail       managerEmail        name                title     location
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
 ```
 
 However, what happens when we try to index on a different attribute?
 
-<!-- !test check get-employees-SEA -->
-<!-- This is expected to be empty
-     but I cannot figure out how to validate an empty std out
-     (txm keeps finding newlines, spaces, tabs, etc)
-     and attempts to create a truly empty block result in test parsing errors -->
+<!-- !test in get-employees-SEA -->
 ```bash
 ./employee-portal get-employees --city=SEA
 ```
@@ -712,6 +710,10 @@ However, what happens when we try to index on a different attribute?
 When we made this query to our plaintext Employee Portal Service,
 we retrieved back all employees in Seattle,
 but now we don't get any results back!
+<!-- !test out get-employees-SEA -->
+```
+employeeNumber employeeEmail       managerEmail        name                title     location
+```
 
 As you can see, because we are no longer writing to the Global Secondary Indexes
 that our plaintext Employee Portal Service used,
@@ -741,11 +743,12 @@ Expected output:
 
 <!-- !test out get-tickets -->
 ```
-3    2022-10-07T15:32:25 barney@gmail.com    charlie@gmail.com   3    Bad Bug Followup    We should follow up on the Bad Bug
-2    2022-10-06T14:32:25 zorro@gmail.com     charlie@gmail.com   3    Easy Bug            This seems simple enough
-2    2022-10-08T14:32:25 charlie@gmail.com   able@gmail.com      3    Easy Bug            that's in able's code
-1    2022-10-07T14:32:25 zorro@gmail.com     able@gmail.com      3    Bad Bug             This bug looks pretty bad
-1    2022-10-07T15:32:25 able@gmail.com      charlie@gmail.com   3    Bad Bug             Charlie should handle this
+ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
+2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
+2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
+1                   2022-10-07T14:32:25      zorro@gmail.com     able@gmail.com      3           Bad Bug             This bug looks pretty bad
+1                   2022-10-07T15:32:25      able@gmail.com      charlie@gmail.com   3           Bad Bug             Charlie should handle this
+3                   2022-10-07T15:32:25      barney@gmail.com    charlie@gmail.com   3           Bad Bug Followup    We should follow up on the Bad Bug
 ```
 
 You may additionally want to verify that this item is encrypted as expected

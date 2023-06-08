@@ -66,10 +66,12 @@ public class Ticket extends BaseItem {
         item.get(MESSAGE_NAME).s());
   }
 
+  private static String format = "%-20s%-25s%-20s%-20s%-12s%-20s%s";
+
   @Override
   public String toString() {
     return String
-      .format("%-5s%-20s%-20s%-20s%-5s%-20s%s",
+      .format(format,
         ticketNumber.toString(),
         modifiedDate.toString(),
         authorEmail.toString(),
@@ -77,6 +79,19 @@ public class Ticket extends BaseItem {
         severity.toString(),
         subject.toString(),
         message.toString()
+      );
+  }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "ticketNumber",
+        "modifiedDate",
+        "authorEmail",
+        "assigneeEmail",
+        "severity",
+        "subject",
+        "message"
       );
   }
 

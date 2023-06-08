@@ -53,6 +53,7 @@ public class GetEmployees implements Runnable {
     else
       results = api.ScanEmployees();
 
+    System.out.println(Employee.heading());
     for (Employee item : results)
       System.out.println(item);
   }

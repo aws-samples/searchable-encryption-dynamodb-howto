@@ -50,8 +50,8 @@ wait
 
 # Put timecards
 ./employee-portal put-timecard $1 -p 2 -s 2022-09-12 -e able@gmail.com    -n 1234 -h 40 -R SDE3 &
-./employee-portal put-timecard $1 -p 2 -s 2022-09-12 -e barney@gmail.com  -n 2345 -h 20 -R PM &
-./employee-portal put-timecard $1 -p 3 -s 2022-09-12 -e charlie@gmail.com -n 3456 -h 40 -R SDE3 &
-./employee-portal put-timecard $1 -p 3 -s 2022-09-12 -e barney@gmail.com  -n 2345 -h 20 -R PM &
+./employee-portal put-timecard $1 -p 2 -s 2022-09-13 -e barney@gmail.com  -n 2345 -h 20 -R PM &
+./employee-portal put-timecard $1 -p 3 -s 2022-09-14 -e charlie@gmail.com -n 3456 -h 40 -R SDE3 &
+./employee-portal put-timecard $1 -p 3 -s 2022-09-15 -e barney@gmail.com  -n 2345 -h 20 -R PM &
 
 wait

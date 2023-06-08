@@ -65,10 +65,12 @@ public class Meeting extends BaseItem {
         item.get(SUBJECT_NAME).s());
   }
 
+  private static String format = "%-15s%-20s%-20s%-20s%-10s%-12s%s";
+
   @Override
   public String toString() {
     return String
-      .format("%-6s%-20s%-20s%-20s%-5s%-10s%s",
+      .format(format,
         employeeNumber,
         employeeEmail,
         startTime,
@@ -76,6 +78,19 @@ public class Meeting extends BaseItem {
         duration,
         attendees,
         location.toString()
+      );
+  }
+
+  public static String heading() {
+    return String
+      .format(format,
+        "employeeNumber",
+        "employeeEmail",
+        "startTime",
+        "subject",
+        "duration",
+        "attendees",
+        "location"
       );
   }
 }

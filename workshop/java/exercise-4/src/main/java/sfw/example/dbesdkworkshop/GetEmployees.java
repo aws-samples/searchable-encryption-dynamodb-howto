@@ -51,8 +51,9 @@ public class GetEmployees implements Runnable {
     else if (city != null)
       results = api.getEmployeeByCity(city, building, floor, room, desk);
     else
-      results = api.ScanEmployees();
+      results = api.ScanEmployees(building, floor, room, desk);
 
+    System.out.println(Employee.heading());
     for (Employee item : results)
       System.out.println(item);
   }

@@ -565,8 +565,9 @@ Expected output:
 
 <!-- !test out get-tickets-author -->
 ```
-2    2022-10-06T14:32:25 zorro@gmail.com     charlie@gmail.com   3    Easy Bug            This seems simple enough
-1    2022-10-07T14:32:25 zorro@gmail.com     able@gmail.com      3    Bad Bug             This bug looks pretty bad
+ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
+2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
+1                   2022-10-07T14:32:25      zorro@gmail.com     able@gmail.com      3           Bad Bug             This bug looks pretty bad
 ```
 
 Even though email is encrypted client-side, by utilizing
@@ -590,7 +591,8 @@ Expected output:
 
 <!-- !test out get-tickets-author-start-end -->
 ```
-2    2022-10-06T14:32:25 zorro@gmail.com     charlie@gmail.com   3    Easy Bug            This seems simple enough
+ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
+2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
 ```
 
 While creation date is not encrypted in our table,
