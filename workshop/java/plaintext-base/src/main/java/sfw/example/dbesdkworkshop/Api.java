@@ -382,11 +382,29 @@ public class Api {
     return results;
   }
 
-  protected List<Reservation> ScanReservations() {
+  protected List<Reservation> ScanReservations(String startDate, String endDate, String floor, String room) {
     HashMap<String, AttributeValue> attrValues = new HashMap<>();
     attrValues.put(":p", AttributeValue.builder().s(RESERVATION_PREFIX).build());
+    String filterExpr = MakeFilter(":p");
+    if (startDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " >= :startDate";
+      attrValues.put(":startDate", AttributeValue.builder().s(startDate).build());
+    }
+    if (endDate != null) {
+      filterExpr += " and " + START_TIME_NAME + " <= :endDate";
+      attrValues.put(":endDate", AttributeValue.builder().s(endDate).build());
+    }
+    if (floor != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :floor)";
+      attrValues.put(":floor", AttributeValue.builder().s(FLOOR_PREFIX + floor).build());
+    }
+    if (room != null) {
+      filterExpr += " and contains(" + GSI1_SORT_KEY + ", :room)";
+      attrValues.put(":room", AttributeValue.builder().s(ROOM_PREFIX + room).build());
+    }
+
     final ScanRequest request = ScanRequest.builder().tableName(tableName).
-      filterExpression(MakeFilter(":p"))
+      filterExpression(filterExpr)
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
