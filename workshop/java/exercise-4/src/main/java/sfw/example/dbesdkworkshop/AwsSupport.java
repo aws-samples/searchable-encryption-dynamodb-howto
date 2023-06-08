@@ -206,8 +206,8 @@ public class AwsSupport {
     // BEGIN EXERCISE 4 STEP 6a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
-    constructors.add(MakeGsi3EmployeeSortKeyConstructor());
     // BEGIN EXERCISE 4 STEP 6b
+    constructors.add(MakeGsi3EmployeeSortKeyConstructor());
 
     return CompoundBeacon.builder()
         .name(GSI3_SORT_KEY)
@@ -243,9 +243,9 @@ public class AwsSupport {
     // BEGIN EXERCISE 4 STEP 8a
 
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
+    // BEGIN EXERCISE 4 STEP 8b
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
     constructors.add(MakeGsi1EmployeeSortKeyConstructor());
-    // BEGIN EXERCISE 4 STEP 8b
 
     return CompoundBeacon.builder()
         .name(GSI1_SORT_KEY)
