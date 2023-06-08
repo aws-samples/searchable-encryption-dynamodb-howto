@@ -460,15 +460,11 @@ configuration.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- TODO This is 5b but the code says 5c...
-     I have changed this to 5c so tests will insert it correctly
-    but ideally we will change the underlying code>
-
-<!-- !test check java step 5c -->
+<!-- !test check java step 5b -->
 ```java
-        // BEGIN EXERCISE 2 STEP 5c
+        // BEGIN EXERCISE 2 STEP 5b
         .search(MakeSearchConfig(ddbLocal))
-        // END EXERCISE 2 STEP 5c
+        // END EXERCISE 2 STEP 5b
 ```
 
 :::

@@ -27,6 +27,7 @@ awsAccountConfig:
       - arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess
       - arn:aws:iam::aws:policy/AWSKeyManagementServicePowerUser
       - arn:aws:iam::aws:policy/AWSCodeCommitPowerUser
+      - arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess
     trustedPrincipals:
       service:
         - lambda.amazonaws.com

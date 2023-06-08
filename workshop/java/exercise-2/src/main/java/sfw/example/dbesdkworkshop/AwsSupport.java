@@ -143,7 +143,7 @@ public class AwsSupport {
         .sortKeyName(SORT_KEY)
         .attributeActionsOnEncrypt(actions)
         .keyring(kmsKeyring)
-        // BEGIN EXERCISE 2 STEP 5c
+        // BEGIN EXERCISE 2 STEP 5b
         .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();

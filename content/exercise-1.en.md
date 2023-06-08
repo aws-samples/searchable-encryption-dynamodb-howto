@@ -751,15 +751,22 @@ Expected output:
 You may additionally want to verify that this item is encrypted as expected
 in [your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise1_Table).
 
-### Verify KMS Usage
+#### (Optional) Verify KMS Usage
 
 One final thing you may want to check is that your KMS Key
 is being used as expected to protect your items.
 
-Take a look at your [AWS CloudTrail logs](TODO) and
-[TODO steps to find KMS log for item put above].
+Take a look at your [AWS CloudTrail logs](https://us-west-2.console.aws.amazon.com/cloudtrail/home?region=us-west-2#/events?EventSource=kms.amazonaws.com).
 
-[TODO some note about the Hierarchy Keyring is not 1:1 with KMS calls]
+You should notice some `Decrypt` events.
+These are calls to your KMS key to decrypt the data key used to encrypt your items.
+You should also notice that there are not as many `Decrypt` events as there are items decrypted;
+this is because the client is locally caching the decryption materials,
+reducing the number of calls the client needs to make to KMS.
+
+(If you re-instantiate the client (e.g. invoke `./employee-portal` multiple times),
+the new client will have a clean cache,
+and the `Decrypt` call will go to KMS.)
 
 ## Explore Further  --- BUG BUG
 
