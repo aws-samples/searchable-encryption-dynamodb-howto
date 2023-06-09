@@ -500,24 +500,6 @@ Under the hood it will:
 1. Decrypt each result and compare it to the original plaintext query
 1. Return all matches
 
-### Checking Your Work
-
-If you want to check your progress,
-or compare what you've done versus a finished example, 
-check out the code in one of the `-complete` folders to compare.
-
-There is a `-complete` folder for each language.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```bash 
-cd ~/environment/workshop/workshop/java/adding-searchable-encryption-configuration-complete
-```
-
-:::
-::::
-
 ## Try it Out
 
 Now use the CLI to create the table that will back the Employee Portal Service

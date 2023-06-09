@@ -431,29 +431,13 @@ All access patterns used in the original plaintext database work in the encrypte
 and no change was required in any of the code involved in reading, writing or querying records;
 only configuration, and index creation.
 
-
-### Checking Your Work
-
-If you want to check your progress, or compare what you've done versus a finished example,
-look at the `complete` folder which contains a complete solution for this workshop.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```
-Take a peek at `~/environment/workshop/java/complete`
-```
-
-:::
-::::
-
 ## Try it Out
 
 Now that you have completed configuring searchable configuration for each of your access
 patterns, you should now be able to perform any query that was possible in your plaintext
 Employee Portal Service in your client-side encrypted Employee Portal Service.
 
-Again, since each exercise is independent,
+Again, because each exercise is independent,
 you need to create the table.
 
 <!-- !test program
@@ -683,8 +667,8 @@ Recreate your table and reload the sample data:
 
 Take another look at the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table).
 
-Because this beacon is created from standard beacons with an output length of one bit,
-there are only two possible values the beacons can be.
+Because this beacon has an output length of one bit,
+there are only two possible values the beacon can be.
 
 Our sample data contains employees with four distinct employee ids.
 Because there are only two beacon values that can be written, we expect that when
