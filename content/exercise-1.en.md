@@ -335,9 +335,9 @@ Now, to implement `CreateBranchKey`:
     return true;
   }
 
-  public static void WaitForTableReady(String tableName, boolean ddbLocal)
+  public static void WaitForTableReady(String tableName)
   {
-    final DynamoDbClient ddbClient = GetClientBuilder(ddbLocal).build();
+    final DynamoDbClient ddbClient = GetClientBuilder().build();
     final DescribeTableRequest request =
       DescribeTableRequest.builder().tableName(tableName).build();
     while (true) {
@@ -348,10 +348,10 @@ Now, to implement `CreateBranchKey`:
     }
   }
 
-  public static String CreateBranchKey(boolean ddbLocal) {
-    final KeyStore keystore = MakeKeyStore(ddbLocal);
+  public static String CreateBranchKey() {
+    final KeyStore keystore = MakeKeyStore();
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
-    WaitForTableReady(BRANCH_KEY_TABLE, ddbLocal);
+    WaitForTableReady(BRANCH_KEY_TABLE);
     return keystore.CreateKey().branchKeyIdentifier();
   }
   // END EXERCISE 1 STEP 3c
