@@ -19,7 +19,7 @@ to enable you to perform queries on Employee Records.
 In this exercise, you will add support for the remaining record types.
 
 As you configure each new beacon to support a new access pattern,
-consider what [truncation length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
+consider what [beacon length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
 as well as whether [beacons are right for that access pattern in the first place](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
 
 ## Let's Go!
@@ -87,7 +87,7 @@ Go to `exercise-4/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 Configure standard beacons for status, organizer email, assignee email,
 severity, and role.
 
-For now, use a truncation length of 8.
+For now, use a beacon length of 8.
 Note that this is just for demonstrative purposes.
 Because this workshop only deals with a handful of sample
 data for each item type (employee, ticket, etc),
@@ -431,29 +431,13 @@ All access patterns used in the original plaintext database work in the encrypte
 and no change was required in any of the code involved in reading, writing or querying records;
 only configuration, and index creation.
 
-
-### Checking Your Work
-
-If you want to check your progress, or compare what you've done versus a finished example,
-look at the `complete` folder which contains a complete solution for this workshop.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```
-Take a peek at `~/environment/workshop/java/complete`
-```
-
-:::
-::::
-
 ## Try it Out
 
 Now that you have completed configuring searchable configuration for each of your access
 patterns, you should now be able to perform any query that was possible in your plaintext
 Employee Portal Service in your client-side encrypted Employee Portal Service.
 
-Again, since each exercise is independent,
+Again, because each exercise is independent,
 you need to create the table.
 
 <!-- !test program
@@ -630,20 +614,20 @@ in the AWS Database Encryption SDK.
 
 For demonstrative purposes this workshop has used example data that
 does not meet our recommendations for [uniformity and non-correlation](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/searchable-encryption.html#are-beacons-right-for-me).
-Additionally, the sample code has chosen a truncation length
+Additionally, the sample code has chosen a beacon length
 that does not meet our [recommendations](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
 because the workshop only ever works with a small amount of sample data.
 
 However, by tweaking your code in a small way you can see how
-truncation length can affect the security and performance of your data.
+beacon length can affect the security and performance of your data.
 
 Go to the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table),
 and take a look at your data.
 
 Find the `aws_dbe_b_employeeEmail` attribute in your data, and compare the value against various items.
-With a beacon output length of 8 bits, the beacon can be one of 256 possible values.
-However, our table only holds 4 different employee emails right now.
-A beacon output length of 8 means that it is likely that each of these four emails has
+With a beacon output length of eight bits, the beacon can be one of 256 possible values.
+However, our table only holds four different employee emails right now.
+A beacon output length of eight means that it is likely that each of these four emails has
 a distinct beacon value.
 This reveals information that may not be acceptable to our threat model.
 
@@ -683,11 +667,11 @@ Recreate your table and reload the sample data:
 
 Take another look at the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table).
 
-Because this beacon is created from standard beacons with an output length of 1 bit,
-there are only 2 possible values beacons can be.
+Because this beacon has an output length of one bit,
+there are only two possible values the beacon can be.
 
-Our sample data contains employees with 4 distinct employee ids.
-Because there are only 2 beacons values that can be written, we expect that when
+Our sample data contains employees with four distinct employee ids.
+Because there are only two beacon values that can be written, we expect that when
 a beacon is written for employee id, some of those employee ids will need to share
 a beacon value.
 
@@ -696,7 +680,7 @@ While they provide security, these false positives come at the cost of performan
 For each false positive that gets returned alongside your expected data,
 your application does extra work to decrypt and filter out these false positives.
 
-Read our docs for more information on how to [choose the right truncation length](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
+Read our docs for more information on how to [choose the right beacon length](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
 for your dataset.
 
 # Next exercise

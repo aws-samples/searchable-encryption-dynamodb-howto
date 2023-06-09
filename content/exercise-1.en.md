@@ -632,22 +632,6 @@ fi
 ./employee-portal create-table
 ```
 
-### Checking Your Work
-
-Want to check your progress, or compare what you've done versus a finished example?
-
-Check out the code in one of the `-complete` folders to compare.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```bash 
-cd ~/environment/workshop/workshop/java/add-esdk-complete
-```
-
-:::
-::::
-
 ## Try it Out
 
 Now that you have written the code,
