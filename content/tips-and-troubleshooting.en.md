@@ -124,6 +124,7 @@ curl -sSL ':assetUrl{path="/testing.tar.gz" source=s3}' | tar -xzf - -C ~/enviro
 Now, in the `~/environment` directory run the following command.
 This will install and run `txm` from the `npm` repository
 and run all the tests that exist in the content markdown.
+This will erase all work you have done on the workshop!
 
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 

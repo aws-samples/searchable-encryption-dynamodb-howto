@@ -11,7 +11,7 @@ to your usage of Amazon DynamoDB
 using the AWS Database Encryption SDK
 and AWS Key Management Service.
 Each exercise has step-by-step instructions.
-Each exercise also has a `-complete` version available to use as a reference.
+There is also has a `-complete` version available to use as a reference.
 
 ## Background: The Employee Portal Service
 
@@ -212,9 +212,9 @@ DataKey -\-> EmployeePortalService
 In this workshop, you will work through the following exercises:
 
 1. Adding the AWS Database Encryption SDK
-1. Adding searchable encryption configuration
-1. Adding support for another access pattern
-1. Adding the remaining access patterns
+1. Start configuring searchable encryption for a single access pattern
+1. Add searchable encryption support to access Employee data.
+1. Adding searchable encryption support for the remaining access patterns
 
 ## Getting Started
 
