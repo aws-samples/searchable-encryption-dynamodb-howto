@@ -5,6 +5,7 @@ package sfw.example.dbesdkworkshop;
 
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
+import software.amazon.awssdk.services.dynamodb.model.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
