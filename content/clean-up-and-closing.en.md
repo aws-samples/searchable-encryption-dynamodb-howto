@@ -17,11 +17,21 @@ If you are working through these exercises in an AWS classroom environment, your
 
 ## Personal AWS account
 
-If you are using your own AWS account for these workshops, you will need to clean up your resources. There are helper scripts available to help you completely tear down your stack resources.
+If you are using your own AWS account for these workshops, you will need to clean up your resources. 
 
-TODO: helper scripts
+Some resources were deploying using CloudFormation. To delete these resources, delete the stack you deployed through the CloudFormation console.
 
-Use the CloudFormation console in your working region(s) to confirm your resources are all successfully cleaned up.
+The DynamoDB resources were not created through CFN. You will need to clean these up manually. To do this, run  
+
+```bash
+cd ~/environment/workshop
+java/plaintext-base/employee-portal delete-table
+java/exercise-1/employee-portal delete-table
+java/exercise-2/employee-portal delete-table
+java/exercise-3/employee-portal delete-table
+java/exercise-4/employee-portal delete-table
+aws dynamodb delete-table --table-name BranchKey_Table
+```
 
 That's it! Your workshop resources have been torn down.
 
