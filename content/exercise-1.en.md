@@ -130,8 +130,8 @@ Add the dependencies for:
 ```java
     // BEGIN EXERCISE 1 STEP 2
     implementation(platform("software.amazon.awssdk:bom:2.19.1"))
-    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:1.0-SNAPSHOT")
-    implementation("software.amazon.cryptography:AwsCryptographicMaterialProviders:1.0-SNAPSHOT")
+    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:3.0.0-preview-1")
+    implementation("software.amazon.cryptography:aws-cryptographic-material-providers:1.0.0-preview-1")
     implementation("software.amazon.awssdk:kms")
     // END EXERCISE 1 STEP 2
 ```
