@@ -1,6 +1,6 @@
 ---
-# TODO Cleaning Up
-title : "Thank You!"
+
+title : "Clean up and closing"
 weight : 1000
 ---
 
