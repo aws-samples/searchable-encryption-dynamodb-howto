@@ -11,26 +11,32 @@ This page contains reference information that might be useful as you work throug
 
 ### Missing CloudFormation resources
 
-Make sure you take the defaults for which region to launch in (us-west-2). If you've changed the region for any part of the workshop, tear your stack down and start fresh.
+Make sure you take the defaults for which region to launch in (us-west-2).
+If you've changed the region for any part of the workshop, tear your stack down and start fresh.
 
 ### More disk space on Cloud9
 
-Working through the workshop, you might find that you are out of disk. If this happens, use the following script to expand your EBS volume. (<a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/move-environment.html#move-environment-resize" target="_blank">Script source</a>)
+Working through the workshop, you might find that you are out of disk.
+The workshop resizes the disk from it's default to 32 GB
+so hopefully you won't have any trouble.
+If this happens, use the following script to expand your EBS volume.
+(<a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/move-environment.html#move-environment-resize" target="_blank">Script source</a>)
 
-Note that this is adapted from the script source because the Busy Engineer's Cloud9 instances run on EC2 Nitro, which has different block device identifiers.
+Note that this is adapted from the script source because the Busy Engineer's Cloud9 instances run on EC2 Nitro,
+which has different block device identifiers.
 
 Step by step:
 
 1. Save the script below to `resize.sh`
 1. `chmod +x resize.sh`
 1. `./resize.sh`
-  * By default, this will increase your volume to 20GB, but you may supply a different number if you prefer.
+  * By default, this will increase your volume to 64GB, but you may supply a different number if you prefer.
 
 ```bash
 #!/bin/bash
 
-# Specify the desired volume size in GiB as a command-line argument. If not specified, default to 20 GiB.
-SIZE=${1:-20}
+# Specify the desired volume size in GiB as a command-line argument. If not specified, default to 64 GiB.
+SIZE=${1:-64}
 
 # Install the jq command-line JSON processor.
 sudo yum -y install jq
@@ -58,24 +64,6 @@ sudo resize2fs /dev/nvme0n1p1
 
 ## Tips
 
-### API Documentation
-
-There is Java API documentation available for each exercise. You can view the documentation as you work in Cloud9.
-
-::::tabs{variant="container" groupId=codeSample}
-:::tab{label="Java"}
-
-```bash 
-make javadoc
-```
-
-:::
-::::
-
-Now select "Preview -> Preview Running Application" from the Cloud9 menu bar.
-
-Cloud9 will open a new pane in your IDE with a web browser rendering your API documentation.
-
 ### Cloud9
 
 Cloud9 has lots of IDE features for you to leverage. Here's some links to help you make the most of your Cloud9 experience. (Links all open in a new window.)
@@ -86,7 +74,10 @@ Cloud9 has lots of IDE features for you to leverage. Here's some links to help y
 
 ### Cryptographic Details
 
-The Busy Engineer's Document Bucket only scratches the surface of the features offered by AWS KMS. To dive deep on how KMS can be useful to your application, check out the [AWS Key Management Service Cryptographic Details Docs](https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html), for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
+The Busy Engineer's Database Encryption only scratches the surface of the features offered by AWS KMS.
+To dive deep on how KMS can be useful to your application,
+check out the [AWS Key Management Service Cryptographic Details Docs](https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html),
+for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
 
 
 
@@ -115,14 +106,27 @@ mvn -B install:install-file \
 
 :::
 
-
+### Testing / Automating the workshop
 
 This is a helper link for testing.
-It will download the required assets to test the workshop
-in the Cloud9 Environment
+It could also be used to complete all the steps automatically,
+but where is the fun in that?
+
+This `curl` command will download the required assets
+into your Cloud9 Environment.
 
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 
 curl -sSL ':assetUrl{path="/testing.tar.gz" source=s3}' | tar -xzf - -C ~/environment
+
+:::
+
+Now, in the `~/environment` directory run the following command.
+This will install and run `txm` from the `npm` repository
+and run all the tests that exist in the content markdown.
+
+:::code{showCopyAction=true showLineNumbers=false language=bash}
+
+make markdown_test
 
 :::
