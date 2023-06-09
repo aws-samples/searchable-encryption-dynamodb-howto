@@ -639,14 +639,13 @@ However, by tweaking your code in a small way you can see how
 truncation length can affect the security and performance of your data.
 
 Go to the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table),
-take a look at your data.
+and take a look at your data.
 
-Find the `aws_dbe_b_PK1` attribute in your data, and compare the value against various items.
+Find the `aws_dbe_b_employeeEmail` attribute in your data, and compare the value against various items.
 With a beacon output length of 8 bits, the beacon can be one of 256 possible values.
-However, our table only holds a handful of item for every type (employee, ticket, etc.).
-If this is the magnitude of data we expect to be in our table over the long term,
-then a beacon output length of 8 means that it is likely each unique `PK1` value in our plaintext items
-will also have distinct `aws_dbe_b_PK1` values.
+However, our table only holds 4 different employee emails right now.
+A beacon output length of 8 means that it is likely that each of these four emails has
+a distinct beacon value.
 This reveals information that may not be acceptable to our threat model.
 
 Let's see what happens if we chose a different beacon output length.
@@ -687,10 +686,8 @@ Take another look at the [AWS Console for your DynamoDB table](https://us-west-2
 
 Because this beacon is created from standard beacons with an output length of 1 bit,
 there are only 2 possible values beacons can be.
-Even if you narrow down the items in your table to a particular item type (employees, meetings, etc)
-you should see that some distinct `PK1` values must share the same beacon value.
 
-For example, our sample data contains employees with 4 distinct employee ids.
+Our sample data contains employees with 4 distinct employee ids.
 Because there are only 2 beacons values that can be written, we expect that when
 a beacon is written for employee id, some of those employee ids will need to share
 a beacon value.
