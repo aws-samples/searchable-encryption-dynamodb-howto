@@ -16,10 +16,16 @@ import static sfw.example.dbesdkworkshop.Config.Constants.*;
 
 public class AwsSupport {
 
+  private static boolean ddbLocal; // Internal testing flag if using a local DDB instance
+  
   private AwsSupport() { // Do not instantiate
   }
 
-  public static DynamoDbClientBuilder GetClientBuilder(boolean ddbLocal)
+  public static void setDdbLocal(boolean _ddbLocal) {
+    ddbLocal = _ddbLocal;
+  }
+  
+  public static DynamoDbClientBuilder GetClientBuilder()
   {
     if (ddbLocal)
       return DynamoDbClient.builder()
@@ -30,11 +36,13 @@ public class AwsSupport {
 
   public static DynamoDbClient MakeDynamoDbClient(SharedOptions shared)
   {
+    ddbLocal = shared.ddbLocal;
+
     if (shared.plain)
-      return GetClientBuilder(shared.ddbLocal)
+      return GetClientBuilder()
               .build();
     else
-      return GetClientBuilder(shared.ddbLocal)
+      return GetClientBuilder()
         // BEGIN EXERCISE 1 STEP 5a
 
         // END EXERCISE 1 STEP 5a
