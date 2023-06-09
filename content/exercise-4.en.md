@@ -46,6 +46,15 @@ cd ~/environment/workshop/java/exercise-4
 ### Step 1:
 
 As always, this exercise will take place in its own table.
+Update your Config to use a new table name for this exercise.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-4/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+
+:::
+::::
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -60,10 +69,33 @@ As always, this exercise will take place in its own table.
 :::
 ::::
 
+#### What Happened?
+
+TABLE_NAME has been updated so that this exercise will work in a separate table.
 
 ### Step 2:
 
 We need to associate beacons with five more encrypted attributes.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-4/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+
+:::
+::::
+
+Configure standard beacons for status, organizer email, assignee email,
+severity, and role.
+
+For now, use a truncation length of 8.
+Note that this is just for demonstrative purposes.
+Because this workshop only deals with a handful of sample
+data for each item type (employee, ticket, etc),
+we don't expect this beacon length to result in
+false positives during queries.
+Before using beacons for your own use case,
+refer to [our documentation on beacon length](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html).
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -100,6 +132,13 @@ We need to associate beacons with five more encrypted attributes.
 
 :::
 ::::
+
+#### What Happened?
+
+You have configured standard beacons over all of the encrypted values
+in your table you want to search on.
+In the next step, you will be able to use these standard beacons
+to add to your pre-existing compound beacons configurations.
 
 ### Step 3:
 
@@ -160,6 +199,12 @@ needs Compound Beacons constructors to satisfy their individual access patterns.
 :::
 ::::
 
+#### What Happened?
+
+You have created constructors for each of the access patterns you need to support.
+In the next step, you will add these constructors into the configuration of your
+compound beacons.
+
 ### Step 4:
 
 Ticket records use GSI2 with the ASSIGNEE_EMAIL_NAME attribute,
@@ -184,6 +229,12 @@ and the usual custom constructor.
 
 :::
 ::::
+
+#### What Happened?
+
+You have configured your compound beacon for GSI2 partition key to write
+the beacon to use the partition constructor for tickets,
+writing the beacon for assignee email if it exists on the item.
 
 ### Step 5:
 
@@ -210,6 +261,12 @@ Tickets and Reservations use the GSI3 Partition Key.
 
 :::
 ::::
+
+#### What Happened?
+
+You have configured your compound beacon for the GSI3 partition key to:
+- if not other constructors are used, write the partition key for reservations if the item contains a building ID
+- otherwise, write the partition key for tickets if the item contain a severity
 
 ### Step 6:
 
@@ -246,6 +303,12 @@ Similarly, Tickets and Reservations use the GSI3 Sort Key.
 :::
 ::::
 
+#### What Happened?
+
+You have configured your compound beacon for the GSI3 sort key to:
+- if not other constructors are used, write the beacon for modify date if it exists on the item
+- otherwise, write the start time, floor, and room if those attributes exist on the item
+
 ### Step 7:
 
 Projects, Tickets and Reservations need their own constructors for the GSI1 Partition Key.
@@ -273,6 +336,13 @@ Projects, Tickets and Reservations need their own constructors for the GSI1 Part
 
 :::
 ::::
+
+#### What Happened?
+
+You have configured your compound beacon for the GSI1 partition key to:
+- if not other constructors are used, write the beacon for status if it exists on the item
+- otherwise, write the beacon for organizer email if it exists on the item
+- otherwise, write the author email if it exists on the item
 
 ### Step 8:
 
@@ -311,11 +381,25 @@ Tickets and Reservations need their own constructors for the GSI1 Sort Key.
 :::
 ::::
 
+#### What Happened?
+
+You have configured your compound beacon for the GSI1 sort key to:
+- if not other constructors are used, write the start time, floor, and room to the item if those attributes exist
+- otherwise, write the beacon for modified date if it exists on the item
+
 ### Step 9:
 
 The Sort Key for GSI1 now has some encrypted parts, where it didn't in exercise 3.
 
 This means that the name of the attribute has changed from "SK1" to "aws_dbe_b_SK1".
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-4/src/main/java/sfw/example/dbesdkworkshop/Api.java`.
+
+:::
+::::
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -339,6 +423,9 @@ This means that the name of the attribute has changed from "SK1" to "aws_dbe_b_S
 
 #### What Happened?
 
+You have updated the configuration so that the table you create
+will have a sort key for GSI1 with the correct name for use with beacons.
+
 We have now added the full configuration for all record types.
 
 All access patterns used in the original plaintext database work in the encrypted database,
@@ -354,8 +441,8 @@ look at the `complete` folder which contains a complete solution for this worksh
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-```bash 
-cd ~/environment/workshop/java/complete
+```
+Take a peek at `~/environment/workshop/java/complete`
 ```
 
 :::
@@ -390,6 +477,7 @@ fi
 ```
 
 [Go to the DynamoDB AWS Console to confirm that your expected table is created](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table).
+(If you are in the 'complete' folder, look for a table named 'Complete_Table'.)
 
 Next, load up some test data into your portal!
 We have provided a script that puts some sample data into your table.
@@ -554,12 +642,12 @@ Go to the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.am
 take a look at your data.
 
 Find the `aws_dbe_b_PK1` attribute in your data, and compare the value against various items.
-With a beacon output length of 8 bits, there are 256 possible values this attribute can be.
+With a beacon output length of 8 bits, the beacon can be one of 256 possible values.
 However, our table only holds a handful of item for every type (employee, ticket, etc.).
 If this is the magnitude of data we expect to be in our table over the long term,
 then a beacon output length of 8 means that it is likely each unique `PK1` value in our plaintext items
 will also have distinct `aws_dbe_b_PK1` values.
-This leaks information that may not be acceptable to our threat model.
+This reveals information that may not be acceptable to our threat model.
 
 Let's see what happens if we chose a different beacon output length.
 
