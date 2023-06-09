@@ -164,7 +164,58 @@ The Hierarchical Keyring locally caches these branch keys
 so that you do not need to make a network call to DynamoDB
 or KMS every time you need to encrypt or decrypt an item.
 
-[TODO diagram?]
+![hierarchical-keyring](/static/hierarchical-keyring.svg)
+
+<!-- @startuml
+
+skinparam BackgroundColor transparent
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/AWSSimplified.puml
+!include AWSPuml/SecurityIdentityCompliance/all.puml
+
+
+!include AWSPuml/Database/all.puml
+!include AWSPuml/Storage/all.puml
+!include AWSPuml/DeveloperTools/all.puml
+!include AWSPuml/Groups/all.puml
+
+
+AWSGroupColoring(KMSService, #FFFFFF, #3B48CC, plain)
+AWSGroupEntity(AWSKMS, "AWS KMS", #3B48CC, KeyManagementService, KMSService)
+
+AWSGroupColoring(Cloud9Instance, #FFFFFF, #3B48CC, plain)
+AWSGroupEntity(IDE, "Workshop Instance", #3B48CC, Cloud9, Cloud9Instance) {
+  ToolsandSDKs(EmployeePortalService, "", "")
+  AWSGroupColoring(Cloud9Instance, #FFFFFF, #3B48CC, plain)
+    AWSGroupEntity(DBESDK, "DB ESDK", #3B48CC, Cloud9, Cloud9Instance) {
+    node "Hierarchical \n Keyring" as Keyring
+    storage "Local\nBranch\nKey\nCache" as Cache 
+    }
+}
+
+
+IdentityAccessManagementDataEncryptionKey(DataKey, "DataKey", "")
+
+AWSGroupColoring(EncryptedDDBItemColor, #FFFFFF, #3B48CC, plain)
+DynamoDBItem(DDBItem, "Branch Key\n(protects data keys)", "")
+IdentityAccessManagementDataEncryptionKey(DataKey, "KMS Key\n(protects branch keys)", "")
+
+AWSGroupColoring(DDBService, #FFFFFF, #3B48CC, plain)
+AWSGroupEntity(DDBGroup, "Amazon DynamoDB", #3B48CC, DynamoDB, DDBService) {
+  DynamoDBItems(DDBTable, "BranchKey_Table", "")
+}
+
+NOTE: When uncommenting, remove backslashes in lines below
+DDBTable <-\-> DDBItem
+Keyring <-> DDBItem
+DataKey -\-> Keyring
+AWSKMS -> DataKey
+Cache <-> Keyring
+EmployeePortalService <-\-> Keyring
+
+@enduml -->
 
 Before you can configure your Hierarchical Keyring,
 you need to create and populate the Key Store that will back the Hierarchical Keyring.
