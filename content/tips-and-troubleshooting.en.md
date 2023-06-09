@@ -79,33 +79,6 @@ To dive deep on how KMS can be useful to your application,
 check out the [AWS Key Management Service Cryptographic Details Docs](https://docs.aws.amazon.com/kms/latest/cryptographic-details/intro.html),
 for more information on the details of encryption, decryption, random number generation procedures, and more within KMS.
 
-
-
-:::code{showCopyAction=true showLineNumbers=false language=bash}
-
-sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
-sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
-sudo yum install -y apache-maven
-
-curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar
-curl ':assetUrl{path="/AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom" source=s3}' -o AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom
-
-curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar
-curl ':assetUrl{path="/aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom" source=s3}' -o aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom
-
-:::
-
-:::code{showCopyAction=true showLineNumbers=false language=bash}
-
-mvn -B install:install-file \
-  -Dfile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.jar \
-  -DpomFile=AwsCryptographicMaterialProviders-1.0-SNAPSHOT.pom;
-mvn -B install:install-file \
-  -Dfile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.jar \
-  -DpomFile=aws-database-encryption-sdk-dynamodb-1.0-SNAPSHOT.pom;
-
-:::
-
 ### Testing / Automating the workshop
 
 This is a helper link for testing.
