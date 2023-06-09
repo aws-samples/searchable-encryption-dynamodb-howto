@@ -7,7 +7,7 @@
 ./employee-portal get-employees -l --employee-number 4567
 # 1. Get employees by manager email
 ./employee-portal get-employees -l --manager-email zorro@gmail.com
-# 1. Get meetings by date and building/floor/room
+# 1. Get meetings by city and building/floor/room
 ./employee-portal get-employees -l --building 22 --city NYC
 ./employee-portal get-employees -l --building 22 --city NYC --desk 3
 ./employee-portal get-employees -l --building 22 --city NYC --desk 3 --floor 2
@@ -40,7 +40,7 @@
 # 1. Get ticket by assignee email
 ./employee-portal get-tickets -l --assignee-email able@gmail.com
 # 1. Get tickets last modified in a date range
-./employee-portal get-tickets -l --start 2022-10-07T14:32:25 --stop 2022-10-07T16:32:25
+./employee-portal get-tickets -l --start 2022-10-07T14:32:25 --end 2022-10-07T16:32:25
 
 # 1. Get time cards by email
 ./employee-portal get-timecards -l --employee-email zorro@gmail.com
