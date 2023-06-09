@@ -343,7 +343,6 @@ Now, to implement `CreateBranchKey`:
     while (true) {
       DescribeTableResponse resp = ddbClient.describeTable(request);
       if (IsTableReady(resp)) break;
-      System.err.println("Waiting for table " + tableName + " to be ready...");
       try {Thread.sleep(500);} catch (Exception e) {}
     }
   }
