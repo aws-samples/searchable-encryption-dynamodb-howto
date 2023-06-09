@@ -4,54 +4,31 @@
 # However unbounded parallelism is never the answer.
 # Working out the optimal parallelism,
 # for any given system is complicated.
-# Thefore, running each type in the background
-# and waiting for each is a nice organization.
+# Thefore, running each type in the background is a nice organization.
 # It gets us way faster and solves the problem.
+# By putting each type into it's own script
+# this also preverves order.
+
+SOURCEDIR=$( dirname -- "$0"; )
+
+chmod +x $SOURCEDIR/load-employees $SOURCEDIR/load-meetings $SOURCEDIR/load-projects $SOURCEDIR/load-reservations $SOURCEDIR/load-tickets $SOURCEDIR/load-timecards
 
 # Put employees
-./employee-portal put-employee $1 -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"    -T SDE9 &
-./employee-portal put-employee $1 -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"  -T SDE8 &
-./employee-portal put-employee $1 -n 3456 -e charlie@gmail.com -g zorro@gmail.com -c SEA -b 44 -f 4  -r 2 -d 5 -N "Charlie Jones" -T SDE7 &
-./employee-portal put-employee $1 -n 4567 -e david@gmail.com   -g zorro@gmail.com -c NYC -b 22 -f 1  -r 2 -d 3 -N "David Jones"   -T SDE6 &
+$SOURCEDIR/load-employees "$@" &
 
-wait
+# # Put meetings
+$SOURCEDIR/load-meetings "$@" &
 
-# Put meetings
-./employee-portal put-meeting $1 -n 1234 -s 2022-07-04T13:00 -f 12 -r 403 -e able@gmail.com    -D 30 -a SomeList -j "Scan Beacons" &
-./employee-portal put-meeting $1 -n 2345 -s 2022-07-04T13:00 -f 12 -r 403 -e barney@gmail.com  -D 30 -a SomeList -j "Scan Beacons" &
-./employee-portal put-meeting $1 -n 3456 -s 2022-07-04T13:00 -f 12 -r 403 -e charlie@gmail.com -D 30 -a SomeList -j "Scan Beacons" &
-./employee-portal put-meeting $1 -n 4567 -s 2022-07-04T13:00 -f 12 -r 403 -e david@gmail.com   -D 30 -a SomeList -j "Scan Beacons" &
-./employee-portal put-meeting $1 -n 2345 -s 2022-07-04T14:00 -f 12 -r 407 -e barney@gmail.com  -D 30 -a SomeList -j "Gazelle" &
-./employee-portal put-meeting $1 -n 3456 -s 2022-07-04T14:00 -f 12 -r 407 -e charlie@gmail.com -D 30 -a SomeList -j "Gazelle" &
+# # Put projects
+$SOURCEDIR/load-projects "$@" &
 
-wait
+# # Put reservations
+$SOURCEDIR/load-reservations "$@" &
 
-# Put projects
-./employee-portal put-project $1 -N 1 -s Pending -S 2022-11-01 -P "Turbo Crypto" -t 2024-01-01 &
-./employee-portal put-project $1 -N 2 -s Active  -S 2022-07-04 -P "Scan Beacons" -t 2023-02-27 &
-./employee-portal put-project $1 -N 3 -s Active  -S 2022-08-05 -P "Gazelle"      -t 2023-03-27 &
-./employee-portal put-project $1 -N 4 -s Done    -S 2020-03-03 -P "S3EC"         -t 2021-09-05 &
+# # Put tickets
+$SOURCEDIR/load-tickets "$@" &
 
-wait
-
-# Put reservations
-./employee-portal put-reservation $1 -i 0d404088-908d-48ff-bea5-4c356ebb46d0 -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons" &
-./employee-portal put-reservation $1 -i f7c947f9-1454-4eb8-afd3-0097d5bdc012 -b 44 -s 2022-07-04T14:00 -f 12 -r 407 -o barney@gmail.com -D 30 -a SomeList -j "Gazelle" &
-
-wait
-
-# Put tickets
-./employee-portal put-ticket $1 -k 1 -M 2022-10-07T14:32:25 -A zorro@gmail.com   -g able@gmail.com    -v 3 -j "Bad Bug"  -m "This bug looks pretty bad" &
-./employee-portal put-ticket $1 -k 1 -M 2022-10-07T15:32:25 -A able@gmail.com    -g charlie@gmail.com -v 3 -j "Bad Bug"  -m "Charlie should handle this" &
-./employee-portal put-ticket $1 -k 2 -M 2022-10-06T14:32:25 -A zorro@gmail.com   -g charlie@gmail.com -v 3 -j "Easy Bug" -m "This seems simple enough" &
-./employee-portal put-ticket $1 -k 2 -M 2022-10-08T14:32:25 -A charlie@gmail.com -g able@gmail.com    -v 3 -j "Easy Bug" -m "that's in able's code" &
-
-wait
-
-# Put timecards
-./employee-portal put-timecard $1 -p 2 -s 2022-09-12 -e able@gmail.com    -n 1234 -h 40 -R SDE3 &
-./employee-portal put-timecard $1 -p 2 -s 2022-09-13 -e barney@gmail.com  -n 2345 -h 20 -R PM &
-./employee-portal put-timecard $1 -p 3 -s 2022-09-14 -e charlie@gmail.com -n 3456 -h 40 -R SDE3 &
-./employee-portal put-timecard $1 -p 3 -s 2022-09-15 -e barney@gmail.com  -n 2345 -h 20 -R PM &
+# # Put timecards
+$SOURCEDIR/load-timecards "$@" &
 
 wait

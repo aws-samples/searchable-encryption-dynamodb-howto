@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Put employees
+./employee-portal put-employee $1 -n 1234 -e able@gmail.com    -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 3 -N "Able Jones"    -T SDE9
+./employee-portal put-employee $1 -n 2345 -e barney@gmail.com  -g zorro@gmail.com -c SEA -b 44 -f 12 -r 2 -d 4 -N "Barney Jones"  -T SDE8
+./employee-portal put-employee $1 -n 3456 -e charlie@gmail.com -g zorro@gmail.com -c SEA -b 44 -f 4  -r 2 -d 5 -N "Charlie Jones" -T SDE7
+./employee-portal put-employee $1 -n 4567 -e david@gmail.com   -g zorro@gmail.com -c NYC -b 22 -f 1  -r 2 -d 3 -N "David Jones"   -T SDE6

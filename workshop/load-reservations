@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Put reservations
+./employee-portal put-reservation $1 -i 0d404088-908d-48ff-bea5-4c356ebb46d0 -b 44 -s 2022-07-04T13:00 -f 12 -r 403 -o able@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-reservation $1 -i f7c947f9-1454-4eb8-afd3-0097d5bdc012 -b 44 -s 2022-07-04T14:00 -f 12 -r 407 -o barney@gmail.com -D 30 -a SomeList -j "Gazelle"

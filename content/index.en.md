@@ -57,7 +57,7 @@ Buildings ||-[#black]-o{ Rooms
 
 As you begin this workshop,
 this system uses DynamoDB to store records for searching.
-All record are stored in a single DynamoDB table
+All records are stored in a single DynamoDB table
 with global secondary indexes. 
 
 See this diagram to understand the architecture of this system at the beginning of the workshop:
@@ -213,7 +213,7 @@ In this workshop, you will work through the following exercises:
 
 1. Adding the AWS Database Encryption SDK
 1. Start configuring searchable encryption for a single access pattern
-1. Add searchable encryption support to access Employee data.
+1. Add searchable encryption support to access to Employee data.
 1. Adding searchable encryption support for the remaining access patterns
 
 ## Getting Started

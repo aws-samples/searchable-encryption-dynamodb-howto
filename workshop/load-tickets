@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Put tickets
+./employee-portal put-ticket $1 -k 1 -M 2022-10-07T14:32:25 -A zorro@gmail.com   -g able@gmail.com    -v 3 -j "Bad Bug"  -m "This bug looks pretty bad"
+./employee-portal put-ticket $1 -k 1 -M 2022-10-07T15:32:25 -A able@gmail.com    -g charlie@gmail.com -v 3 -j "Bad Bug"  -m "Charlie should handle this"
+./employee-portal put-ticket $1 -k 2 -M 2022-10-06T14:32:25 -A zorro@gmail.com   -g charlie@gmail.com -v 3 -j "Easy Bug" -m "This seems simple enough"
+./employee-portal put-ticket $1 -k 2 -M 2022-10-08T14:32:25 -A charlie@gmail.com -g able@gmail.com    -v 3 -j "Easy Bug" -m "that's in able's code"

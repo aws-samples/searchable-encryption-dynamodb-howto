@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Put meetings
+./employee-portal put-meeting $1 -n 1234 -s 2022-07-04T13:00 -f 12 -r 403 -e able@gmail.com    -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting $1 -n 2345 -s 2022-07-04T13:00 -f 12 -r 403 -e barney@gmail.com  -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting $1 -n 3456 -s 2022-07-04T13:00 -f 12 -r 403 -e charlie@gmail.com -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting $1 -n 4567 -s 2022-07-04T13:00 -f 12 -r 403 -e david@gmail.com   -D 30 -a SomeList -j "Scan Beacons"
+./employee-portal put-meeting $1 -n 2345 -s 2022-07-04T14:00 -f 12 -r 407 -e barney@gmail.com  -D 30 -a SomeList -j "Gazelle"
+./employee-portal put-meeting $1 -n 3456 -s 2022-07-04T14:00 -f 12 -r 407 -e charlie@gmail.com -D 30 -a SomeList -j "Gazelle"

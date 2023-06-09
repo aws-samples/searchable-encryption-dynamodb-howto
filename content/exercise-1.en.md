@@ -705,10 +705,10 @@ Expected output:
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 employeeNumber employeeEmail       managerEmail        name                title     location
-1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
-2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 4567           david@gmail.com     zorro@gmail.com     David Jones         SDE6      {city=NYC, desk=3, floor=1, building=22, room=2}
 3456           charlie@gmail.com   zorro@gmail.com     Charlie Jones       SDE7      {city=SEA, desk=5, floor=4, building=44, room=2}
+1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
+2345           barney@gmail.com    zorro@gmail.com     Barney Jones        SDE8      {city=SEA, desk=4, floor=12, building=44, room=2}
 ```
 
 The data that the CLI prints will appear as plaintext
@@ -784,11 +784,11 @@ Expected output:
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
-3                   2022-10-07T15:32:25      barney@gmail.com    charlie@gmail.com   3           Bad Bug Followup    We should follow up on the Bad Bug
 2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
 2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
 1                   2022-10-07T14:32:25      zorro@gmail.com     able@gmail.com      3           Bad Bug             This bug looks pretty bad
 1                   2022-10-07T15:32:25      able@gmail.com      charlie@gmail.com   3           Bad Bug             Charlie should handle this
+3                   2022-10-07T15:32:25      barney@gmail.com    charlie@gmail.com   3           Bad Bug Followup    We should follow up on the Bad Bug
 ```
 
 You may additionally want to verify that this item is encrypted as expected
