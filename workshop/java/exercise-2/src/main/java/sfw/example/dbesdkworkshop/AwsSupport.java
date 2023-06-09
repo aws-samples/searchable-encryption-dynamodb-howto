@@ -74,16 +74,28 @@ public class AwsSupport {
   }
 
   // BEGIN EXERCISE 2 STEP 2
+  
+  // END EXERCISE 2 STEP 2
 
   // BEGIN EXERCISE 2 STEP 3a
+
+  // END EXERCISE 2 STEP 3a
   
   // BEGIN EXERCISE 2 STEP 3b
 
+  // END EXERCISE 2 STEP 3b
+
   // BEGIN EXERCISE 2 STEP 4a
+
+  // END EXERCISE 2 STEP 4a
   
   // BEGIN EXERCISE 2 STEP 4b
+
+  // END EXERCISE 2 STEP 4b
   
   // BEGIN EXERCISE 2 STEP 5a
+
+  // END EXERCISE 2 STEP 5a
 
  public static IKeyring MakeHierarchicalKeyring(boolean ddbLocal)
   {
@@ -144,6 +156,8 @@ public class AwsSupport {
         .attributeActionsOnEncrypt(actions)
         .keyring(kmsKeyring)
         // BEGIN EXERCISE 2 STEP 5b
+
+        // END EXERCISE 2 STEP 5b
         .build();
 
     HashMap<String, DynamoDbTableEncryptionConfig> tables = new HashMap<String, DynamoDbTableEncryptionConfig>();

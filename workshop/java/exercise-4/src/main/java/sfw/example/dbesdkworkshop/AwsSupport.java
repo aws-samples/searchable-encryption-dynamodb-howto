@@ -118,10 +118,14 @@ public class AwsSupport {
         .build());
     // BEGIN EXERCISE 4 STEP 2
 
+    // END EXERCISE 4 STEP 2
+
     return beacons;
   }
 
   // BEGIN EXERCISE 4 STEP 3
+
+  // END EXERCISE 4 STEP 3
 
   public static Constructor MakeGsi1TimecardPartitionKeyConstructor() {
     ArrayList<ConstructorPart> parts = new ArrayList<ConstructorPart>();
@@ -167,9 +171,13 @@ public class AwsSupport {
     encryptedParts.add(EncryptedPart.builder().name(MANAGER_EMAIL_NAME).prefix(MANAGER_EMAIL_PREFIX).build());
     // BEGIN EXERCISE 4 STEP 4a
 
+    // END EXERCISE 4 STEP 4a
+
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi2EmployeePartitionKeyConstructor());
     // BEGIN EXERCISE 4 STEP 4b
+
+    // END EXERCISE 4 STEP 4b
 
     return CompoundBeacon.builder()
         .name(GSI2_PARTITION_KEY)
@@ -185,9 +193,13 @@ public class AwsSupport {
     encryptedParts.add(EncryptedPart.builder().name(CITY_NAME).prefix(CITY_PREFIX).build());
     // BEGIN EXERCISE 4 STEP 5a
 
+    // END EXERCISE 4 STEP 5a
+
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi3EmployeePartitionKeyConstructor());
     // BEGIN EXERCISE 4 STEP 5b
+
+    // END EXERCISE 4 STEP 5b
 
     return CompoundBeacon.builder()
         .name(GSI3_PARTITION_KEY)
@@ -205,8 +217,12 @@ public class AwsSupport {
     encryptedParts.add(EncryptedPart.builder().name(DESK_NAME).prefix(DESK_PREFIX).build());
     // BEGIN EXERCISE 4 STEP 6a
 
+    // END EXERCISE 4 STEP 6a
+
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     // BEGIN EXERCISE 4 STEP 6b
+
+    // END EXERCISE 4 STEP 6b
     constructors.add(MakeGsi3EmployeeSortKeyConstructor());
 
     return CompoundBeacon.builder()
@@ -214,6 +230,8 @@ public class AwsSupport {
         .split(SPLIT)
         .encrypted(encryptedParts)
     // BEGIN EXERCISE 4 STEP 6c
+
+    // END EXERCISE 4 STEP 6c
         .constructors(constructors)
         .build();
   }
@@ -223,10 +241,14 @@ public class AwsSupport {
     encryptedParts.add(EncryptedPart.builder().name(EMPLOYEE_EMAIL_NAME).prefix(EMPLOYEE_EMAIL_PREFIX).build());
     // BEGIN EXERCISE 4 STEP 7a
 
+    // END EXERCISE 4 STEP 7a
+
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     constructors.add(MakeGsi1TimecardPartitionKeyConstructor());
     // Gsi1EmployeePartitionKey is the same as Gsi1TimecardPartitionKey
     // BEGIN EXERCISE 4 STEP 7b
+
+    // END EXERCISE 4 STEP 7b
 
     return CompoundBeacon.builder()
         .name(GSI1_PARTITION_KEY)
@@ -242,8 +264,12 @@ public class AwsSupport {
     signedParts.add(SignedPart.builder().name(EMPLOYEE_NUMBER_NAME).prefix(EMPLOYEE_NUMBER_PREFIX).build());
     // BEGIN EXERCISE 4 STEP 8a
 
+    // END EXERCISE 4 STEP 8a
+
     ArrayList<Constructor> constructors = new ArrayList<Constructor>();
     // BEGIN EXERCISE 4 STEP 8b
+
+    // END EXERCISE 4 STEP 8b
     constructors.add(MakeGsi1TimecardSortKeyConstructor());
     constructors.add(MakeGsi1EmployeeSortKeyConstructor());
 
@@ -251,6 +277,8 @@ public class AwsSupport {
         .name(GSI1_SORT_KEY)
         .split(SPLIT)
     // BEGIN EXERCISE 4 STEP 8c
+
+    // END EXERCISE 4 STEP 8c
         .encrypted(encryptedParts)
         .constructors(constructors)
         .build();

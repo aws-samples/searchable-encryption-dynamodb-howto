@@ -83,6 +83,8 @@ public class Api {
     final KeySchemaElement sk1Schema = KeySchemaElement
       .builder()
     // BEGIN EXERCISE 4 STEP 9a
+
+    // END EXERCISE 4 STEP 9a
     .keyType(KeyType.RANGE)
       .build();
     final ArrayList<KeySchemaElement> gsi1Schema = new ArrayList<KeySchemaElement>();
@@ -142,6 +144,8 @@ public class Api {
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
     // BEGIN EXERCISE 4 STEP 9b
+
+    // END EXERCISE 4 STEP 9b
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
       .attributeName(BEACON_PREFIX + GSI2_PARTITION_KEY)
