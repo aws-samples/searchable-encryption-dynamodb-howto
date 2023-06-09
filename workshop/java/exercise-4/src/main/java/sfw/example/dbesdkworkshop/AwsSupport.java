@@ -5,6 +5,7 @@ package sfw.example.dbesdkworkshop;
 
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
+import software.amazon.awssdk.services.dynamodb.model.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,9 +75,32 @@ public class AwsSupport {
         .build();
   }
 
-  public static String CreateBranchKey() {
-    final KeyStore keystore = MakeKeyStore();
+  public static boolean IsTableReady(DescribeTableResponse resp)
+  {
+    if (resp.table().tableStatus() != TableStatus.ACTIVE) return false;
+    for (GlobalSecondaryIndexDescription x : resp.table().globalSecondaryIndexes()) {
+      if (x.indexStatus() != IndexStatus.ACTIVE) return false;
+    }
+    return true;
+  }
+
+  public static void WaitForTableReady(String tableName, boolean ddbLocal)
+  {
+    final DynamoDbClient ddbClient = GetClientBuilder(ddbLocal).build();
+    final DescribeTableRequest request =
+      DescribeTableRequest.builder().tableName(tableName).build();
+    while (true) {
+      DescribeTableResponse resp = ddbClient.describeTable(request);
+      if (IsTableReady(resp)) break;
+      System.err.println("Waiting for table " + tableName + " to be ready...");
+      try {Thread.sleep(500);} catch (Exception e) {}
+    }
+  }
+
+  public static String CreateBranchKey(boolean ddbLocal) {
+    final KeyStore keystore = MakeKeyStore(ddbLocal);
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
+    WaitForTableReady(BRANCH_KEY_TABLE, ddbLocal);
     return keystore.CreateKey().branchKeyIdentifier();
   }
 

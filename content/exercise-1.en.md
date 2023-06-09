@@ -302,6 +302,7 @@ Now, to implement `CreateBranchKey`:
       when creating the branch key, and call KMS Decrypt when your application
       will eventually need to decrypt this branch key for use in item encryption and decryption.
 1. Call the `CreateKeyStore` method on the Key Store to create the DynamoDB table.
+1. Wait for that table to be ready.
 1. Call the `CreateKey` method on the Key Store to create a new branch key in that Key Store.
 1. Return the Branch Key Id returned by the `CreateKey` call.
 
@@ -325,9 +326,32 @@ Now, to implement `CreateBranchKey`:
         .build()).build();
   }
   
-  public static String CreateBranchKey() {
-    final KeyStore keystore = MakeKeyStore();    
+  public static boolean IsTableReady(DescribeTableResponse resp)
+  {
+    if (resp.table().tableStatus() != TableStatus.ACTIVE) return false;
+    for (GlobalSecondaryIndexDescription x : resp.table().globalSecondaryIndexes()) {
+      if (x.indexStatus() != IndexStatus.ACTIVE) return false;
+    }
+    return true;
+  }
+
+  public static void WaitForTableReady(String tableName, boolean ddbLocal)
+  {
+    final DynamoDbClient ddbClient = GetClientBuilder(ddbLocal).build();
+    final DescribeTableRequest request =
+      DescribeTableRequest.builder().tableName(tableName).build();
+    while (true) {
+      DescribeTableResponse resp = ddbClient.describeTable(request);
+      if (IsTableReady(resp)) break;
+      System.err.println("Waiting for table " + tableName + " to be ready...");
+      try {Thread.sleep(500);} catch (Exception e) {}
+    }
+  }
+
+  public static String CreateBranchKey(boolean ddbLocal) {
+    final KeyStore keystore = MakeKeyStore(ddbLocal);
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
+    WaitForTableReady(BRANCH_KEY_TABLE, ddbLocal);
     return keystore.CreateKey().branchKeyIdentifier();
   }
   // END EXERCISE 1 STEP 3c
