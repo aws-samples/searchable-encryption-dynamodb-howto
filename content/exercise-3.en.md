@@ -9,8 +9,7 @@ weight : 300
 
 # Exercise 3: Adding The Employee Record access patterns
 
-In this section, you will will configure searchable encryption
-to configure the access patterns for the Employee data type.
+In this section, you will learn how to configure searchable encryption to access Employee data.
 
 ## Background
 
@@ -18,7 +17,7 @@ In Exercise 2, you configured [searchable encryption](https://docs.aws.amazon.co
 to enable you to perform some simple searches on Timecard records.
 
 In this exercise, you will add support for Employee records,
-which we will need to search in much more complex ways.
+which we will need to search for in much more complex ways.
 
 As you configure each new beacon to support a new access pattern,
 consider what [truncation length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
@@ -33,7 +32,7 @@ considerations on the tradeoffs being made between security and performance.
 If you just finished [Adding Searchable Encryption Configuration](../exercise-2), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-2` directory for the language you are using:
+jump into the `exercise-3` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}

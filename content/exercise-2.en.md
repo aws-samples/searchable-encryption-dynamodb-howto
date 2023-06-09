@@ -68,7 +68,7 @@ for timecards based on email and start time.
 If you just finished [Adding the Database Encryption SDK](../exercise-1), you are all set.
 
 If you aren't sure, or want to catch up,
-jump into the `exercise-1` directory for the language you are using:
+jump into the `exercise-2` directory for the language you are using:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -172,7 +172,7 @@ This is to make is easier to compare and contrast as you move through the exerci
 ### Step 2: Configure Standard Beacons
 
 To start adding searchable encryption,
-first configure the standard beacons over
+first configure a standard beacon over
 the encrypted attributes that you will want to query.
 
 To support querying timecards by email,
@@ -307,8 +307,8 @@ Because this compound beacon contains a constructor which specifies a required e
 any time an item with a "email" field is written, the client will write to this compound beacon.
 
 The value used in the beacon will include only the email standard beacon.
-For example, if the calculated beacon value for "zorro@gmail.com" is "a",
-then the value written to this field will be "CE-a".
+For example, if the calculated beacon value for "zorro@gmail.com" is `abcdef`,
+then the value written to this field will be `CE-abcdef`.
 
 ### Step 4:
 
@@ -388,8 +388,8 @@ Because this compound beacon contains a constructor which specifies a required m
 any time an item with a modified date attribute is written, the client will write to this compound beacon.
 
 The value used in the beacon will include only the plaintext value of the modified date.
-For example, if the calculated beacon value for "modifiedDate" is "2023-06-13",
-then the value written to this field will be "M-2023-06-13".
+For example, if the calculated beacon value for "modifiedDate" is `2023-06-13`,
+then the value written to this field will be `M-2023-06-13`.
 
 ### Step 5: Add the Beacons to the Interceptor
 

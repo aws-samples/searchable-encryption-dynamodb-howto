@@ -30,9 +30,9 @@ We will use the AWS Database Encryption SDK
 to encrypt items on the client,
 before they are transmitted off of the host machine to DynamoDB.
 When you encrypt items client-side, you choose which attributes
-values to encrypt and which attributes to include in the signature.
+values to encrypt and which attributes to include in the cryptographic signature.
 When you retrieve these encrypted items from DynamoDB,
-the client locally decrypts and verifies these items on your host.
+the client locally decrypts and verifies the signatures on these items on your host.
 In this way, DynamoDB never has access to the plaintext
 of the item attributes you encrypt.
 This process is called [client-side encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html).
@@ -420,7 +420,7 @@ for your one table.
 
 For this table, configuration contains several parts:
 1. Configure a [Crypto Action](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/concepts.html#crypt-actions) for each attribute in your table.
-  - For every attribute, you can `ENCRYPT_AND_SIGN`, `SIGN_ONLY`, or `DO_NOTHING`.
+    - For every attribute, you can `ENCRYPT_AND_SIGN`, `SIGN_ONLY`, or `DO_NOTHING`.
     For this exercise, you will `ENCRYPT_AND_SIGN` as many attributes as possible,
     and `SIGN_ONLY` the rest.
 1. Configure the Logical Table Name. This is the name that is cryptographically bound

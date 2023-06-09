@@ -9,8 +9,7 @@ weight : 400
 
 # Exercise 4: Adding The Remaining Access Patterns
 
-In this section, you will will configure searchable encryption
-to configure the remaining access patterns.
+In this section, you will learn how to configure searchable encryption for remaining data in the sample database.
 
 ## Background
 
@@ -265,7 +264,7 @@ Tickets and Reservations use the GSI3 Partition Key.
 #### What Happened?
 
 You have configured your compound beacon for the GSI3 partition key to:
-- if not other constructors are used, write the partition key for reservations if the item contains a building ID
+- if no other constructors are used, write the partition key for reservations if the item contains a building ID
 - otherwise, write the partition key for tickets if the item contain a severity
 
 ### Step 6:
@@ -306,7 +305,7 @@ Similarly, Tickets and Reservations use the GSI3 Sort Key.
 #### What Happened?
 
 You have configured your compound beacon for the GSI3 sort key to:
-- if not other constructors are used, write the beacon for modify date if it exists on the item
+- if no other constructors are used, write the beacon for modify date if it exists on the item
 - otherwise, write the start time, floor, and room if those attributes exist on the item
 
 ### Step 7:
@@ -340,7 +339,7 @@ Projects, Tickets and Reservations need their own constructors for the GSI1 Part
 #### What Happened?
 
 You have configured your compound beacon for the GSI1 partition key to:
-- if not other constructors are used, write the beacon for status if it exists on the item
+- if no other constructors are used, write the beacon for status if it exists on the item
 - otherwise, write the beacon for organizer email if it exists on the item
 - otherwise, write the author email if it exists on the item
 
@@ -384,7 +383,7 @@ Tickets and Reservations need their own constructors for the GSI1 Sort Key.
 #### What Happened?
 
 You have configured your compound beacon for the GSI1 sort key to:
-- if not other constructors are used, write the start time, floor, and room to the item if those attributes exist
+- if no other constructors are used, write the start time, floor, and room to the item if those attributes exist
 - otherwise, write the beacon for modified date if it exists on the item
 
 ### Step 9:

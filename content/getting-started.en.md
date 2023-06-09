@@ -7,7 +7,7 @@ weight : 10
 
 ## Workshop Details
 
-In this workshop, you will add encryption and decryption features
+In this workshop, you will add [client-side encryption and decryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html) features
 to an example Employee Portal Service.
 You will learn about some
 real world AWS patterns for integrating [client-side encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html)
@@ -20,7 +20,7 @@ By default, when you use DynamoDB your data is already protected with [server-si
 However, you may want to have further control over the encryption and decryption of your data
 by using [client-side encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html).
 
-However, introducing client-side encryption to database systems introduces a host of complex problems.
+Be aware, that introducing client-side encryption to database systems introduces a host of complex problems.
 How should we encrypt sensitive data in our items in the first place?
 What should we do if we need to create an index over an attribute that contains sensitive data?
 
