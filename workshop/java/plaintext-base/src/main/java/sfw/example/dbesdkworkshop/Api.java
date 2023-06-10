@@ -387,11 +387,12 @@ public class Api {
     .expressionAttributeValues(attrValues)
     .build();
     final ScanResponse response = ddbClient.scan(request);
-    final ArrayList<Employee> results = new ArrayList<Employee>();
-    for (Map<String,AttributeValue> item : response.items()) {
-      results.add(Employee.fromItem(item));
-    }
-    return results;
+    return response
+      .items()
+      .stream()
+      .map(item -> Employee.fromItem(item))
+      .sorted(Comparator.comparing(Employee::getEmployeeNumber))
+      .collect(Collectors.toList());
   }
 
   protected List<Reservation> ScanReservations(String startDate, String endDate, String floor, String room) {

@@ -29,6 +29,10 @@ public class Employee extends BaseItem {
     this.title = title;
   }
 
+  public String getEmployeeNumber() {
+    return employeeNumber;
+  }
+
   public static String AppendStrWithPrefix(String base, String value, String prefix)
   {
     if (value == null) return base;
