@@ -122,10 +122,6 @@ Add the dependencies for:
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-<!-- !test program
-./utils/check-block.sh ./workshop/java/exercise-1 <&0
- -->
-
 <!-- !test check java step 2 -->
 ```java
     // BEGIN EXERCISE 1 STEP 2
