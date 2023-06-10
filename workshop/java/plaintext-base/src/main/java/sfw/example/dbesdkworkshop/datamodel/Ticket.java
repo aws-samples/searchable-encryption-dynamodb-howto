@@ -32,6 +32,10 @@ public class Ticket extends BaseItem {
     this.message = message;
   }
 
+  public String getTicketNumber() {
+    return ticketNumber;
+  }
+
   public Map<String, AttributeValue> toItem() {
     Map<String, AttributeValue> item = new HashMap<>();
     item.put(PARTITION_KEY, AttributeValue.fromS(TICKET_NUMBER_PREFIX + ticketNumber));

@@ -504,11 +504,12 @@ public class Api {
       .expressionAttributeValues(attrValues)
       .build();
     final ScanResponse response = ddbClient.scan(request);
-    final ArrayList<Ticket> results = new ArrayList<Ticket>();
-    for (Map<String,AttributeValue> item : response.items()) {
-      results.add(Ticket.fromItem(item));
-    }
-    return results;
+    return response
+      .items()
+      .stream()
+      .map(item -> Ticket.fromItem(item))
+      .sorted(Comparator.comparing(Ticket::getTicketNumber))
+      .collect(Collectors.toList());
   }
 
   protected List<Timecard> ScanTimecards(String startDate, String endDate, String role) {
