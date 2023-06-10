@@ -1,5 +1,5 @@
 ---
-title : "Exercise 1"
+title : "1: Adding the AWS Database Encryption SDK"
 weight : 100
 ---
 
@@ -7,7 +7,7 @@ weight : 100
 ./utils/check-block.sh ./workshop/java/exercise-1 <&0
  -->
 
-# Exercise 1: Add the AWS Database Encryption SDK
+# 1: Adding the AWS Database Encryption SDK
 
 In this section, you will add client-side encryption
 to the example Employee Portal Service

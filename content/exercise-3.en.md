@@ -1,5 +1,5 @@
 ---
-title : "Exercise 3"
+title : "3: Add searchable encryption support to access to Employee data"
 weight : 300
 ---
 
@@ -7,7 +7,7 @@ weight : 300
 ./utils/check-block.sh ./workshop/java/exercise-3 <&0
  -->
 
-# Exercise 3: Adding The Employee Record access patterns
+# 3: Add searchable encryption support to access to Employee data
 
 In this section, you will learn how to configure searchable encryption to access Employee data.
 
@@ -29,7 +29,8 @@ considerations on the tradeoffs being made between security and performance.
 
 ### Starting Directory
 
-If you just finished [Adding Searchable Encryption Configuration](../exercise-2), you are all set.
+If you just finished [configuring searchable encryption for a single access pattern](../exercise-2),
+you are all set.
 
 If you aren't sure, or want to catch up,
 jump into the `exercise-3` directory for the language you are using:

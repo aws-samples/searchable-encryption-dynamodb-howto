@@ -1,5 +1,5 @@
 ---
-title : "Exercise 2"
+title : "2: Configuring searchable encryption for a single access pattern"
 weight : 200
 ---
 
@@ -7,7 +7,7 @@ weight : 200
 ./utils/check-block.sh ./workshop/java/exercise-2 <&0
  -->
 
-# Exercise 2: Adding Searchable Encryption Configuration
+# 2: Configuring searchable encryption for a single access pattern
 
 In this section, you will configure the AWS Database Encryption SDK to use searchable encryption.
 

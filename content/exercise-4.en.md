@@ -1,5 +1,5 @@
 ---
-title : "Exercise 4"
+title : "4: Add searchable encryption support for the remaining access patterns"
 weight : 400
 ---
 
@@ -7,7 +7,7 @@ weight : 400
 ./utils/check-block.sh ./workshop/java/exercise-4 <&0
  -->
 
-# Exercise 4: Adding The Remaining Access Patterns
+# 4: Add searchable encryption support for the remaining access patterns
 
 In this section, you will learn how to configure searchable encryption for remaining data in the sample database.
 
@@ -26,7 +26,7 @@ as well as whether [beacons are right for that access pattern in the first place
 
 ### Starting Directory
 
-If you just finished [Adding The Employee Record access patterns](../exercise-3),
+If you just finished [adding searchable encryption support to access to Employee data](../exercise-3),
 you are all set.
 
 If you aren't sure, or want to catch up,

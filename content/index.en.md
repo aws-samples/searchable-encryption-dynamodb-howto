@@ -213,8 +213,8 @@ In this workshop, you will work through the following exercises:
 
 1. Adding the AWS Database Encryption SDK
 1. Start configuring searchable encryption for a single access pattern
-1. Add searchable encryption support to access to Employee data.
-1. Adding searchable encryption support for the remaining access patterns
+1. Add searchable encryption support to access to Employee data
+1. Add searchable encryption support for the remaining access patterns
 
 ## Getting Started
 
