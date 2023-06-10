@@ -541,14 +541,14 @@ Before we get started, let's first reset the data in your table.
 
 Let's try querying timecards using the newly supported access pattern:
 
-<!-- !test in get-tickets-author -->
+<!-- !test in get-tickets --author-email=zorro@gmail.com -->
 ```bash
 ./employee-portal get-tickets --author-email=zorro@gmail.com
 ```
 
 Expected output:
 
-<!-- !test out get-tickets-author -->
+<!-- !test out get-tickets --author-email=zorro@gmail.com -->
 ```
 ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
 2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
