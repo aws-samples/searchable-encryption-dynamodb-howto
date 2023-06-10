@@ -3,11 +3,7 @@
 
 package sfw.example.dbesdkworkshop;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 import sfw.example.dbesdkworkshop.datamodel.*;
 import sfw.example.dbesdkworkshop.Config;
