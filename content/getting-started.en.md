@@ -44,7 +44,7 @@ To set up your environment, you will:
 If you are using your own AWS Account for this workshop, make sure:
 
 1. It is not a production account. This is a workshop for learning and experimentation. Don't put production at risk!
-1. When you are done with the exercises, you follow the instructions in [Clean Up and Closing](../clean-up-and-closing.md) to clean up the deployed resources.
+1. When you are done with the exercises, you follow the instructions in [Clean Up and Closing](../clean-up-and-closing.md) to clean up the deployed resources.  Failure to clean up properly may cause you to incur charges on your AWS account.
 
 If you are working through these exercises in an AWS classroom environment, AWS accounts have been created for you.
 

@@ -13,6 +13,8 @@ and AWS Key Management Service.
 Each exercise has step-by-step instructions.
 There is also has a `-complete` version available to use as a reference.
 
+The audience for this workshop are software engineers and product managers who are interested in protecting their own and their customer's data, while storing data in DynamoDB.  This workshop should take about 90 mins to complete.
+
 ## Background: The Employee Portal Service
 
 This workshop is centered around an example Employee Portal Service.
