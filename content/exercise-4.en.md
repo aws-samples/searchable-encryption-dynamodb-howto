@@ -495,10 +495,10 @@ You should see the same tickets that you were able to retrieve before
 WARNING : You are doing a full table scan. In real life, this would be very time consuming.
 
 ticketNumber        modifiedDate             authorEmail         assigneeEmail       severity    subject             message
-2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
-2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
 1                   2022-10-07T14:32:25      zorro@gmail.com     able@gmail.com      3           Bad Bug             This bug looks pretty bad
 1                   2022-10-07T15:32:25      able@gmail.com      charlie@gmail.com   3           Bad Bug             Charlie should handle this
+2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
+2                   2022-10-08T14:32:25      charlie@gmail.com   able@gmail.com      3           Easy Bug            that's in able's code
 ```
 
 This shows all of the ticket records.
