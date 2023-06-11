@@ -602,7 +602,7 @@ Resources:
       InstanceType: !Ref InstanceType
       Name: !Ref InstanceName
       Repositories:
-        - PathComponent: !Sub workshop
+        - PathComponent: workshop
           RepositoryUrl: !GetAtt CodeCommitRepo.CloneUrlHttp
       OwnerArn: 
         Fn::If:
@@ -641,6 +641,7 @@ Resources:
     Type: AWS::KMS::Key
     Properties:
       Description: A KMS for the workshop
+      EnableKeyRotation: true
       KeyPolicy:
         Version: '2012-10-17'
         Id: key-default-1
