@@ -85,7 +85,7 @@ First, create a new DynamoDB table that will contain the data for this exercise.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+Look at `exercise-2/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
 
 :::
 ::::
@@ -114,7 +114,7 @@ beacon attribute.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Look at `exercise-1/src/main/java/sfw/example/dbesdkworkshop/Api.java`.
+Look at `exercise-2/src/main/java/sfw/example/dbesdkworkshop/Api.java`.
 
 :::
 ::::
@@ -182,7 +182,7 @@ you will need to configure a beacon on the email attribute.
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-Go to `exercise-1/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+Go to `exercise-2/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
 
 :::
 ::::

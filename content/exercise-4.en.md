@@ -669,7 +669,7 @@ Recreate your table and reload the sample data:
 Take another look at the [AWS Console for your DynamoDB table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=Exercise4_Table).
 
 Because this beacon has an output length of one bit,
-there are only two possible values the beacon can be.
+there are only two possible values the beacon can be, `0` or `1`.
 
 Our sample data contains employees with four distinct employee ids.
 Because there are only two beacon values that can be written, we expect that when
