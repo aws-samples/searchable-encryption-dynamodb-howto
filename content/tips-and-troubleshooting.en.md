@@ -3,8 +3,6 @@ title : "Tips and Troubleshooting"
 weight : 10000
 ---
 
-# Tips and Troubleshooting
-
 This page contains reference information that might be useful as you work through the workshop.
 
 ## Troubleshooting

@@ -3,8 +3,6 @@ title : "Getting Started"
 weight : 10
 ---
 
-# Getting Started
-
 ## Workshop Details
 
 In this workshop, you will add [client-side encryption and decryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html) features
@@ -20,11 +18,11 @@ By default, when you use DynamoDB your data is already protected with [server-si
 However, you may want to have further control over the encryption and decryption of your data
 by using [client-side encryption](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html).
 
-Be aware, that introducing client-side encryption to database systems introduces a host of complex problems.
-How should we encrypt sensitive data in our items in the first place?
-What should we do if we need to create an index over an attribute that contains sensitive data?
+Introducing client-side encryption to database systems introduces a host of interesting problems to solve.
+How should you encrypt sensitive data in your items in the first place?
+What should you do if you need to create an index over an attribute that contains sensitive data?
 
-The workshop exercises will help you address some of these challenges.
+The workshop exercises will help you address these challenges.
 
 ## Background
 
@@ -51,7 +49,7 @@ If you are working through these exercises in an AWS classroom environment, AWS 
 ### Set up your development environment
 
 1. Sign in to your AWS Account for the workshop. If you are working through these exercises in an AWS classroom environment, click the "Open AWS console" link in the sidebar.
-2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the [Event dashboard](https://catalog.us-east-1.prod.workshops.aws/event/dashboard/en-US), then copy and paste the "Cloud9IdeUrl" into your browser.
+2. Open Cloud9. A Cloud9 environment containing workshop resources has been created for you. If you are working through these exercises in an AWS classroom environment, open the [Event dashboard](https://catalog.us-east-1.prod.workshops.aws/event/dashboard/en-US), scroll down to "Event Outputs", then copy and paste the "Cloud9IdeUrl" value into your browser.
 
 ## Interact with your table
 
@@ -91,8 +89,8 @@ fi
 ./employee-portal help
 ```
 
-Let's try to add a new meeting into our table.
-To see what data we need to specify, do:
+Let's try to add a new meeting into your table.
+To see what data you need to specify, do:
 
 <!-- !test check help put-meeting -->
 ```bash
@@ -122,8 +120,8 @@ you will see that it now contains more items.
 
 ## Getting records from the table
 
-Let's use the CLI to access some of our data.
-Take a look at all of our current employees:
+Let's use the CLI to access some of your data.
+Take a look at all of your current employees:
 
 <!-- !test in get-employees -->
 ```bash
@@ -145,7 +143,7 @@ employeeNumber employeeEmail       managerEmail        name                title
 ```
 
 Can you think of any particular ways in which you might want to index on these employees?
-Let's see what our options are for getting a particular set of employees:
+Let's see what your options are for getting a particular set of employees:
 
 ```bash
 ./employee-portal help get-employees
@@ -167,9 +165,9 @@ employeeNumber employeeEmail       managerEmail        name                title
 
 Now try to see if you can index the data in a different way, e.g. getting all employees in New York City.
 
-Alternatively, explore the other data in our table.
-What are our current meetings, projects, reservations, tickets, or timecards?
-Keep in mind the list of supported access patterns we will implement on our encrypted table:
+Alternatively, explore the other data in your table.
+What are your current meetings, projects, reservations, tickets, or timecards?
+Keep in mind the list of supported access patterns you will implement on your encrypted table:
 
 1. Get employee info by email
 1. Get employee info by employeeID
@@ -205,7 +203,7 @@ At this point, you should have a DynamoDB table
 populated with multiple items
 representing data for the Employee Portal Service
 that you can interact with via a CLI
-to `put` and `get` items.
+to put and get items.
 
 You will see that all of these items are being served as plaintext.
 Right now, the Employee Portal Service does not use any client-side encryption.
@@ -215,7 +213,7 @@ you may want to encrypt your data such that its
 plaintext is never available on DynamoDB servers.
 
 This plaintext version of the Employee Portal Service will be used as a reference
-as we build a version with client-side encryption in later steps.
+as you build a version with client-side encryption in later steps.
 
 # Start the workshop!
 

@@ -7,8 +7,6 @@ weight : 400
 ./utils/check-block.sh ./workshop/java/exercise-4 <&0
  -->
 
-# 4: Add searchable encryption support for the remaining access patterns
-
 In this section, you will learn how to configure searchable encryption for remaining data in the sample database.
 
 ## Background
@@ -74,7 +72,7 @@ TABLE_NAME has been updated so that this exercise will work in a separate table.
 
 ### Step 2:
 
-We need to associate beacons with five more encrypted attributes.
+You need to associate beacons with five more encrypted attributes.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -141,7 +139,7 @@ to add to your pre-existing compound beacons configurations.
 
 ### Step 3:
 
-As we did for Timecards and Employees, each of the remaining four record types
+As you did for Timecards and Employees, each of the remaining four record types
 needs Compound Beacons constructors to satisfy their individual access patterns.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -425,7 +423,7 @@ Go to `exercise-4/src/main/java/sfw/example/dbesdkworkshop/Api.java`.
 You have updated the configuration so that the table you create
 will have a sort key for GSI1 with the correct name for use with beacons.
 
-We have now added the full configuration for all record types.
+You have now added the full configuration for all record types.
 
 All access patterns used in the original plaintext database work in the encrypted database,
 and no change was required in any of the code involved in reading, writing or querying records;
@@ -463,7 +461,7 @@ fi
 (If you are in the 'complete' folder, look for a table named 'Complete_Table'.)
 
 Next, load up some test data into your portal!
-We have provided a script that puts some sample data into your table.
+You have provided a script that puts some sample data into your table.
 
 <!-- !test check load-data -->
 ```bash
@@ -478,11 +476,11 @@ a new attribute for every new beacon you configured.
 In Exercise 3, you were able to get employees by employee ID,
 manager email, and city.
 
-Now that you have completed creating beacons for each of our desired
-access patterns, you can use our CLI to test even more access patterns out.
+Now that you have completed creating beacons for each of your desired
+access patterns, you can use the CLI to test even more access patterns out.
 
 Let's try getting tickets in a variety of ways.
-To start, let's retrieve all of our tickets
+To start, let's retrieve all of your tickets
 <!-- !test in get-tickets -->
 ```bash
 ./employee-portal get-tickets
@@ -520,7 +518,7 @@ ticketNumber        modifiedDate             authorEmail         assigneeEmail  
 ```
 
 The CLI is also configured to make use of the GSI1's sort key if you provide the right values.
-Narrow down the results from our query further by specifying a time range:
+Narrow down the results from your query further by specifying a time range:
 <!-- !test in get-tickets-email-date -->
 ```bash
 ./employee-portal get-tickets --assignee-email able@gmail.com --start 2022-10-07T14:32:25 --end 2022-10-07T16:32:25
@@ -581,31 +579,34 @@ use out of GSI3 to query on tickets.
 
 The full list of access patterns your table should support is listed below.
 Try out a couple of these access patterns yourself:
+
+1. Get employee info by email
+1. Get employee info by employeeID
+1. Get employees by manager email
+1. Get employees by city.building.floor.desk
+
 1. Get meetings by date and email
 1. Get meetings by date and employeeID
 1. Get meetings by date and building/floor/room
-1. Get employee data by email
 1. Get meetings by email
-1. Get tickets by email
-1. Get reservations by email
-1. Get time cards by email
-1. Get employee info by employeeID
-1. Get employee info by email
-1. Get ticket history by ticket ID
-1. Get ticket history by employee email
-1. Get ticket history by assignee email
-1. Get employees by city.building.floor.desk
-1. Get employees by manager email
-1. Get assigned tickets by assignee email
-1. Get tickets last touched in the past 24 hours
+
 1. Get projects by status, start and target date
 1. Get projects by name
-1. Get project history by date range
-1. Get project history by role
+
+1. Get reservations by email
 1. Get reservations by building ID
 1. Get reservations by building ID and time range
 
-## Explore Further
+1. Get ticket by ticket ID
+1. Get ticket by employee email
+1. Get ticket by assignee email
+1. Get tickets last modified in a date range
+
+1. Get time cards by email
+1. Get time cards by date range
+1. Get time cards by role
+
+### Try out different beacon lengths
 
 Now that you know how to build an application that can use client-side encryption
 with DynamoDB and still support complex access patterns,
@@ -626,12 +627,12 @@ and take a look at your data.
 
 Find the `aws_dbe_b_employeeEmail` attribute in your data, and compare the value against various items.
 With a beacon output length of eight bits, the beacon can be one of 256 possible values.
-However, our table only holds four different employee emails right now.
+However, your table only holds four different employee emails right now.
 A beacon output length of eight means that it is likely that each of these four emails has
 a distinct beacon value.
-This reveals information that may not be acceptable to our threat model.
+This reveals information that may not be acceptable to your threat model.
 
-Let's see what happens if we chose a different beacon output length.
+Let's see what happens if you chose a different beacon output length.
 
 First, once you choose a beacon output length, you cannot update it.
 Thus, to test out this change you will need to re-build your table.

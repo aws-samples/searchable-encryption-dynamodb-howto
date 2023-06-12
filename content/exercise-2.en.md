@@ -7,8 +7,6 @@ weight : 200
 ./utils/check-block.sh ./workshop/java/exercise-2 <&0
  -->
 
-# 2: Configuring searchable encryption for a single access pattern
-
 In this section, you will configure the AWS Database Encryption SDK to use searchable encryption.
 
 ## Background
@@ -110,7 +108,7 @@ Update the table name to something specific to this exercise.
 Next, in order to support searchable encryption
 for this new access pattern,
 the table you create will need to be updated to
-include a new Global Secondary Index that uses a new
+include a new global secondary index that uses a new
 beacon attribute.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -125,13 +123,13 @@ Update the CLI code that creates the table
 so that it also creates the necessary Global
 Secondary Index.
 
-Instead of creating a GSI over "PK1" as in your
+Instead of creating a global secondary index over "PK1" as in your
 original Employee Portal Service,
-you will now create a GSI over "aws_dbe_b_PK1".
+you will now create a global secondary index over "aws_dbe_b_PK1".
 "aws_dbe_b_" is a prefix that the AWS Database Encryption SDK
 appends to the attribute names that hold beacon values.
 
-Update the code that defines the first Global Secondary Index:
+Update the code that defines the first global secondary index:
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -168,6 +166,9 @@ in the attribute definitions for table creation.
 Each exercise is set up to work with a new DynamoDB table to store
 your item data.
 This is to make is easier to compare and contrast as you move through the exercises.
+
+You have also configured the global secondary index that gets created with your table to work with
+searchable encryption.
 
 ### Step 2: Configure Standard Beacons
 
@@ -235,9 +236,9 @@ with the beacon value instead.
 
 With the standard beacon created,
 you can now create the [compound beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-type.html#plan-compound-beacons) that you will use as the value
-for your new Global Secondary Index.
+for your new global secondary index.
 
-The value written to this Global Secondary Index in this exercise
+The value written to this global secondary index in this exercise
 will be exactly the standard beacon configured in the previous step.
 When you add support for more access patterns in later exercises,
 the value written to this attribute will depend on the item being written.
@@ -264,7 +265,7 @@ Configure a beacon constructor that contains a single, required part: author ema
 ::::
 
 Now configure the compound beacon,
-giving it the same name as your original Global Secondary Index, "PK1".
+giving it the same name as your original global secondary index, "PK1".
 
 For `encryptedParts`, specify name as "authorEmail" and the unique prefix "CE-".
 Also configure the constructor you configured above.
@@ -301,7 +302,7 @@ For this example, `SPLIT` uses "^".
 #### What Happened?
 
 You have added a configuration for a new compound beacon which will be used
-as the partition key in a Global Secondary Index on your table.
+as the partition key in a global secondary index on your table.
 
 Because this compound beacon contains a constructor which specifies a required email field,
 any time an item with a "email" field is written, the client will write to this compound beacon.
@@ -313,7 +314,7 @@ then the value written to this field will be `CE-abcdef`.
 ### Step 4:
 
 Now, you will similarly create a new compound beacon to be used as
-the sort key in your new Global Secondary Index.
+the sort key in your new global secondary index.
 
 For the access pattern we are supporting in this exercise,
 this sort key will just contain the plaintext modified date
@@ -344,9 +345,9 @@ You want this beacon to be written to if the item contains the modified date att
 ::::
 
 Now configure the compound beacon which will be the sort key
-in your new Global Secondary Index.
+in your new global secondary index.
 
-Configure the name as the sort key of your Global Secondary Index.
+Configure the name as the sort key of your global secondary index.
 
 Instead of configuring the modified date as an encrypted part,
 add it to the configuration as a signed part.
@@ -380,7 +381,7 @@ add it to the configuration as a signed part.
 #### What Happened?
 
 You have added a configuration for a new compound beacon which will be used
-as the sort key in a Global Secondary Index on your table.
+as the sort key in a global secondary index on your table.
 Because this compound beacon only contains signed parts (not encrypted parts)
 the value is written to the attribute "SK1" instead of "aws_dbe_b_SK1".
 
@@ -530,7 +531,7 @@ Now that you have updated the code
 to support this access pattern on encrypted data
 you need to write the beacons to the database.
 
-Before we get started, let's first reset the data in your table.
+Before you get started, let's first reset the data in your table.
 
 <!-- !test check load-data -->
 ```bash
@@ -562,7 +563,7 @@ correct records!
 ## Get Timecards by Email and Date
 
 Because you configured the sort key for your new
-Global Secondary Index to contain the ticket's creation date,
+global secondary index to contain the ticket's creation date,
 you can also specify start and end dates using the CLI.
 With this command, the CLI will return all timecards
 that were created on or after the `start` date and on or after the `end` date:
@@ -580,7 +581,7 @@ ticketNumber        modifiedDate             authorEmail         assigneeEmail  
 2                   2022-10-06T14:32:25      zorro@gmail.com     charlie@gmail.com   3           Easy Bug            This seems simple enough
 ```
 
-While creation date is not encrypted in our table,
+While creation date is not encrypted in your table,
 it can still be used in conjunction with the encrypted email field
 to support this access pattern.
 
@@ -596,18 +597,8 @@ for each of the beacons you configured.
 The values of these new fields are the hex representations of
 truncated HMACs.
 
-## Explore Further
-
-Want to dive into more content related to this exercise?
-Try out these links.
-
-* <a href="https://docs.aws.amazon.com/kms/latest/developerguide/grants.html" target="_blank">AWS KMS: Key Grants</a>
-* <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html" target="_blank">AWS KMS: Key Policies</a>
-* <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html" target="_blank">AWS KMS: Cross-account KMS Key Usage</a>
-* <a href="https://aws.amazon.com/dynamodb/global-tables/" target="_blank">Amazon DynamoDB: global tables</a>
-
 # Next exercise
 
 Ready for more?
 Next you will work on [adding another access pattern](../exercise-3)
-to our searchable encryption configuration.
+to your searchable encryption configuration.

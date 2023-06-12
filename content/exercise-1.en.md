@@ -7,8 +7,6 @@ weight : 100
 ./utils/check-block.sh ./workshop/java/exercise-1 <&0
  -->
 
-# 1: Adding the AWS Database Encryption SDK
-
 In this section, you will add client-side encryption
 to the example Employee Portal Service
 using the [AWS Database Encryption SDK](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/)
@@ -22,11 +20,11 @@ Employee Portal Service
 and learned how to get and put items
 into your DynamoDB table.
 
-Now we are going to build a new version of this
+Now you are going to build a new version of this
 Employee Portal Service that includes client-side encryption
 with the [AWS Database Encryption SDK](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/).
 
-We will use the AWS Database Encryption SDK
+You will use the AWS Database Encryption SDK
 to encrypt items on the client,
 before they are transmitted off of the host machine to DynamoDB.
 When you encrypt items client-side, you choose which attributes
@@ -40,7 +38,7 @@ This process is called [client-side encryption](https://docs.aws.amazon.com/data
 To perform this encryption, the AWS Database Encryption SDK
 will use a strategy known as [envelope encryption](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#enveloping).
 For every item that is encrypted,
-a unique `data key` is generated that is responsible for encrypting that item.
+a unique data key is generated that is responsible for encrypting that item.
 You will configure the client to generate and protect these data keys
 using the KMS Key that you set up in [Getting Started](../getting-started).
 
@@ -102,13 +100,13 @@ This is to make is easier to compare and contrast as you move through the exerci
 
 ### Step 2: Add the DB-ESDK Dependency
 
-Now, let's begin adding client-side encryption by updating our dependencies.
+Now, let's begin adding client-side encryption by updating your dependencies.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
 
-This project uses [Gradle](https://gradle.org/) to build our application.
-Take a look at our Gradle build file at `exercise-1/build.gradle.kts`.
+This project uses [Gradle](https://gradle.org/) to build your application.
+Take a look at your Gradle build file at `exercise-1/build.gradle.kts`.
 
 :::
 ::::
@@ -117,7 +115,6 @@ Add the dependencies for:
 - AWS Key Management Service
 - AWS Database Encryption SDK
 - AWS Cryptographic Materials Library
-[TODO the MPL artifact id, and MPL/Gazelle versions still needs to be updated]
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -143,7 +140,7 @@ and the AWS Database Encryption SDK, which contains the code necessary to perfor
 You also added the AWS Cryptographic Materials Library, which contains the Keyring interface necessary
 to configure the AWS Database Encryption SDK with AWS KMS.
 
-You will see how we use each of these libraries in later steps.
+You will see how to use each of these libraries in later steps.
 
 ### Step 3: Configure your Key Store
 
@@ -286,8 +283,8 @@ import software.amazon.cryptography.materialproviders.model.MaterialProvidersCon
 
 Now, to implement `CreateBranchKey`:
 1. Configure and instantiate a Key Store.
-    - Put this in a new `CreateKeyStore` method so that we may reuse it later.
-    - Use the KMS Key and Key Store table name that we defined earlier in this step.
+    - Put this in a new `CreateKeyStore` method so that you may reuse it later.
+    - Use the KMS Key and Key Store table name that you defined earlier in this step.
     - For `logicalKeyStoreName`, use the Key Store's DynamoDB table name.
       This is the name that will be cryptographically bound to the branch keys for authentication.
     - The Key Store requires a DynamoDB client.
@@ -381,8 +378,8 @@ to use this branch key by this branch key id.
 
 ### Step 4: Configure the Hierarchical Keyring
 
-Now that we have a Key Store with a branch key,
-we can configure the Hierarchical Keyring.
+Now that you have a Key Store with a branch key,
+you can configure the Hierarchical Keyring.
 
 Add a method which configures a Hierarchical Keyring,
 using the same Key Store configuration that is used by the CLI,
@@ -580,7 +577,7 @@ as they are either also used as a primary key value,
 or otherwise are needed to be plaintext to support
 ranged searched.
 By the end of this workshop, you will see how
-we can keep these items encrypted while still preserving the
+you can keep these items encrypted while still preserving the
 rest of your desired access patterns.
 
 Using the attribute actions you configured
@@ -594,7 +591,7 @@ and will decrypt items as configured, after they are retrieved from DynamoDB.
 
 ### Step 6: Tying it together
 
-Now we can build our application and use the CLI to create our Key Store and create a branch key.
+Now you can build your application and use the CLI to create your Key Store and create a branch key.
 Input the following into the terminal:
 
 <!-- !test program
@@ -621,7 +618,7 @@ fi
 (If this command fails with a `ResourceNotFoundException`, wait a few seconds and run it again.)
 
 This command outputs the branch key ID of the branch key just created.
-Keep note of this ID, as we will need to add it to our configuration.
+Keep note of this ID, as you will need to add it to your configuration.
 
 Go to `~/environment/workshop/config.toml`.
 
@@ -663,7 +660,7 @@ let's try it out and see what it does.
 
 ### Examine your Key Store
 
-First, let's take a look at the Key Store that we created.
+First, let's take a look at the Key Store that you created.
 Go to the [AWS Console for your Key Store table](https://us-west-2.console.aws.amazon.com/dynamodbv2/home?region=us-west-2#table?name=BranchKey_Table).
 
 Here, you should see that there exists two entries.
@@ -673,7 +670,7 @@ protecting your data keys.
 The key material for this branch key is itself client-side encrypted
 by your KMS Key, under the `enc` attribute.
 The other item that shares the branch key id is called a beacon key.
-Ignore the beacon key for now, we will use it in a later exercise.
+Ignore the beacon key for now, you will use it in a later exercise.
 
 The Hierarchical Keyring will get this branch key and decrypt it
 with your KMS key the first time you encrypt or decrypt an item.
@@ -702,19 +699,19 @@ now appear in DynamoDB as the `Bytes` DynamoDB type,
 in an encrypted form.
 DynamoDB never sees the plaintext form for these attribute values.
 
-You should also notice that there are two extra attributes written to our items.
-`aws_dbe_head` contains our [material description](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/concepts.html#material-description),
+You should also notice that there are two extra attributes written to your items.
+`aws_dbe_head` contains your [material description](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/concepts.html#material-description),
 which contains the metadata necessary for the AWS Database Encryption SDK
 to understand how to decrypt the item.
-`aws_dbe_foot` contains the signature calculated over our item.
+`aws_dbe_foot` contains the signature calculated over your item.
 
 ### Retrieve items from your encrypted table
 
-Similar to how we got and put records into the plaintext Employee Portal Service,
-you can use the CLI to retrieve and put records into our Employee Portal Service
+Similar to how you got and put records into the plaintext Employee Portal Service,
+you can use the CLI to retrieve and put records into your Employee Portal Service
 with client-side encryption.
 
-To start, let's retrieve all of our employees again:
+To start, let's retrieve all of your employees again:
 
 <!-- !test in get-employees -->
 ```bash
@@ -743,10 +740,10 @@ when you interact with the data with the CLI.
 
 ### Can we query?
 
-In the previous step we just ran `get-employees` to get
-all of our employees.
+In the previous step you just ran `get-employees` to get
+all of your employees.
 
-We can verify that we are able to get a particular employee by primary key:
+Verify that you are able to get a particular employee by primary key:
 
 <!-- !test in get-employees-1234 -->
 ```bash
@@ -761,39 +758,39 @@ employeeNumber employeeEmail       managerEmail        name                title
 1234           able@gmail.com      zorro@gmail.com     Able Jones          SDE9      {city=SEA, desk=3, floor=12, building=44, room=2}
 ```
 
-However, what happens when we try to index on a different attribute?
+However, what happens when you try to index on a different attribute?
 
 <!-- !test in get-employees-SEA -->
 ```bash
 ./employee-portal get-employees --city=SEA
 ```
 
-When we made this query to our plaintext Employee Portal Service,
-we retrieved back all employees in Seattle,
-but now we don't get any results back!
+When you made this query to your plaintext Employee Portal Service,
+you retrieved back all employees in Seattle,
+but now you don't get any results back!
 <!-- !test out get-employees-SEA -->
 ```
 employeeNumber employeeEmail       managerEmail        name                title     location
 ```
 
-As you can see, because we are no longer writing to the Global Secondary Indexes
-that our plaintext Employee Portal Service used,
-our CLI is currently unable to retrieve employees by anything
+As you can see, because you are no longer writing to the global secondary indexes
+that your plaintext Employee Portal Service used,
+the CLI is currently unable to retrieve employees by anything
 other than their primary key value.
 
 ### Put items into your encrypted table
 
-Let's double check that putting new items into our table
+Let's double check that putting new items into your table
 via the CLI still behaves as expected.
 
-Put a new ticket into our table:
+Put a new ticket into your table:
 
 <!-- !test check put-ticket -->
 ```bash
 ./employee-portal put-ticket --ticket-number=3 --modified-date=2022-10-07T15:32:25 --author-email=barney@gmail.com --assignee-email=charlie@gmail.com --severity=3 --subject="Bad Bug Followup" --message="We should follow up on the Bad Bug"
 ```
 
-Now verify that this ticket appears in our table:
+Now verify that this ticket appears in your table:
 
 <!-- !test in get-tickets -->
 ```bash
@@ -835,14 +832,9 @@ reducing the number of calls the client needs to make to KMS.
 the new client will have a clean cache,
 and the `Decrypt` call will go to KMS.)
 
-## Explore Further
-
-* **AWS Cloud Development Kit** - Check out the `~/environment/workshop/cdk` directory to see how the workshop resources are described using CDK.
-* **Alice, Bob, and Friends** - <a href="https://en.wikipedia.org/wiki/Alice_and_Bob#Cast_of_characters" target="_blank">Who are Faythe and Walter?</a>
-
 # Next exercise
 
 Now that you are encrypting and decrypting items in the Employee Portal Service,
-let's move onto adding back in those Global Secondary Indexes which enable all of our interesting access patterns.
+let's move onto adding back in those global secondary indexes which enable all of your interesting access patterns.
 Move onto the next exercise:
 [Adding a searchable encryption configuration](../exercise-2)

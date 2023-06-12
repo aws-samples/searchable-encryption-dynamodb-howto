@@ -3,15 +3,12 @@ title : "The Busy Engineer's Database Encryption"
 weight : 1
 ---
 
-# The Busy Engineer's Database Encryption
-
 Welcome to the Busy Engineer's database encryption workshop.
 In this workshop, you will be guided through adding client-side encryption
 to your usage of Amazon DynamoDB
 using the AWS Database Encryption SDK
 and AWS Key Management Service.
 Each exercise has step-by-step instructions.
-There is also has a `-complete` version available to use as a reference.
 
 The audience for this workshop are software engineers and product managers who are interested in protecting their own and their customer's data, while storing data in DynamoDB.  This workshop should take about 90 mins to complete.
 
@@ -112,29 +109,31 @@ For example, you may want to get all the meetings booked by a particular employe
 Or you may want to get all of the tickets created within a certain time range.
 A full list of supported access patterns is provided below:
 
+1. Get employee info by email
+1. Get employee info by employeeID
+1. Get employees by manager email
+1. Get employees by city.building.floor.desk
+
 1. Get meetings by date and email
 1. Get meetings by date and employeeID
 1. Get meetings by date and building/floor/room
-1. Get employee data by email
 1. Get meetings by email
-1. Get tickets by email
-1. Get reservations by email
-1. Get time cards by email
-1. Get employee info by employeeID
-1. Get employee info by email
-1. Get ticket history by ticket ID
-1. Get ticket history by employee email
-1. Get ticket history by assignee email
-1. Get employees by city.building.floor.desk
-1. Get employees by manager email
-1. Get assigned tickets by assignee email
-1. Get tickets last touched in the past 24 hours
+
 1. Get projects by status, start and target date
 1. Get projects by name
-1. Get project history by date range
-1. Get project history by role
+
+1. Get reservations by email
 1. Get reservations by building ID
 1. Get reservations by building ID and time range
+
+1. Get ticket by ticket ID
+1. Get ticket by employee email
+1. Get ticket by assignee email
+1. Get tickets last modified in a date range
+
+1. Get time cards by email
+1. Get time cards by date range
+1. Get time cards by role
 
 For this workshop, you will be interacting with this Employee Portal Service
 with a CLI that can retrieve this data via these access patterns.

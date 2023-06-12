@@ -7,8 +7,6 @@ weight : 300
 ./utils/check-block.sh ./workshop/java/exercise-3 <&0
  -->
 
-# 3: Add searchable encryption support to access to Employee data
-
 In this section, you will learn how to configure searchable encryption to access Employee data.
 
 ## Background
@@ -17,7 +15,9 @@ In Exercise 2, you configured [searchable encryption](https://docs.aws.amazon.co
 to enable you to perform some simple searches on Timecard records.
 
 In this exercise, you will add support for Employee records,
-which we will need to search for in much more complex ways.
+which you will need to search for in much more complex ways.
+To do this, you will make use out of three global secondary indexes.
+This workshop will refer to these global secondary indexes as "GSI1", "GSI2", and "GSI3".
 
 As you configure each new beacon to support a new access pattern,
 consider what [truncation length is appropriate for that beacon](https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/choosing-beacon-length.html)
@@ -47,7 +47,15 @@ cd ~/environment/workshop/java/exercise-3
 
 ### Step 1:
 
-Let's begin by making a new name for our table.
+Let's begin by making a new name for your table.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-3/src/main/java/sfw/example/dbesdkworkshop/Config.java`.
+
+:::
+::::
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -62,10 +70,16 @@ Let's begin by making a new name for our table.
 :::
 ::::
 
-
 ### Step 2:
 
-We will need several more Standard Beacons
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-3/src/main/java/sfw/example/dbesdkworkshop/AwsSupport.java`.
+
+:::
+::::
+You will need several more Standard Beacons
 in order to search Employee Records.
 These Standard Beacons will be referenced by Compound Beacons in later steps.
 
@@ -120,10 +134,10 @@ searchable beacon from a single field of the map.
 ### Step 3:
 
 For Employee Records, the Partition Key for GSI1 will be employeeName.
-As Timecard also used employeeName for the Partition key, we need add nothing more here.
+As Timecard also used employeeName for the Partition key, you need add nothing more here.
 
 For Employee Records, the Sort Key for GSI1 will be employeeNumber.
-We will not be doing ranged searches on employeeNumber;
+You will not be doing ranged searches on employeeNumber;
 instead, this is just to disambiguate Employee Records from Timecard Records
 that have the same Partition key but a different Sort key.
 
@@ -146,7 +160,7 @@ employeeNumber is now available as a Part for the GSI1 Partition key compound be
 
 ### Step 4a:
 
-In this step we add routines to build the Constructors for the index keys
+In this step, add routines to build the Constructors for the index keys
 for all the indexes for Employee Records.
 
 ::::tabs{variant="container" groupId=codeSample}
@@ -185,15 +199,21 @@ for all the indexes for Employee Records.
   // END EXERCISE 3 STEP 4a
 ```
 
+:::
+::::
+
 #### What Happened?
 
-We now have Compound Beacon Constructors for the partition keys of all three GSIs,
+You now have Compound Beacon Constructors for the partition keys of all three GSIs,
 plus the sort key for GSI3.
 
-### Step 4a:
+### Step 4b:
 
-In this step we write the routines to create the Compound Beacons
+In this step, write the routines to create the Compound Beacons
 for the keys for GSI2 and GSI3.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
 <!-- !test check java step 4b -->
 ```java
@@ -256,12 +276,12 @@ for the keys for GSI2 and GSI3.
 
 #### What Happened?
 
-We can now build the Compound Beacons for the partition keys of GSI2 and GSI3,
+You can now build the Compound Beacons for the partition keys of GSI2 and GSI3,
 plus the Sort key for GSI3.
 
 ### Step 5:
 
-For GSI1's Sort key, we need to add the new Constructor.
+For GSI1's Sort key, you need to add the new Constructor.
 
 Recall that for Employee Records, the Partition key for GSI1 is the same as for Timecard Records,
 so nothing needs to be added for that.
@@ -286,7 +306,7 @@ GSI1's Sort Key is now ready to go.
 
 ### Step 6:
 
-Now we add our new Compound Beacons to the list.
+Now add your new Compound Beacons to the list.
 
 ::::tabs{variant="container" groupId=codeSample}
 :::tab{label="Java"}
@@ -305,9 +325,17 @@ Now we add our new Compound Beacons to the list.
 
 #### What Happened?
 
-We have completed all of the beacon configuration for Employee Records.
+You have completed all of the beacon configuration for Employee Records.
 
 ### Step 7:
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
+
+Go to `exercise-3/src/main/java/sfw/example/dbesdkworkshop/Api.java`.
+
+:::
+::::
 
 When an index key is a compound beacon with encrypted parts,
 you have to specify "aws_dbe_b_foo" where you might expect to put "foo".
@@ -315,7 +343,10 @@ you have to specify "aws_dbe_b_foo" where you might expect to put "foo".
 This is because it is legal to have both a regular attribute "foo" and a beacon named "foo",
 and so the beacon is stored under the name "aws_dbe_b_foo".
 
-Thus when we create the table, and therefore the GSIs, we must specify this new name.
+Thus when you create the table, and therefore the GSIs, you must specify this new name.
+
+::::tabs{variant="container" groupId=codeSample}
+:::tab{label="Java"}
 
 <!-- !test check java step 7a -->
 ```java
@@ -353,11 +384,14 @@ Thus when we create the table, and therefore the GSIs, we must specify this new 
     // END EXERCISE 3 STEP 7d
 ```
 
+:::
+::::
+
 #### What Happened?
 
 The GSIs now all point to the appropriate beacon.
 
-We are now finished with the configuration changes for the Employee Records.
+You are now finished with the configuration changes for the Employee Records.
 
 Nothing needs to change in the code that reads, writes or queries.
 
@@ -365,7 +399,7 @@ Nothing needs to change in the code that reads, writes or queries.
 ## Try it Out
 
 First, let's create the table that will back the Employee Portal Service.
-We have made this easy for you by providing a target within the CLI.
+You have made this easy for you by providing a target within the CLI.
 
 <!-- !test program
 cd ./workshop/java/exercise-3
@@ -396,13 +430,13 @@ We have provided a script that puts some sample data into your table.
 ./load-data
 ```
 
-Similar to how we got and put records into the plaintext Employee Portal Service,
-you can use the CLI to retrieve and put records into our Employee Portal Service
+Similar to how you got and put records into the plaintext Employee Portal Service,
+you can use the CLI to retrieve and put records into your Employee Portal Service
 with client-side encryption.
 
 ### Retrieve items from your encrypted table
 
-To start, let's retrieve all of our employees again:
+To start, let's retrieve all of your employees again:
 <!-- !test in get-employees -->
 ```bash
 ./employee-portal get-employees
@@ -465,7 +499,7 @@ employeeNumber employeeEmail       managerEmail        name                title
 # Next exercise
 
 Now that you have added support for Timecards (simple) and Employees (complex)
-we need to repeat the process for the four remaining record types.
+you need to repeat the process for the four remaining record types.
 
 Move onto the next exercise:
 [Adding a searchable encryption configuration](../exercise-4).
