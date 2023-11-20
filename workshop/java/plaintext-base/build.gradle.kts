@@ -62,7 +62,17 @@ tasks {
         val contents = configurations.runtimeClasspath.get()
                 .map { if (it.isDirectory) it else zipTree(it) } +
                 sourcesMain.output
+        // If we include some signed jars
+        // their signatures will fail,
+        // so remove the signatures.
+        // Not a production solution,
+        // but for prod don't bundle...
         from(contents)
+        {
+            exclude("META-INF/*.SF")
+            exclude("META-INF/*.DSA")
+            exclude("META-INF/*.RSA")
+        }
     }
     build {
         dependsOn(fatJar) // Trigger fat jar creation during build

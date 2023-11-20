@@ -102,7 +102,9 @@ public class AwsSupport {
     final KeyStore keystore = MakeKeyStore();
     keystore.CreateKeyStore(CreateKeyStoreInput.builder().build());
     WaitForTableReady(BRANCH_KEY_TABLE);
-    return keystore.CreateKey().branchKeyIdentifier();
+    return keystore.CreateKey(
+      CreateKeyInput.builder().build()
+    ).branchKeyIdentifier();
   }
 
   public static BeaconKeySource MakeKeySource() {
@@ -225,7 +227,6 @@ public class AwsSupport {
       .branchKeyId(BRANCH_KEY_ID)
       .keyStore(MakeKeyStore())
       .ttlSeconds(6000l)
-      .maxCacheSize(100)
       .build();
 
     return matProv.CreateAwsKmsHierarchicalKeyring(keyringInput);
