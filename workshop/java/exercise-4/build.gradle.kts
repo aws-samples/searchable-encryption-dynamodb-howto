@@ -29,8 +29,8 @@ dependencies {
     api("software.amazon.cryptools:AmazonCorrettoCryptoProvider:1.2.0")
     api("javax.xml.bind:jaxb-api:2.3.1")
     implementation(platform("software.amazon.awssdk:bom:2.19.1"))
-    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:3.0.0-preview-1")
-    implementation("software.amazon.cryptography:aws-cryptographic-material-providers:1.0.0-preview-1")
+    implementation("software.amazon.cryptography:aws-database-encryption-sdk-dynamodb:3.1.2")
+    implementation("software.amazon.cryptography:aws-cryptographic-material-providers:1.0.2")
     implementation("software.amazon.awssdk:kms")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.3.1")
@@ -67,6 +67,11 @@ tasks {
                 .map { if (it.isDirectory) it else zipTree(it) } +
                 sourcesMain.output
         from(contents)
+        {
+            exclude("META-INF/*.SF")
+            exclude("META-INF/*.DSA")
+            exclude("META-INF/*.RSA")
+        }
     }
     build {
         dependsOn(fatJar) // Trigger fat jar creation during build
