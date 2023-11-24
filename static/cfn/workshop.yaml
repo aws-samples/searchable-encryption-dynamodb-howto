@@ -207,8 +207,6 @@ Resources:
       Tags:
         - Key: Environment
           Value: !Sub ${EnvironmentName}
-        - Key: auto-delete
-          Value: never
       ServiceToken:
         Fn::GetAtt:
           - Cloud9BootstrapInstanceLambdaFunction
@@ -264,6 +262,21 @@ Resources:
           logger = logging.getLogger(__name__)
           logger.setLevel(logging.INFO)
 
+          def restart_instance(instance_id):
+              logger.info('Restart EC2 instance to restart SSM Agent')
+              ec2 = boto3.client('ec2')
+
+              try:
+                  response = ec2.reboot_instances(
+                      InstanceIds=[
+                          instance_id
+                      ]
+                  )
+              except botocore.exceptions.ClientError as error:
+                  raise error
+
+              logger.info('response: %s', response)
+
           def lambda_handler(event, context):
               logger.info("event: {}".format(json.dumps(event)))
               logger.info("context: {}".format(context))
@@ -310,7 +323,9 @@ Resources:
                       logger.info(
                           "response - associate_iam_instance_profile: {}".format(json.dumps(response))
                       )
-                      # r_ec2 = boto3.resource('ec2')
+
+                      # Restart the instance
+                      restart_instance(instance['InstanceId'])
 
                       responseData = {
                           "Success": "Started bootstrapping for instance: "
@@ -616,8 +631,6 @@ Resources:
           Value: Active
         - Key: Environment
           Value: !Ref EnvironmentName
-        - Key: auto-delete
-          Value: never
 
   ################## CODECOMMIT REPOSITORY ################
   CodeCommitRepo:
