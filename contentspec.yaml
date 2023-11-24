@@ -40,6 +40,7 @@ awsAccountConfig:
     deployableRegions:
       recommended:
         - us-west-2
+        - us-west-1
         # - us-east-1 ## Disabled because Cloud9 can fail to deploy `m5.large` in a specific AZ
 
 infrastructure:
