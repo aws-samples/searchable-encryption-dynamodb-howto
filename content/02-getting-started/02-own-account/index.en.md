@@ -26,11 +26,11 @@ To download the code associated with the workshop:
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 
 # Download code zipfile
-curl -sSL ':assetUrl{path="/archive.zip" source=s3}'
+curl ':assetUrl{path="/archive.zip" source=s3}' -o archive.zip
 # Download CloudFormation template
-curl -sSL ':assetUrl{path="/static/cfn/workshop.yaml" source=repo}'
+curl ':assetUrl{path="/static/cfn/workshop.yaml" source=repo}' -o workshop.yaml
 # Download bootstrap script
-curl -sSL ':assetUrl{path="/static/own_account.sh" source=repo}'
+curl ':assetUrl{path="/static/own_account.sh" source=repo}' -o own_account.sh
 
 :::
 
