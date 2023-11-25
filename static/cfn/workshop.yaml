@@ -621,6 +621,7 @@ Resources:
       Description: !Sub AWS Cloud9 instance for ${EnvironmentName}
       AutomaticStopTimeMinutes: !Ref AutomaticStopTimeMinutes
       InstanceType: !Ref InstanceType
+      ImageId: amazonlinux-2-x86_64
       Name: !Ref InstanceName
       Repositories:
         - PathComponent: workshop

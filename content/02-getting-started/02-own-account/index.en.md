@@ -13,13 +13,9 @@ This section only applies if you are running the workshop in your own account.
 
 We will download the zip file containing the workshop's template code, the CloudFormation templates used to provision the resources, and the bootstrap script. We will then run the bootstrap script to provision the resources.
 
-1. Sign in to the AWS Management Console and open the AWS CloudShell console at https://console.aws.amazon.com/cloudshell/ .
+1. Sign in to the AWS Management Console and open the AWS CloudShell console at https://console.aws.amazon.com/cloudshell/?region=us-east-2 .
 
-1. In the menu bar, for Select a Region, choose the region in which you will be running the workshop.
-
-Select Region
-
-3. Run the following code in CloudShell terminal.
+2. Run the following code in CloudShell terminal.
 
 To download the code associated with the workshop:
 
@@ -34,9 +30,9 @@ curl ':assetUrl{path="/own_account.sh" source=repo}' -o own_account.sh
 
 :::
 
-4. On the **Safe Paste** dialog, choose **Paste**.
+3. On the **Safe Paste** dialog, choose **Paste**.
 
-5. Run the bootstrap script in the CloudShell terminal.
+4. Run the bootstrap script in the CloudShell terminal.
 
 :::code{showCopyAction=true showLineNumbers=false language=bash}
 

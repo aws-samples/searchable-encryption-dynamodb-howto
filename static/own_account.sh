@@ -27,6 +27,7 @@ echo 'Starting Workshop CloudFormation stack'
 aws cloudformation create-stack \
   --stack-name Workshop \
   --template-body file://workshop.yaml \
+  --capabilities CAPABILITY_NAMED_IAM
   --parameters \
       ParameterKey=RepoName,ParameterValue=Workshop \
       ParameterKey=S3CodeBucket,ParameterValue='' \
@@ -56,4 +57,10 @@ git commit -m "Initial Commit"
 git push --set-upstream origin main
 cd ..
 
-echo -e '\n\nSetup is complete\n\n'
+echo -e '\n\nCloud9 instance is created\n\n'
+
+echo Wait for the following command Workshop-Cloud9BootStrapSSMDocument-*
+echo to run successfully.
+echo this will bootstrap the Cloud9 instance with the required dependencies
+echo aws ssm list-commands --query 'Commands[*].[CommandId,Status,DocumentName]' --output table
+aws ssm list-commands --query 'Commands[*].[CommandId,Status,DocumentName]' --output table
