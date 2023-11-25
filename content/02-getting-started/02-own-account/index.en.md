@@ -28,9 +28,9 @@ To download the code associated with the workshop:
 # Download code zipfile
 curl ':assetUrl{path="/archive.zip" source=s3}' -o archive.zip
 # Download CloudFormation template
-curl ':assetUrl{path="/static/cfn/workshop.yaml" source=repo}' -o workshop.yaml
+curl ':assetUrl{path="/cfn/workshop.yaml" source=repo}' -o workshop.yaml
 # Download bootstrap script
-curl ':assetUrl{path="/static/own_account.sh" source=repo}' -o own_account.sh
+curl ':assetUrl{path="/own_account.sh" source=repo}' -o own_account.sh
 
 :::
 
