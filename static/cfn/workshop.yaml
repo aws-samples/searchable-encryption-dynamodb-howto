@@ -160,6 +160,11 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
+                  - ssm:ListCommandInvocations
+                  - ssm:GetCommandInvocation
+                Resource: '*'
+              - Effect: Allow
+                Action:
                   - cloudformation:DescribeStacks
                   - cloudformation:DescribeStackEvents
                   - cloudformation:DescribeStackResource
@@ -171,6 +176,7 @@ Resources:
                   - ec2:AssociateIamInstanceProfile
                   - ec2:ModifyInstanceAttribute
                   - ec2:ReplaceIamInstanceProfileAssociation
+                  - ec2:RebootInstances
                 Resource:
                   - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
               - Effect: Allow
