@@ -57,6 +57,9 @@ git commit -m "Initial Commit"
 git push --set-upstream origin main
 cd ..
 
+# Wait to make sure that the SSM Document exists and starts running
+sleep 10
+
 echo -e '\n\nCloud9 instance is created\n\n'
 
 echo Wait for the following command Workshop-Cloud9BootStrapSSMDocument-*
