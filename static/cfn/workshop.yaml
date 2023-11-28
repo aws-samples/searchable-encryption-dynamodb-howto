@@ -26,7 +26,7 @@ Parameters:
   InstanceVolumeSize:
     Description: The size in GB of the Cloud9 instance volume
     Type: Number
-    Default: 8
+    Default: 32
   InstanceOwner:
     Type: String
     Description: Assumed role username of Cloud9 owner, in the format 'Role/username'. Leave blank to assign leave the instance assigned to the role running the CloudFormation template.
@@ -476,21 +476,22 @@ Resources:
                 - echo '=== INSTALL and CONFIGURE default software components ==='
                 - sudo -H -u ec2-user bash -c "pip install --user -U boto boto3 botocore awscli aws-sam-cli"
                 - echo '=== Resizing the Instance volume'
+                # If the InstanceVolumeSize is less than or equal to the default Cloud9 size
+                # then this loop will never complete.
                 - !Sub SIZE=${InstanceVolumeSize}
-                - !Sub REGION=${AWS::Region}
                 - |
                   INSTANCEID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
                   VOLUMEID=$(aws ec2 describe-instances \
                     --instance-id $INSTANCEID \
                     --query "Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId" \
-                    --output text --region $REGION)
-                  aws ec2 modify-volume --volume-id $VOLUMEID --size $SIZE --region $REGION
+                    --output text)
+                  aws ec2 modify-volume --volume-id $VOLUMEID --size $SIZE
                   while [ \
                     "$(aws ec2 describe-volumes-modifications \
                       --volume-id $VOLUMEID \
                       --filters Name=modification-state,Values="optimizing","completed" \
                       --query "length(VolumesModifications)"\
-                      --output text --region $REGION)" != "1" ]; do
+                      --output text)" != "1" ]; do
                   sleep 1
                   done
                   if [ $(readlink -f /dev/xvda) = "/dev/xvda" ]
