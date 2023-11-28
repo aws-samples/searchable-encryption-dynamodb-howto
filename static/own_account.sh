@@ -27,7 +27,7 @@ echo 'Starting Workshop CloudFormation stack'
 aws cloudformation create-stack \
   --stack-name Workshop \
   --template-body file://workshop.yaml \
-  --capabilities CAPABILITY_NAMED_IAM
+  --capabilities CAPABILITY_NAMED_IAM \
   --parameters \
       ParameterKey=RepoName,ParameterValue=Workshop \
       ParameterKey=S3CodeBucket,ParameterValue='' \
