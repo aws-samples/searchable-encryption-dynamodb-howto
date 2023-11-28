@@ -13,7 +13,7 @@ This section only applies if you are running the workshop in your own account.
 
 We will download the zip file containing the workshop's template code, the CloudFormation templates used to provision the resources, and the bootstrap script. We will then run the bootstrap script to provision the resources.
 
-1. Sign in to the AWS Management Console and open the AWS CloudShell console at https://console.aws.amazon.com/cloudshell/?region=us-east-2 .
+1. Sign in to the AWS Management Console and open the AWS CloudShell console at https://console.aws.amazon.com/cloudshell/?region=us-west-2 .
 
 2. Run the following code in CloudShell terminal.
 
