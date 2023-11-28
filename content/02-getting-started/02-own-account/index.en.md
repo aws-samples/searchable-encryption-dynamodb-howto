@@ -8,6 +8,19 @@ This section only applies if you are running the workshop in your own account.
 :::
 
 ## Workshop Resources
+The following resources will be deployed to run the workshop:
+
+* AWS Cloud9 environment named Workshop.
+* AWS CodeCommit repository named Workshop, populated with template code.
+* AWS KMS key to encrypt data
+
+To configure the Cloud9 environment, a number of additional resources are provisioned.
+
+* AWS Systems Manager Automation Document used to configure the Cloud9 environment.
+* Amazon S3 bucket to hold the Automation Document's output logs.
+* AWS Lambda function to create a CloudFormation template to associate the Automation Document with the Cloud9 environment.
+* IAM roles for the Lambda function and Cloud9 instance.
+
 
 ## Download and execute the bootstrap script
 
