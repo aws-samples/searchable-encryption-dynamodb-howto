@@ -44,7 +44,7 @@ public class Reservation extends BaseItem {
     String floor = location.get(FLOOR_NAME);
     String room = location.get(ROOM_NAME);
     String building = location.get(BUILDING_NAME);
-    item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
+    // item.put(GSI1_PARTITION_KEY, AttributeValue.fromS(ORGANIZER_EMAIL_PREFIX + organizerEmail));
     item.put(GSI1_SORT_KEY, AttributeValue.fromS(START_TIME_PREFIX + startTime + SPLIT + FLOOR_PREFIX + floor + SPLIT + ROOM_PREFIX + room));
 
     item.put(GSI3_PARTITION_KEY, AttributeValue.fromS(BUILDING_PREFIX + building));

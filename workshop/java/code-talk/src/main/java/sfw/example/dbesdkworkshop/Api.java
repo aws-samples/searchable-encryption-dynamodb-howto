@@ -73,7 +73,7 @@ public class Api {
 
     final KeySchemaElement pk1Schema = KeySchemaElement
       .builder()
-      .attributeName(GSI1_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
       .keyType(KeyType.HASH)
       .build();
     final KeySchemaElement sk1Schema = KeySchemaElement
@@ -134,7 +134,7 @@ public class Api {
       .attributeName(SORT_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
-      .attributeName(GSI1_PARTITION_KEY)
+      .attributeName(BEACON_PREFIX + GSI1_PARTITION_KEY)
       .attributeType(ScalarAttributeType.S).build());
     attrs.add(AttributeDefinition.builder()
       .attributeName(GSI1_SORT_KEY)
